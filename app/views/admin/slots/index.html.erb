@@ -1,0 +1,55 @@
+<% content_for :title, "Slots — Admin" %>
+
+<div class="mb-6 flex items-center justify-between">
+  <div>
+    <%= render BreadcrumbComponent.new(items: [{ label: "Admin", path: admin_root_path }, { label: "Slots", path: nil }]) %>
+    <h1 class="mt-1 text-2xl font-semibold text-stone-900">Slots</h1>
+  </div>
+  <div class="flex gap-3">
+    <%= link_to "Bulk Create", bulk_new_admin_slots_path, class: btn_secondary %>
+    <%= link_to "New Slot", new_admin_slot_path, class: btn_primary %>
+  </div>
+</div>
+
+<% if @slots.any? %>
+  <div class="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
+    <table class="w-full text-sm">
+      <thead class="border-b border-stone-200 bg-stone-50">
+        <tr>
+          <th class="px-4 py-3 text-left font-medium text-stone-600">Date &amp; Time</th>
+          <th class="px-4 py-3 text-left font-medium text-stone-600">Duration</th>
+          <th class="px-4 py-3 text-left font-medium text-stone-600">Status</th>
+          <th class="px-4 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-stone-100">
+        <% @slots.each do |slot| %>
+          <tr>
+            <td class="px-4 py-3 text-stone-900">
+              <%= slot.starts_at.strftime("%a, %b %-d %Y · %-I:%M %p") %>
+            </td>
+            <td class="px-4 py-3 text-stone-500">1 hour</td>
+            <td class="px-4 py-3">
+              <span class="<%= slot_status_badge_classes(slot.status) %> rounded-full px-2.5 py-0.5 text-xs font-medium">
+                <%= slot.status.capitalize %>
+              </span>
+            </td>
+            <td class="px-4 py-3 text-right">
+              <% if slot.cancellable? %>
+                <%= button_to "Cancel", admin_slot_path(slot), method: :delete,
+                      class: "text-sm font-medium text-red-600 hover:text-red-800",
+                      data: { turbo_confirm: "Cancel this slot on #{slot.starts_at.strftime('%b %-d at %-I:%M %p')}?" } %>
+              <% end %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%== @pagy.series_nav if @pagy.pages > 1 %>
+<% else %>
+  <div class="<%= card %> text-center text-stone-500">
+    No upcoming slots. <%= link_to "Create some →", new_admin_slot_path, class: "text-stone-900 underline" %>
+  </div>
+<% end %>

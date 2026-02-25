@@ -21,4 +21,8 @@ class Slot < ApplicationRecord
   def ends_at
     starts_at + 1.hour
   end
+
+  def cancellable?
+    status == "open"
+  end
 end
