@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Admin — Small City Studio" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+  </head>
+
+  <body class="min-h-screen bg-stone-50 font-sans antialiased">
+    <nav class="bg-stone-900 text-white">
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 lg:px-8">
+        <span class="text-sm font-semibold tracking-wide">Small City Studio &mdash; Admin</span>
+        <div class="flex items-center gap-6 text-sm">
+          <%= link_to "Dashboard", admin_root_path, class: "hover:text-stone-300 #{'text-stone-300' if current_page?(admin_root_path)}" %>
+          <%= link_to "Slots", admin_slots_path, class: "hover:text-stone-300 #{'text-stone-300' if request.path.start_with?('/admin/slots')}" %>
+          <%= link_to "Agreement", admin_agreement_path, class: "hover:text-stone-300 #{'text-stone-300' if request.path.start_with?('/admin/agreement')}" %>
+          <%= link_to "Settings", admin_settings_path, class: "hover:text-stone-300 #{'text-stone-300' if request.path.start_with?('/admin/settings')}" %>
+          <%= link_to "← Site", root_path, class: "ml-4 text-stone-400 hover:text-white" %>
+        </div>
+      </div>
+    </nav>
+
+    <% flash.each do |type, message| %>
+      <div class="mx-auto max-w-6xl px-4 pt-4 lg:px-8">
+        <%= render FlashMessageComponent.new(type: type.to_sym, message: message) %>
+      </div>
+    <% end %>
+
+    <main class="mx-auto max-w-6xl px-4 py-8 lg:px-8">
+      <%= yield %>
+    </main>
+  </body>
+</html>

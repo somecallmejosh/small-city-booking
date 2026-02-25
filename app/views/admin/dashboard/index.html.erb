@@ -1,0 +1,25 @@
+<% content_for :title, "Dashboard — Admin" %>
+
+<div class="mb-6">
+  <h1 class="text-2xl font-semibold text-stone-900">Dashboard</h1>
+</div>
+
+<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
+  <div class="<%= card %>">
+    <p class="text-sm text-stone-500">Upcoming open slots</p>
+    <p class="mt-1 text-3xl font-bold text-stone-900"><%= @open_slots_count %></p>
+    <%= link_to "Manage slots →", admin_slots_path, class: "mt-3 inline-block text-sm text-stone-600 hover:text-stone-900" %>
+  </div>
+
+  <div class="<%= card %>">
+    <p class="text-sm text-stone-500">Upcoming reserved slots</p>
+    <p class="mt-1 text-3xl font-bold text-stone-900"><%= @reserved_slots_count %></p>
+  </div>
+</div>
+
+<div class="mt-8 flex flex-wrap gap-3">
+  <%= link_to "New Slot", new_admin_slot_path, class: btn_primary %>
+  <%= link_to "Bulk Create Slots", bulk_new_admin_slots_path, class: btn_secondary %>
+  <%= link_to "Edit Agreement", edit_admin_agreement_path, class: btn_secondary %>
+  <%= link_to "Studio Settings", admin_settings_path, class: btn_secondary %>
+</div>

@@ -1,0 +1,31 @@
+<% content_for :title, "Settings — Admin" %>
+
+<div class="mb-6 flex items-start justify-between">
+  <div>
+    <%= render BreadcrumbComponent.new(items: [
+      { label: "Admin", path: admin_root_path },
+      { label: "Settings", path: nil }
+    ]) %>
+    <h1 class="mt-1 text-2xl font-semibold text-stone-900">Studio Settings</h1>
+  </div>
+  <%= link_to "Edit", edit_admin_settings_path, class: btn_primary %>
+</div>
+
+<div class="<%= card %> max-w-lg space-y-4">
+  <div>
+    <p class="text-sm text-stone-500">Studio name</p>
+    <p class="text-stone-900"><%= @settings.studio_name.presence || "—" %></p>
+  </div>
+  <div>
+    <p class="text-sm text-stone-500">Studio description</p>
+    <p class="text-stone-900"><%= @settings.studio_description.presence || "—" %></p>
+  </div>
+  <div>
+    <p class="text-sm text-stone-500">Hourly rate</p>
+    <p class="text-stone-900">$<%= format("%.2f", @settings.hourly_rate_cents / 100.0) %></p>
+  </div>
+  <div>
+    <p class="text-sm text-stone-500">Cancellation window</p>
+    <p class="text-stone-900"><%= @settings.cancellation_hours %> hours</p>
+  </div>
+</div>

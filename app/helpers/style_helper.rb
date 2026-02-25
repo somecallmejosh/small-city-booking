@@ -22,4 +22,15 @@ module StyleHelper
   def page_container
     "mx-auto w-full max-w-2xl px-4 lg:px-8"
   end
+
+  SLOT_STATUS_BADGE_CLASSES = {
+    "open"      => "bg-green-100 text-green-800",
+    "held"      => "bg-yellow-100 text-yellow-800",
+    "reserved"  => "bg-blue-100 text-blue-800",
+    "cancelled" => "bg-stone-100 text-stone-500"
+  }.freeze
+
+  def slot_status_badge_classes(status)
+    SLOT_STATUS_BADGE_CLASSES.fetch(status, "bg-stone-100 text-stone-500")
+  end
 end
