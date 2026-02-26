@@ -7,7 +7,7 @@ end
 
 # Initial StudioSetting record (singleton)
 StudioSetting.find_or_create_by!(id: 1) do |s|
-  s.hourly_rate_cents = 5000
+  s.hourly_rate_cents = 7500
   s.studio_name = "Small City Studio"
   s.studio_description = "Professional recording studio in East Hartford, CT."
   s.cancellation_hours = 24

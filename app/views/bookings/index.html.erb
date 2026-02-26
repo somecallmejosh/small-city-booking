@@ -1,0 +1,66 @@
+<% content_for :title, "My Bookings" %>
+
+<div class="mx-auto max-w-2xl">
+  <h1 class="mb-6 text-2xl font-semibold text-stone-900">My Bookings</h1>
+
+  <%
+    upcoming = @bookings.select { |b| b.status.in?(%w[pending confirmed]) && b.slots.any? { |s| s.starts_at > Time.current } }
+    past     = @bookings - upcoming
+  %>
+
+  <% if upcoming.any? %>
+    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide text-stone-500">Upcoming</h2>
+    <div class="mb-8 space-y-3">
+      <% upcoming.each do |booking| %>
+        <div class="<%= card %> flex items-center justify-between">
+          <div>
+            <p class="text-sm font-medium text-stone-900">
+              <%= booking.slots.order(:starts_at).first&.starts_at&.strftime("%A, %B %-d %Y") %>
+            </p>
+            <p class="text-xs text-stone-500">
+              <%= booking.slots.count %> hour<%= "s" if booking.slots.count > 1 %> ·
+              $<%= number_with_precision(booking.total_cents / 100.0, precision: 2) %>
+            </p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="<%= slot_status_badge_classes(booking.status) %> rounded-full px-2.5 py-0.5 text-xs font-medium">
+              <%= booking.status.capitalize %>
+            </span>
+            <%= link_to "View", booking_path(booking), class: "text-sm font-medium text-stone-700 hover:underline" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if past.any? %>
+    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide text-stone-500">Past</h2>
+    <div class="space-y-3">
+      <% past.each do |booking| %>
+        <div class="<%= card %> flex items-center justify-between opacity-75">
+          <div>
+            <p class="text-sm font-medium text-stone-900">
+              <%= booking.slots.order(:starts_at).first&.starts_at&.strftime("%A, %B %-d %Y") %>
+            </p>
+            <p class="text-xs text-stone-500">
+              <%= booking.slots.count %> hour<%= "s" if booking.slots.count > 1 %> ·
+              $<%= number_with_precision(booking.total_cents / 100.0, precision: 2) %>
+            </p>
+          </div>
+          <div class="flex items-center gap-3">
+            <span class="<%= slot_status_badge_classes(booking.status) %> rounded-full px-2.5 py-0.5 text-xs font-medium">
+              <%= booking.status.capitalize %>
+            </span>
+            <%= link_to "View", booking_path(booking), class: "text-sm font-medium text-stone-700 hover:underline" %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+
+  <% if @bookings.empty? %>
+    <div class="<%= card %> text-center text-stone-500">
+      No bookings yet. <%= link_to "Browse slots →", root_path, class: "text-stone-900 underline" %>
+    </div>
+  <% end %>
+</div>

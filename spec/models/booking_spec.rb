@@ -18,8 +18,13 @@ RSpec.describe Booking, type: :model do
     end
 
     it "rejects an invalid status" do
-      booking = build(:booking, status: "pending")
+      booking = build(:booking, status: "bogus")
       expect(booking).not_to be_valid
+    end
+
+    it "accepts pending as a valid status" do
+      booking = build(:booking, status: "pending")
+      expect(booking).to be_valid
     end
 
     it "accepts all valid statuses" do
@@ -43,6 +48,33 @@ RSpec.describe Booking, type: :model do
       confirmed  = create(:booking, status: "confirmed")
       expect(Booking.cancelled).to include(cancelled)
       expect(Booking.cancelled).not_to include(confirmed)
+    end
+
+    it ".pending returns only pending bookings" do
+      pending_booking   = create(:booking, status: "pending")
+      confirmed_booking = create(:booking, status: "confirmed")
+      expect(Booking.pending).to include(pending_booking)
+      expect(Booking.pending).not_to include(confirmed_booking)
+    end
+  end
+
+  describe "#within_cancellation_window?" do
+    let(:settings) { StudioSetting.current }
+
+    before { settings.update!(cancellation_hours: 24) }
+
+    it "returns true when the slot starts far in the future" do
+      slot    = create(:slot, starts_at: 48.hours.from_now.beginning_of_hour)
+      booking = create(:booking, status: "confirmed")
+      booking.slots << slot
+      expect(booking.within_cancellation_window?).to be true
+    end
+
+    it "returns false when the slot is within the cancellation window" do
+      slot    = create(:slot, starts_at: 12.hours.from_now.beginning_of_hour)
+      booking = create(:booking, status: "confirmed")
+      booking.slots << slot
+      expect(booking.within_cancellation_window?).to be false
     end
   end
 end

@@ -31,6 +31,9 @@ gem "rack-attack"
 # Fast pagination
 gem "pagy"
 
+# Stripe payments
+gem "stripe"
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 
@@ -70,6 +73,13 @@ group :development, :test do
   gem "capybara"
   gem "cuprite"
   gem "simplecov", require: false
+
+  # HTTP stubbing
+  gem "webmock"
+  gem "vcr"
+
+  # Database cleaning for concurrency specs
+  gem "database_cleaner-active_record"
 end
 
 group :development do
