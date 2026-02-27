@@ -25,4 +25,11 @@ class Slot < ApplicationRecord
   def cancellable?
     status == "open"
   end
+
+  after_update_commit -> {
+    broadcast_replace_later_to "slots",
+      target: "slot_#{id}",
+      partial: "slots/slot",
+      locals: { slot: self }
+  }
 end

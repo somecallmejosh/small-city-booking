@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <title><%= content_for(:title) || "Small City" %></title>
+    <title><%= content_for(:title) || "Small City Studio" %></title>
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="application-name" content="Small City">
@@ -23,8 +23,29 @@
     <%= javascript_importmap_tags %>
   </head>
 
-  <body>
-    <main class="container mx-auto mt-28 px-5 flex">
+  <body class="min-h-screen bg-stone-50 font-sans antialiased">
+    <nav class="bg-stone-900 text-white">
+      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 lg:px-8">
+        <%= link_to "Small City Studio", root_path, class: "text-sm font-semibold tracking-wide hover:text-stone-300" %>
+        <div class="flex items-center gap-6 text-sm">
+          <% if authenticated? %>
+            <%= link_to "My Bookings", bookings_path, class: "hover:text-stone-300" %>
+            <%= button_to "Sign Out", session_path, method: :delete,
+                  class: "text-stone-400 hover:text-white text-sm" %>
+          <% else %>
+            <%= link_to "Sign In", new_session_path, class: "hover:text-stone-300" %>
+          <% end %>
+        </div>
+      </div>
+    </nav>
+
+    <% flash.each do |type, message| %>
+      <div class="mx-auto max-w-6xl px-4 pt-4 lg:px-8">
+        <%= render FlashMessageComponent.new(type: type.to_sym, message: message) %>
+      </div>
+    <% end %>
+
+    <main class="mx-auto max-w-6xl px-4 py-8 lg:px-8">
       <%= yield %>
     </main>
   </body>

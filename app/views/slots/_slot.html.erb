@@ -1,0 +1,17 @@
+<%= turbo_frame_tag "slot_#{slot.id}" do %>
+  <% if slot.status == "open" %>
+    <button type="button"
+            data-slot-selection-target="slot"
+            data-slot-id="<%= slot.id %>"
+            data-starts-at-ms="<%= slot.starts_at.to_i * 1000 %>"
+            data-ends-at-ms="<%= slot.ends_at.to_i * 1000 %>"
+            data-action="click->slot-selection#selectSlot"
+            class="<%= slot_button_classes(slot) %>">
+      <%= slot.starts_at.strftime("%-I:%M %p") %>
+    </button>
+  <% else %>
+    <span class="<%= slot_button_classes(slot) %>">
+      <%= slot.starts_at.strftime("%-I:%M %p") %>
+    </span>
+  <% end %>
+<% end %>

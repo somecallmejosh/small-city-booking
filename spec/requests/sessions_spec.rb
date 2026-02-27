@@ -42,11 +42,11 @@ RSpec.describe "Sessions", type: :request do
   describe "authentication redirect" do
     it "stores the originally requested URL and redirects back after sign-in" do
       user # ensure user exists
-      get root_path  # unauthenticated → stored as return_to and redirected to sign-in
+      get bookings_path  # requires authentication → stored as return_to and redirected to sign-in
       expect(response).to redirect_to(new_session_path)
 
       post session_path, params: { email_address: "test@example.com", password: "securepassword1" }
-      expect(response).to redirect_to(root_url)
+      expect(response).to redirect_to(bookings_url)
     end
   end
 end
