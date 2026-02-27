@@ -39,6 +39,11 @@ class WebhooksController < ApplicationController
 
       booking.update!(status: "confirmed", stripe_payment_intent_id: intent.id)
 
+      if intent["latest_charge"].present?
+        charge = Stripe::Charge.retrieve(intent["latest_charge"])
+        booking.update!(stripe_receipt_url: charge.receipt_url)
+      end
+
       booking.slots.each do |slot|
         slot.update!(status: "reserved", held_by_user: nil, held_until: nil)
       end

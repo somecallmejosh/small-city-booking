@@ -76,5 +76,19 @@ RSpec.describe Booking, type: :model do
       booking.slots << slot
       expect(booking.within_cancellation_window?).to be false
     end
+
+    it "returns false when the slot starts at exactly the boundary" do
+      slot    = create(:slot, starts_at: 24.hours.from_now)
+      booking = create(:booking, status: "confirmed")
+      booking.slots << slot
+      expect(booking.within_cancellation_window?).to be false
+    end
+
+    it "returns true when the slot starts one second past the boundary" do
+      slot    = create(:slot, starts_at: 24.hours.from_now + 1.second)
+      booking = create(:booking, status: "confirmed")
+      booking.slots << slot
+      expect(booking.within_cancellation_window?).to be true
+    end
   end
 end
