@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_02_25_192853) do
+ActiveRecord::Schema[8.1].define(version: 2026_02_27_174347) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -92,6 +92,8 @@ ActiveRecord::Schema[8.1].define(version: 2026_02_25_192853) do
     t.string "status", default: "confirmed", null: false
     t.string "stripe_payment_intent_id"
     t.string "stripe_payment_link_id"
+    t.string "stripe_payment_link_url"
+    t.string "stripe_receipt_url"
     t.string "stripe_refund_id"
     t.integer "total_cents", null: false
     t.datetime "updated_at", null: false

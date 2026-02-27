@@ -1,5 +1,12 @@
-<%# Uses the native <dialog> element; opened by JS via data-action="click->confirmation-dialog#open" on a trigger %>
-<dialog class="m-0 w-full max-w-none rounded-none p-0 backdrop:bg-black/50 sm:m-auto sm:max-w-md sm:rounded-xl" data-controller="confirmation-dialog" aria-labelledby="dialog-title-<%= @confirm_url.parameterize %>" aria-modal="true">
+<%# Uses the native <dialog> element. Wrap this component and a trigger button in:
+    <div data-controller="confirmation-dialog">
+      <button type="button" data-action="confirmation-dialog#open">…</button>
+      <%= render ConfirmationDialogComponent.new(confirm_url: …, …) %>
+    </div> %>
+<dialog class="m-0 w-full max-w-none rounded-none p-0 backdrop:bg-black/50 sm:m-auto sm:max-w-md sm:rounded-xl"
+        data-confirmation-dialog-target="dialog"
+        aria-labelledby="dialog-title-<%= @confirm_url.parameterize %>"
+        aria-modal="true">
   <%# Mobile: bottom-sheet; desktop: centered modal via the <dialog> native positioning %>
   <div class="fixed inset-x-0 bottom-0 rounded-t-2xl bg-white px-4 pb-8 pt-6 shadow-xl sm:relative sm:inset-auto sm:rounded-xl sm:p-6">
     <h2 id="dialog-title-<%= @confirm_url.parameterize %>" class="text-base font-semibold text-stone-900"><%= @title %></h2>

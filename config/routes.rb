@@ -12,6 +12,10 @@ Rails.application.routes.draw do
         post :bulk_create
       end
     end
+    resources :bookings, only: [ :index, :show, :new, :create ] do
+      member     { post :cancel }
+      collection { post :bulk_cancel }
+    end
     resource :agreement, only: [ :show, :edit, :update ]
     resource :settings, only: [ :show, :edit, :update ]
   end

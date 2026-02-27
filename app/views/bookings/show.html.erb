@@ -35,18 +35,43 @@
           $<%= number_with_precision(@booking.total_cents / 100.0, precision: 2) %>
         </span>
       </p>
+      <% if @booking.stripe_receipt_url.present? %>
+        <p class="mt-2 text-sm">
+          <%= link_to "View Stripe receipt →", @booking.stripe_receipt_url,
+                target: "_blank", rel: "noopener noreferrer",
+                class: "text-stone-700 underline hover:text-stone-900" %>
+        </p>
+      <% end %>
     </div>
 
-    <% if @booking.status == "confirmed" && @booking.within_cancellation_window? %>
+    <% if @booking.status == "confirmed" %>
       <div class="mt-6 border-t border-stone-100 pt-4">
-        <%= render ConfirmationDialogComponent.new(
-          title:   "Cancel Booking",
-          message: "Are you sure you want to cancel this booking? A refund will be issued.",
-          confirm_label: "Yes, Cancel",
-          cancel_label:  "Keep Booking"
-        ) do %>
-          <%= button_to "Cancel Booking", cancel_booking_path(@booking), method: :post,
-                class: btn_danger %>
+        <% if @booking.within_cancellation_window? %>
+          <div data-controller="confirmation-dialog">
+            <button type="button" data-action="confirmation-dialog#open" class="<%= btn_danger %>">
+              Cancel Booking
+            </button>
+            <%= render ConfirmationDialogComponent.new(
+              title:         "Cancel Booking",
+              message:       "Are you sure you want to cancel? A full refund will be issued to your original payment method.",
+              confirm_url:   cancel_booking_path(@booking),
+              confirm_label: "Yes, Cancel",
+              cancel_label:  "Keep Booking"
+            ) %>
+          </div>
+        <% else %>
+          <div data-controller="confirmation-dialog">
+            <button type="button" data-action="confirmation-dialog#open" class="<%= btn_danger %>">
+              Cancel Booking
+            </button>
+            <%= render ConfirmationDialogComponent.new(
+              title:         "Cancel Booking",
+              message:       "Are you sure you want to cancel? No refund will be issued — you are outside the cancellation window.",
+              confirm_url:   cancel_booking_path(@booking),
+              confirm_label: "Yes, Cancel (No Refund)",
+              cancel_label:  "Keep Booking"
+            ) %>
+          </div>
         <% end %>
       </div>
     <% end %>

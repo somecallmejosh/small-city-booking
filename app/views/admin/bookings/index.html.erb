@@ -1,0 +1,111 @@
+<% content_for :title, "Bookings — Admin" %>
+
+<div class="mb-6 flex items-center justify-between">
+  <div>
+    <%= render BreadcrumbComponent.new(items: [{ label: "Admin", path: admin_root_path }, { label: "Bookings", path: nil }]) %>
+    <h1 class="mt-1 text-2xl font-semibold text-stone-900">Bookings</h1>
+  </div>
+  <%= link_to "New Booking", new_admin_booking_path, class: btn_primary %>
+</div>
+
+<div class="mb-4 flex flex-wrap gap-2">
+  <% [nil, "pending", "confirmed", "cancelled", "completed"].each do |status| %>
+    <% label = status ? status.capitalize : "All" %>
+    <% active = @status_filter == status %>
+    <%= link_to label,
+          admin_bookings_path(status.present? ? { status: status } : {}),
+          class: "rounded-full px-3 py-1 text-xs font-medium border #{active ? 'bg-stone-900 text-white border-stone-900' : 'bg-white text-stone-600 border-stone-300 hover:bg-stone-50'}" %>
+  <% end %>
+</div>
+
+<% if @bookings.any? %>
+  <%= form_with url: bulk_cancel_admin_bookings_path, method: :post,
+                data: { controller: "bulk-select", turbo_confirm: "Cancel the selected bookings? Confirmed bookings will be refunded." } do %>
+    <%= hidden_field_tag :status_filter, @status_filter %>
+
+    <div class="mb-3 hidden items-center gap-3 rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-2.5"
+         data-bulk-select-target="actionBar">
+      <span class="text-sm text-yellow-800">
+        <span data-bulk-select-target="counter">0</span> selected
+      </span>
+      <button type="submit" class="<%= btn_danger %> py-1 text-xs">
+        Cancel Selected
+      </button>
+    </div>
+
+    <div class="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
+      <table class="w-full text-sm">
+        <thead class="border-b border-stone-200 bg-stone-50">
+          <tr>
+            <th class="w-10 px-4 py-3">
+              <input type="checkbox"
+                     class="h-4 w-4 rounded border-stone-300"
+                     data-bulk-select-target="selectAll"
+                     data-action="change->bulk-select#toggleAll">
+            </th>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Customer</th>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Session</th>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Total</th>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Status</th>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Created</th>
+            <th class="px-4 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-stone-100">
+          <% @bookings.each do |booking| %>
+            <% cancellable = %w[pending confirmed].include?(booking.status) %>
+            <tr>
+              <td class="px-4 py-3">
+                <% if cancellable %>
+                  <input type="checkbox"
+                         name="booking_ids[]"
+                         value="<%= booking.id %>"
+                         class="h-4 w-4 rounded border-stone-300"
+                         data-bulk-select-target="checkbox"
+                         data-action="change->bulk-select#toggle">
+                <% end %>
+              </td>
+              <td class="px-4 py-3">
+                <p class="font-medium text-stone-900"><%= booking.user.name.presence || booking.user.email_address %></p>
+                <p class="text-xs text-stone-500"><%= booking.user.email_address %></p>
+              </td>
+              <td class="px-4 py-3 text-stone-700">
+                <% first_slot = booking.slots.min_by(&:starts_at) %>
+                <% if first_slot %>
+                  <%= first_slot.starts_at.strftime("%a, %b %-d %Y") %>
+                  <span class="text-stone-400">·</span>
+                  <%= booking.slots.count %> hr<%= "s" if booking.slots.count != 1 %>
+                <% else %>
+                  <span class="text-stone-400">—</span>
+                <% end %>
+              </td>
+              <td class="px-4 py-3 text-stone-700">
+                $<%= number_with_precision(booking.total_cents / 100.0, precision: 2) %>
+              </td>
+              <td class="px-4 py-3">
+                <span class="<%= slot_status_badge_classes(booking.status) %> rounded-full px-2.5 py-0.5 text-xs font-medium">
+                  <%= booking.status.capitalize %>
+                </span>
+                <% if booking.admin_created? %>
+                  <span class="ml-1 rounded-full bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-700">Admin</span>
+                <% end %>
+              </td>
+              <td class="px-4 py-3 text-stone-500">
+                <%= booking.created_at.strftime("%b %-d, %Y") %>
+              </td>
+              <td class="px-4 py-3 text-right">
+                <%= link_to "View", admin_booking_path(booking), class: "text-sm font-medium text-stone-700 hover:underline" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% end %>
+
+  <%== @pagy.series_nav if @pagy.pages > 1 %>
+<% else %>
+  <div class="<%= card %> text-center text-stone-500">
+    No bookings found<% if @status_filter.present? %> with status "<%= @status_filter %>"<% end %>.
+  </div>
+<% end %>

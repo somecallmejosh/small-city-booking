@@ -36,15 +36,29 @@ RSpec.describe "Webhooks", type: :request do
     context "payment_intent.succeeded" do
       let(:intent_data) do
         {
-          "id"       => "pi_test_success",
-          "object"   => "payment_intent",
-          "metadata" => {
-            "booking_id"       => booking.id.to_s,
-            "agreement_id"     => agreement.id.to_s,
-            "agreed_ip"        => "127.0.0.1",
+          "id"            => "pi_test_success",
+          "object"        => "payment_intent",
+          "latest_charge" => "ch_test_fake",
+          "metadata"      => {
+            "booking_id"        => booking.id.to_s,
+            "agreement_id"      => agreement.id.to_s,
+            "agreed_ip"         => "127.0.0.1",
             "agreed_user_agent" => "TestAgent/1.0"
           }
         }
+      end
+
+      before do
+        stub_request(:get, "https://api.stripe.com/v1/charges/ch_test_fake")
+          .to_return(
+            status:  200,
+            headers: { "Content-Type" => "application/json" },
+            body:    JSON.generate({
+              id:          "ch_test_fake",
+              object:      "charge",
+              receipt_url: "https://receipt.stripe.com/test_receipt"
+            })
+          )
       end
 
       it "confirms the booking, reserves slots, and creates an AgreementAcceptance" do
@@ -56,6 +70,12 @@ RSpec.describe "Webhooks", type: :request do
         expect(booking.reload.status).to eq("confirmed")
         expect(slot.reload.status).to eq("reserved")
         expect(AgreementAcceptance.last.booking).to eq(booking)
+      end
+
+      it "stores the Stripe receipt URL on the booking" do
+        post_webhook(type: "payment_intent.succeeded", data: intent_data)
+
+        expect(booking.reload.stripe_receipt_url).to eq("https://receipt.stripe.com/test_receipt")
       end
 
       it "is idempotent (second call does not create another AgreementAcceptance)" do
