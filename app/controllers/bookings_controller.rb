@@ -78,6 +78,24 @@ class BookingsController < ApplicationController
     @booking.slots.each { |slot| slot.update!(status: "open") }
     @booking.update!(status: "cancelled", cancelled_at: Time.current)
 
+    SendNotificationJob.perform_later(
+      Current.user.id,
+      "Booking Cancelled",
+      "Your booking has been cancelled."
+    )
+    admin = admin_user
+    if admin
+      slot_label = @booking.slots.minimum(:starts_at)
+                            .in_time_zone("Eastern Time (US & Canada)")
+                            .strftime("%b %-d at %-I:%M %p")
+      SendNotificationJob.perform_later(
+        admin.id,
+        "Booking Cancelled",
+        "#{Current.user.name} cancelled their booking on #{slot_label}.",
+        url: "/admin/bookings/#{@booking.id}"
+      )
+    end
+
     redirect_to bookings_path, notice: "Booking cancelled."
   end
 end

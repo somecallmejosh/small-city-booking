@@ -16,22 +16,8 @@
   <%= turbo_stream_from "slots" %>
 
   <% if @slots_by_date.any? %>
-    <div class="space-y-6">
-      <% @slots_by_date.each do |date, slots| %>
-        <div class="rounded-xl border border-stone-200 bg-white p-5 shadow-sm">
-          <h2 class="mb-3 text-sm font-semibold text-stone-700">
-            <%= date.strftime("%A, %B %-d") %>
-          </h2>
-          <div class="flex flex-wrap gap-2">
-            <% slots.each do |slot| %>
-              <%= render "slots/slot", slot: slot %>
-            <% end %>
-          </div>
-        </div>
-      <% end %>
-    </div>
 
-    <div class="mt-6 rounded-xl border border-stone-200 bg-white p-5 shadow-sm">
+    <div class="mt-6 rounded-xl border border-stone-200 bg-white p-5 shadow-sm sticky top-0 mb-6">
       <p class="text-sm text-stone-600" data-slot-selection-target="summary">
         Select slots to book
       </p>
@@ -54,6 +40,23 @@
         </div>
       <% end %>
     </div>
+
+    <div class="space-y-6">
+      <% @slots_by_date.each do |date, slots| %>
+        <div class="rounded-xl border border-stone-200 bg-white p-5 shadow-sm">
+          <h2 class="mb-3 text-sm font-semibold text-stone-700">
+            <%= date.strftime("%A, %B %-d") %>
+          </h2>
+          <div class="flex flex-wrap gap-2">
+            <% slots.each do |slot| %>
+              <%= render "slots/slot", slot: slot %>
+            <% end %>
+          </div>
+        </div>
+      <% end %>
+    </div>
+
+
   <% else %>
     <div class="<%= card %> text-center text-stone-500">
       No upcoming slots available. Check back soon.

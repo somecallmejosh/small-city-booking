@@ -34,6 +34,9 @@ gem "pagy"
 # Stripe payments
 gem "stripe"
 
+# Web Push notifications (VAPID)
+gem "web-push"
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 

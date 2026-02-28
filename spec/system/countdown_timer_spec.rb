@@ -28,8 +28,8 @@ RSpec.describe "Countdown timer", type: :system do
     # Should redirect to checkout page
     expect(page).to have_current_path(new_booking_path, wait: 10)
 
-    # Countdown timer element is present
-    expect(page).to have_css("[data-controller='countdown-timer']")
+    # Countdown timer element is present (element has multiple controllers; use word-match selector)
+    expect(page).to have_css("[data-controller~='countdown-timer']")
     expect(page).to have_css("[data-countdown-timer-target='display']")
 
     # Pay button is initially disabled (agreement checkbox not checked)

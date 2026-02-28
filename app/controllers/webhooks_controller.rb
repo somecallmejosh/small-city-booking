@@ -39,6 +39,23 @@ class WebhooksController < ApplicationController
 
       booking.update!(status: "confirmed", stripe_payment_intent_id: intent.id)
 
+      slot_label = slot_date_label(booking.slots.minimum(:starts_at))
+      SendNotificationJob.perform_later(
+        booking.user_id,
+        "Booking Confirmed",
+        "Your session on #{slot_label} has been confirmed.",
+        url: "/bookings/#{booking.id}"
+      )
+      admin = admin_user
+      if admin
+        SendNotificationJob.perform_later(
+          admin.id,
+          "New Booking",
+          "#{booking.user.name} booked #{slot_label}.",
+          url: "/admin/bookings/#{booking.id}"
+        )
+      end
+
       if intent["latest_charge"].present?
         charge = Stripe::Charge.retrieve(intent["latest_charge"])
         booking.update!(stripe_receipt_url: charge.receipt_url)
@@ -66,5 +83,15 @@ class WebhooksController < ApplicationController
         slot.update!(status: "open", held_by_user: nil, held_until: nil)
       end
       booking.update!(status: "cancelled")
+
+      SendNotificationJob.perform_later(
+        booking.user_id,
+        "Payment Failed",
+        "Your studio booking payment could not be processed. Please try booking again."
+      )
+    end
+
+    def slot_date_label(starts_at)
+      starts_at.in_time_zone("Eastern Time (US & Canada)").strftime("%b %-d at %-I:%M %p")
     end
 end

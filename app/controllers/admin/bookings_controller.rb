@@ -43,6 +43,12 @@ class Admin::BookingsController < Admin::BaseController
     result = ManualBookingCreator.new(booking_params).call
 
     if result.success?
+      SendNotificationJob.perform_later(
+        result.booking.user_id,
+        "Booking Created",
+        "The studio has created a booking for you.",
+        url: "/bookings/#{result.booking.id}"
+      )
       redirect_to admin_booking_path(result.booking), notice: "Booking created."
     else
       @users = User.order(:name)
@@ -63,6 +69,12 @@ class Admin::BookingsController < Admin::BaseController
       end
       booking.slots.each { |slot| slot.update!(status: "open") }
       booking.update!(status: "cancelled", cancelled_at: Time.current)
+
+      SendNotificationJob.perform_later(
+        booking.user_id,
+        "Booking Cancelled",
+        "Your studio booking has been cancelled."
+      )
     end
 
     def booking_params

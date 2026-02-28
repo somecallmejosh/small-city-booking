@@ -35,9 +35,9 @@
           $<%= number_with_precision(@booking.total_cents / 100.0, precision: 2) %>
         </span>
       </p>
-      <% if @booking.stripe_receipt_url.present? %>
+      <% if (receipt_url = @booking.safe_receipt_url) %>
         <p class="mt-2 text-sm">
-          <%= link_to "View Stripe receipt →", @booking.stripe_receipt_url,
+          <%= link_to "View Stripe receipt →", receipt_url,
                 target: "_blank", rel: "noopener noreferrer",
                 class: "text-stone-700 underline hover:text-stone-900" %>
         </p>

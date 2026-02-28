@@ -20,4 +20,13 @@ class Booking < ApplicationRecord
   def within_cancellation_window?
     slots.minimum(:starts_at) > StudioSetting.current.cancellation_hours.hours.from_now
   end
+
+  def safe_receipt_url
+    return nil unless stripe_receipt_url.present?
+
+    uri = URI.parse(stripe_receipt_url)
+    uri.is_a?(URI::HTTPS) ? stripe_receipt_url : nil
+  rescue URI::InvalidURIError
+    nil
+  end
 end
