@@ -18,7 +18,10 @@ Rails.application.routes.draw do
     end
     resource :agreement, only: [ :show, :edit, :update ]
     resource :settings, only: [ :show, :edit, :update ]
+    resources :customers, only: [ :index, :show, :edit, :update ]
   end
+
+  get "/help", to: "help#show"
 
   resources :bookings, only: [ :index, :new, :create, :show ] do
     member { post :cancel }

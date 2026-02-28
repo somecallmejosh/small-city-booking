@@ -16,6 +16,7 @@
         <div class="flex items-center gap-6 text-sm">
           <%= link_to "Dashboard", admin_root_path, class: "hover:text-stone-300 #{'text-stone-300' if current_page?(admin_root_path)}" %>
           <%= link_to "Bookings", admin_bookings_path, class: "hover:text-stone-300 #{'text-stone-300' if request.path.start_with?('/admin/bookings')}" %>
+          <%= link_to "Customers", admin_customers_path, class: "hover:text-stone-300 #{'text-stone-300' if request.path.start_with?('/admin/customers')}" %>
           <%= link_to "Slots", admin_slots_path, class: "hover:text-stone-300 #{'text-stone-300' if request.path.start_with?('/admin/slots')}" %>
           <%= link_to "Agreement", admin_agreement_path, class: "hover:text-stone-300 #{'text-stone-300' if request.path.start_with?('/admin/agreement')}" %>
           <%= link_to "Settings", admin_settings_path, class: "hover:text-stone-300 #{'text-stone-300' if request.path.start_with?('/admin/settings')}" %>

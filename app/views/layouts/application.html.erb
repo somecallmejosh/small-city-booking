@@ -28,6 +28,7 @@
       <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 lg:px-8">
         <%= link_to "Small City Studio", root_path, class: "text-sm font-semibold tracking-wide hover:text-stone-300" %>
         <div class="flex items-center gap-6 text-sm">
+          <%= link_to "Help", help_path, class: "hover:text-stone-300 #{'text-stone-300' if current_page?(help_path)}" %>
           <% if authenticated? %>
             <%= link_to "My Bookings", bookings_path, class: "hover:text-stone-300" %>
             <div data-controller="push-subscription"

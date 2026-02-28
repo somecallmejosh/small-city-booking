@@ -1,0 +1,65 @@
+<% content_for :title, "Customers — Admin" %>
+
+<div class="mb-6 flex items-center justify-between">
+  <div>
+    <%= render BreadcrumbComponent.new(items: [{ label: "Admin", path: admin_root_path }, { label: "Customers", path: nil }]) %>
+    <h1 class="mt-1 text-2xl font-semibold text-stone-900">Customers</h1>
+  </div>
+</div>
+
+<%= form_with url: admin_customers_path, method: :get, class: "mb-6 flex gap-2" do |f| %>
+  <%= f.text_field :q, value: params[:q], placeholder: "Search by name or email…",
+        class: "#{input_field} max-w-sm" %>
+  <%= f.submit "Search", class: btn_secondary %>
+  <% if params[:q].present? %>
+    <%= link_to "Clear", admin_customers_path, class: btn_secondary %>
+  <% end %>
+<% end %>
+
+<% if @customers.any? %>
+  <div class="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
+    <table class="w-full text-sm">
+      <thead class="border-b border-stone-200 bg-stone-50">
+        <tr>
+          <th class="px-4 py-3 text-left font-medium text-stone-600">Customer</th>
+          <th class="px-4 py-3 text-left font-medium text-stone-600">Phone</th>
+          <th class="px-4 py-3 text-left font-medium text-stone-600">Bookings</th>
+          <th class="px-4 py-3 text-left font-medium text-stone-600">Joined</th>
+          <th class="px-4 py-3"></th>
+        </tr>
+      </thead>
+      <tbody class="divide-y divide-stone-100">
+        <% @customers.each do |customer| %>
+          <tr>
+            <td class="px-4 py-3">
+              <p class="font-medium text-stone-900"><%= customer.name.presence || "—" %></p>
+              <p class="text-xs text-stone-500"><%= customer.email_address %></p>
+            </td>
+            <td class="px-4 py-3 text-stone-700">
+              <%= customer.phone.presence || "—" %>
+            </td>
+            <td class="px-4 py-3 text-stone-700">
+              <%= customer.bookings_count %>
+            </td>
+            <td class="px-4 py-3 text-stone-500">
+              <%= customer.created_at.strftime("%b %-d, %Y") %>
+            </td>
+            <td class="px-4 py-3 text-right">
+              <%= link_to "View", admin_customer_path(customer), class: "text-sm font-medium text-stone-700 hover:underline" %>
+            </td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <%== @pagy.series_nav if @pagy.pages > 1 %>
+<% else %>
+  <div class="<%= card %> text-center text-stone-500">
+    <% if params[:q].present? %>
+      No customers found matching "<%= params[:q] %>".
+    <% else %>
+      No customers yet.
+    <% end %>
+  </div>
+<% end %>

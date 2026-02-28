@@ -1,0 +1,38 @@
+<% content_for :title, "Edit #{@customer.name.presence || @customer.email_address} — Admin" %>
+
+<div class="mb-6">
+  <%= render BreadcrumbComponent.new(items: [
+    { label: "Admin",     path: admin_root_path },
+    { label: "Customers", path: admin_customers_path },
+    { label: @customer.name.presence || @customer.email_address, path: admin_customer_path(@customer) },
+    { label: "Edit", path: nil }
+  ]) %>
+  <h1 class="mt-1 text-2xl font-semibold text-stone-900">Edit Customer</h1>
+</div>
+
+<div class="<%= card %> max-w-md">
+  <%= form_with model: @customer, url: admin_customer_path(@customer), method: :patch do |f| %>
+    <% if @customer.errors.any? %>
+      <div class="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+        <% @customer.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="mb-4">
+      <%= f.label :name, "Name", class: form_label %>
+      <%= f.text_field :name, class: input_field, placeholder: "Full name" %>
+    </div>
+
+    <div class="mb-6">
+      <%= f.label :phone, "Phone", class: form_label %>
+      <%= f.text_field :phone, class: input_field, placeholder: "Optional" %>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <%= f.submit "Save Changes", class: btn_primary %>
+      <%= link_to "Cancel", admin_customer_path(@customer), class: btn_secondary %>
+    </div>
+  <% end %>
+</div>
