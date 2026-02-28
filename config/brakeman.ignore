@@ -1,0 +1,12 @@
+{
+  "ignored_warnings": [
+    {
+      "fingerprint": "6ac2e547377e145c91a7a384b847301a67339b9a5a87105c93f14f149b503094",
+      "note": "False positive. stripe_receipt_url is sourced exclusively from Stripe's API. Booking#safe_receipt_url validates it is a URI::HTTPS before returning; a nil guard wraps the link_to call in the template."
+    },
+    {
+      "fingerprint": "80858951d3bb2b93ec95df5bac165e0bb12483243a5ee255e83a1139442ea0d2",
+      "note": "False positive. stripe_receipt_url is sourced exclusively from Stripe's API. Booking#safe_receipt_url validates it is a URI::HTTPS before returning; a nil guard wraps the link_to call in the template."
+    }
+  ]
+}

@@ -58,6 +58,28 @@ RSpec.describe Booking, type: :model do
     end
   end
 
+  describe "#safe_receipt_url" do
+    it "returns the URL when it is a valid https URL" do
+      booking = build(:booking, stripe_receipt_url: "https://pay.stripe.com/receipts/test123")
+      expect(booking.safe_receipt_url).to eq("https://pay.stripe.com/receipts/test123")
+    end
+
+    it "returns nil when stripe_receipt_url is blank" do
+      booking = build(:booking, stripe_receipt_url: nil)
+      expect(booking.safe_receipt_url).to be_nil
+    end
+
+    it "returns nil for a non-https URL" do
+      booking = build(:booking, stripe_receipt_url: "http://pay.stripe.com/receipts/test123")
+      expect(booking.safe_receipt_url).to be_nil
+    end
+
+    it "returns nil for a javascript: URI" do
+      booking = build(:booking, stripe_receipt_url: "javascript:alert(1)")
+      expect(booking.safe_receipt_url).to be_nil
+    end
+  end
+
   describe "#within_cancellation_window?" do
     let(:settings) { StudioSetting.current }
 
