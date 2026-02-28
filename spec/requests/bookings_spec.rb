@@ -152,6 +152,16 @@ RSpec.describe "Bookings", type: :request do
         expect(reserved_slot.reload.status).to eq("open")
         expect(response).to redirect_to(bookings_path)
       end
+
+      it "enqueues a cancellation notification to the customer" do
+        stub_stripe_refund(payment_intent_id: "pi_test_fake")
+
+        post cancel_booking_path(booking)
+
+        expect(SendNotificationJob).to have_been_enqueued.with(
+          user.id, "Booking Cancelled", anything
+        )
+      end
     end
 
     context "when outside cancellation window" do

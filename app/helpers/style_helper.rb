@@ -43,7 +43,7 @@ module StyleHelper
   end
 
   SLOT_BUTTON_CLASSES = {
-    "open"      => "rounded-lg border border-green-300 bg-green-50 px-3 py-2 text-sm font-medium text-green-800 hover:bg-green-100 cursor-pointer",
+    "open"      => "rounded-lg border border-green-300 bg-green-50 px-3 py-2 text-sm font-medium text-green-800 hover:bg-green-100 hover:text-green-950 cursor-pointer font-semibold",
     "held"      => "rounded-lg border border-yellow-300 bg-yellow-50 px-3 py-2 text-sm font-medium text-yellow-800 cursor-not-allowed opacity-60",
     "reserved"  => "rounded-lg border border-blue-300 bg-blue-50 px-3 py-2 text-sm font-medium text-blue-800 cursor-not-allowed opacity-60",
     "cancelled" => "rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-sm font-medium text-stone-400 cursor-not-allowed opacity-40"

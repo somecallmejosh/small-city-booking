@@ -169,6 +169,8 @@ GEM
       actionview (>= 7.0.0)
       activesupport (>= 7.0.0)
     json (2.18.1)
+    jwt (3.1.2)
+      base64
     kamal (2.10.1)
       activesupport (>= 7.0)
       base64 (~> 0.2)
@@ -230,6 +232,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.19.1-x86_64-linux-musl)
       racc (~> 1.4)
+    openssl (4.0.1)
     ostruct (0.6.3)
     pagy (43.3.0)
       json
@@ -429,6 +432,9 @@ GEM
       actionview (>= 8.0.0)
       bindex (>= 0.4.0)
       railties (>= 8.0.0)
+    web-push (3.1.0)
+      jwt (~> 3.0)
+      openssl (>= 3.0)
     webmock (3.26.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
@@ -489,6 +495,7 @@ DEPENDENCIES
   vcr
   view_component
   web-console
+  web-push
   webmock
 
 BUNDLED WITH

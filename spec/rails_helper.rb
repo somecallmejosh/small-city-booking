@@ -10,6 +10,8 @@ require "spec_helper"
 ENV["RAILS_ENV"]              ||= "test"
 ENV["STRIPE_SECRET_KEY"]      ||= "sk_test_fake"
 ENV["STRIPE_WEBHOOK_SECRET"]  ||= "whsec_test_secret"
+ENV["VAPID_PUBLIC_KEY"]       ||= "test_vapid_public_key"
+ENV["VAPID_PRIVATE_KEY"]      ||= "test_vapid_private_key"
 require_relative "../config/environment"
 abort("The Rails environment is running in production mode!") if Rails.env.production?
 require "rspec/rails"

@@ -1,5 +1,6 @@
 {
-  "name": "SmallCity",
+  "name": "<%= StudioSetting.current.studio_name.presence || "Small City Studio" %>",
+  "short_name": "Small City",
   "icons": [
     {
       "src": "/icon.png",
@@ -16,7 +17,7 @@
   "start_url": "/",
   "display": "standalone",
   "scope": "/",
-  "description": "SmallCity.",
-  "theme_color": "red",
-  "background_color": "red"
+  "description": "<%= StudioSetting.current.studio_description.presence || "Book studio time at Small City Studio." %>",
+  "theme_color": "#1c1917",
+  "background_color": "#1c1917"
 }

@@ -72,6 +72,14 @@ RSpec.describe "Webhooks", type: :request do
         expect(AgreementAcceptance.last.booking).to eq(booking)
       end
 
+      it "enqueues a notification to the customer" do
+        post_webhook(type: "payment_intent.succeeded", data: intent_data)
+
+        expect(SendNotificationJob).to have_been_enqueued.with(
+          user.id, "Booking Confirmed", anything, url: "/bookings/#{booking.id}"
+        )
+      end
+
       it "stores the Stripe receipt URL on the booking" do
         post_webhook(type: "payment_intent.succeeded", data: intent_data)
 
@@ -102,6 +110,14 @@ RSpec.describe "Webhooks", type: :request do
         expect(response).to have_http_status(:ok)
         expect(booking.reload.status).to eq("cancelled")
         expect(slot.reload.status).to eq("open")
+      end
+
+      it "enqueues a notification to the customer" do
+        post_webhook(type: "payment_intent.payment_failed", data: intent_data)
+
+        expect(SendNotificationJob).to have_been_enqueued.with(
+          user.id, "Payment Failed", anything
+        )
       end
     end
 

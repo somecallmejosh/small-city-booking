@@ -24,7 +24,11 @@ Rails.application.routes.draw do
     member { post :cancel }
   end
   resources :slot_holds, only: [ :create, :destroy ]
+  resources :push_subscriptions, only: [ :create, :destroy ]
   post "/webhooks/stripe", to: "webhooks#stripe"
+
+  get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
+  get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
 
   root to: "home#index"
 end
