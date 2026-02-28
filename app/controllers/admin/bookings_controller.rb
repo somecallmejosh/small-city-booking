@@ -9,7 +9,7 @@ class Admin::BookingsController < Admin::BaseController
   end
 
   def show
-    @booking = Booking.includes(:user, :slots, :agreement).find(params[:id])
+    @booking = Booking.includes(:user, :slots).find(params[:id])
   end
 
   def cancel

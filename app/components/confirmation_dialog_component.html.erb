@@ -1,8 +1,3 @@
-<%# Uses the native <dialog> element. Wrap this component and a trigger button in:
-    <div data-controller="confirmation-dialog">
-      <button type="button" data-action="confirmation-dialog#open">…</button>
-      <%= render ConfirmationDialogComponent.new(confirm_url: …, …) %>
-    </div> %>
 <dialog class="m-0 w-full max-w-none rounded-none p-0 backdrop:bg-black/50 sm:m-auto sm:max-w-md sm:rounded-xl"
         data-confirmation-dialog-target="dialog"
         aria-labelledby="dialog-title-<%= @confirm_url.parameterize %>"

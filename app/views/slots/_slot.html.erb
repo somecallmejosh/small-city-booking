@@ -1,5 +1,5 @@
 <%= turbo_frame_tag "slot_#{slot.id}" do %>
-  <% if slot.status == "open" %>
+  <% if slot.status == "open" && !slot.past? %>
     <button type="button"
             data-slot-selection-target="slot"
             data-slot-id="<%= slot.id %>"

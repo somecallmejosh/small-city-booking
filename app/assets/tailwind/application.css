@@ -1,1 +1,31 @@
 @import "tailwindcss";
+
+@layer components {
+  .pagy {
+    @apply mt-4 flex justify-center gap-x-1 text-sm font-medium;
+
+    a:not([role="separator"]) {
+      @apply flex min-w-8 items-center justify-center rounded-lg border border-stone-200 bg-white px-3 py-1.5 text-stone-600 transition-colors;
+    }
+
+    a[href]:hover {
+      @apply bg-stone-50 text-stone-900;
+    }
+
+    a:not([href]) {
+      @apply cursor-default;
+    }
+
+    a[role="link"]:not([aria-current]) {
+      @apply opacity-40;
+    }
+
+    a[aria-current] {
+      @apply border-stone-900 bg-stone-900 text-white;
+    }
+
+    a[role="separator"] {
+      @apply flex items-center px-1.5 text-stone-400;
+    }
+  }
+}

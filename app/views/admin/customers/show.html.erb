@@ -1,0 +1,97 @@
+<% content_for :title, "#{@customer.name.presence || @customer.email_address} — Admin" %>
+
+<div class="mb-6 flex items-start justify-between">
+  <div>
+    <%= render BreadcrumbComponent.new(items: [
+      { label: "Admin",     path: admin_root_path },
+      { label: "Customers", path: admin_customers_path },
+      { label: @customer.name.presence || @customer.email_address, path: nil }
+    ]) %>
+    <h1 class="mt-1 text-2xl font-semibold text-stone-900">
+      <%= @customer.name.presence || @customer.email_address %>
+    </h1>
+  </div>
+  <%= link_to "Edit", edit_admin_customer_path(@customer), class: btn_secondary %>
+</div>
+
+<div class="grid gap-6 lg:grid-cols-2">
+  <div class="<%= card %>">
+    <h2 class="mb-4 text-sm font-semibold text-stone-700">Profile</h2>
+    <dl class="space-y-2 text-sm">
+      <div>
+        <dt class="text-xs text-stone-500">Name</dt>
+        <dd class="text-stone-900"><%= @customer.name.presence || "—" %></dd>
+      </div>
+      <div>
+        <dt class="text-xs text-stone-500">Email</dt>
+        <dd class="text-stone-900"><%= @customer.email_address %></dd>
+      </div>
+      <div>
+        <dt class="text-xs text-stone-500">Phone</dt>
+        <dd class="text-stone-900"><%= @customer.phone.presence || "—" %></dd>
+      </div>
+      <div>
+        <dt class="text-xs text-stone-500">Joined</dt>
+        <dd class="text-stone-900"><%= @customer.created_at.strftime("%B %-d, %Y") %></dd>
+      </div>
+    </dl>
+  </div>
+
+  <div class="<%= card %>">
+    <h2 class="mb-4 text-sm font-semibold text-stone-700">Spend</h2>
+    <p class="text-3xl font-bold text-stone-900">
+      $<%= number_with_precision(@total_spent / 100.0, precision: 2) %>
+    </p>
+    <p class="mt-1 text-xs text-stone-500">Total from confirmed & completed bookings</p>
+  </div>
+</div>
+
+<div class="mt-6">
+  <h2 class="mb-3 text-lg font-semibold text-stone-900">Booking History</h2>
+
+  <% if @bookings.any? %>
+    <div class="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
+      <table class="w-full text-sm">
+        <thead class="border-b border-stone-200 bg-stone-50">
+          <tr>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Booking</th>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Session</th>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Total</th>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Status</th>
+            <th class="px-4 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-stone-100">
+          <% @bookings.each do |booking| %>
+            <tr>
+              <td class="px-4 py-3 text-stone-500">#<%= booking.id %></td>
+              <td class="px-4 py-3 text-stone-700">
+                <% first_slot = booking.slots.min_by(&:starts_at) %>
+                <% if first_slot %>
+                  <%= first_slot.starts_at.strftime("%a, %b %-d %Y") %>
+                  <span class="text-stone-400">·</span>
+                  <%= booking.slots.count %> hr<%= "s" if booking.slots.count != 1 %>
+                <% else %>
+                  <span class="text-stone-400">—</span>
+                <% end %>
+              </td>
+              <td class="px-4 py-3 text-stone-700">
+                $<%= number_with_precision(booking.total_cents / 100.0, precision: 2) %>
+              </td>
+              <td class="px-4 py-3">
+                <span class="<%= booking_status_badge_classes(booking.status) %> rounded-full px-2.5 py-0.5 text-xs font-medium">
+                  <%= booking.status.capitalize %>
+                </span>
+              </td>
+              <td class="px-4 py-3 text-right">
+                <%= link_to "View", admin_booking_path(booking), class: "text-sm font-medium text-stone-700 hover:underline" %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  <% else %>
+    <div class="<%= card %> text-center text-stone-500">No bookings yet.</div>
+  <% end %>
+</div>

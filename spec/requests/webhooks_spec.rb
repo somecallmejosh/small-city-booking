@@ -33,6 +33,21 @@ RSpec.describe "Webhooks", type: :request do
       end
     end
 
+    context "with a tampered payload" do
+      it "returns 400 when the payload does not match its signature" do
+        # Build a valid signed envelope for one payload…
+        original = stripe_webhook_payload(type: "customer.created", data: { "id" => "cus_original" })
+        # …then send a different (tampered) body with the original signature
+        post webhooks_stripe_path,
+             params:  '{"tampered":"true"}',
+             headers: {
+               "Content-Type"          => "application/json",
+               "HTTP_STRIPE_SIGNATURE" => original[:sig_header]
+             }
+        expect(response).to have_http_status(:bad_request)
+      end
+    end
+
     context "payment_intent.succeeded" do
       let(:intent_data) do
         {

@@ -10,7 +10,7 @@
     <h1 class="mt-1 text-2xl font-semibold text-stone-900">Booking #<%= @booking.id %></h1>
   </div>
   <div class="flex items-center gap-3">
-    <span class="<%= slot_status_badge_classes(@booking.status) %> rounded-full px-2.5 py-0.5 text-xs font-medium">
+    <span class="<%= booking_status_badge_classes(@booking.status) %> rounded-full px-2.5 py-0.5 text-xs font-medium">
       <%= @booking.status.capitalize %>
     </span>
     <% if @booking.admin_created? %>
@@ -31,9 +31,10 @@
 
   <div class="<%= card %>">
     <h2 class="mb-4 text-sm font-semibold text-stone-700">Sessions</h2>
-    <% if @booking.slots.any? %>
+    <% sorted_slots = @booking.slots.sort_by(&:starts_at) %>
+    <% if sorted_slots.any? %>
       <ul class="space-y-1">
-        <% @booking.slots.order(:starts_at).each do |slot| %>
+        <% sorted_slots.each do |slot| %>
           <li class="text-sm text-stone-700">
             <%= slot.starts_at.strftime("%A, %B %-d %Y · %-I:%M %p") %>
           </li>
@@ -102,13 +103,13 @@
 <% if %w[pending confirmed].include?(@booking.status) %>
   <div class="mt-6" data-controller="confirmation-dialog">
     <button type="button" data-action="confirmation-dialog#open" class="<%= btn_danger %>">
-      <% if @booking.status == "confirmed" %>Cancel &amp; Refund<% else %>Cancel Booking<% end %>
+      <% if @booking.status == "confirmed" %>Cancel & Refund<% else %>Cancel Booking<% end %>
     </button>
     <%= render ConfirmationDialogComponent.new(
-      title:         @booking.status == "confirmed" ? "Cancel &amp; Refund Booking" : "Cancel Booking",
+      title:         @booking.status == "confirmed" ? "Cancel & Refund Booking" : "Cancel Booking",
       message:       @booking.status == "confirmed" ? "This will cancel the booking, release all slots, and issue a refund." : "This will cancel the pending booking and release the held slots.",
       confirm_url:   cancel_admin_booking_path(@booking),
-      confirm_label: @booking.status == "confirmed" ? "Yes, Cancel &amp; Refund" : "Yes, Cancel",
+      confirm_label: @booking.status == "confirmed" ? "Yes, Cancel & Refund" : "Yes, Cancel",
       cancel_label:  "Keep Booking"
     ) %>
   </div>

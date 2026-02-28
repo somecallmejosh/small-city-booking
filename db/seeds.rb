@@ -1,9 +1,16 @@
 # Admin user — change the password before deploying to production
 User.find_or_create_by!(email_address: "admin@example.com") do |u|
   u.name = "Admin"
-  u.password = "changeme123456"
+  u.password = "adminpassword"
   u.admin = true
 end
+
+User.find_or_create_by!(email_address: "customer@example.com") do |u|
+  u.name = "Customer"
+  u.password = "customerpassword"
+  u.admin = false
+end
+
 
 # Initial StudioSetting record (singleton)
 StudioSetting.find_or_create_by!(id: 1) do |s|

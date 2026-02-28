@@ -1,0 +1,168 @@
+<% content_for :title, "Help — Small City Studio" %>
+
+<div class="mx-auto max-w-2xl">
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold text-stone-900">User Manual</h1>
+    <p class="mt-2 text-stone-500">Everything you need to know about booking studio time.</p>
+  </div>
+
+  <nav class="mb-10 rounded-xl border border-stone-200 bg-white p-5 shadow-sm" aria-label="Page sections">
+    <p class="mb-2 text-xs font-semibold uppercase tracking-wide text-stone-500">On this page</p>
+    <ol class="space-y-1 text-sm text-stone-700">
+      <li><a href="#calendar" class="hover:underline">The Booking Calendar</a></li>
+      <li><a href="#checkout" class="hover:underline">Checkout & Hold</a></li>
+      <li><a href="#cancellation" class="hover:underline">Cancellation & Refunds</a></li>
+      <li><a href="#terms" class="hover:underline">Terms of Booking</a></li>
+      <% if authenticated? && Current.user&.admin? %>
+        <li><a href="#admin" class="hover:underline">Admin Workflow</a></li>
+      <% end %>
+    </ol>
+  </nav>
+
+  <div class="space-y-10">
+    <section id="calendar">
+      <h2 class="text-xl font-semibold text-stone-900">The Booking Calendar</h2>
+      <div class="mt-4 space-y-4 text-stone-700">
+        <p>
+          The home page shows a calendar of all available studio time. Each block represents one hour.
+          Slots are color-coded so you can see their status at a glance:
+        </p>
+        <ul class="space-y-2 rounded-lg border border-stone-200 bg-white p-4 text-sm">
+          <li class="flex items-center gap-3">
+            <span class="inline-block h-4 w-4 rounded-full bg-green-500 flex-shrink-0"></span>
+            <span><strong>Open</strong> — available to book</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="inline-block h-4 w-4 rounded-full bg-yellow-400 flex-shrink-0"></span>
+            <span><strong>Held</strong> — another customer is in the checkout process; may become available if they don't complete payment</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="inline-block h-4 w-4 rounded-full bg-blue-500 flex-shrink-0"></span>
+            <span><strong>Reserved</strong> — already booked</span>
+          </li>
+          <li class="flex items-center gap-3">
+            <span class="inline-block h-4 w-4 rounded-full bg-stone-400 flex-shrink-0"></span>
+            <span><strong>Cancelled</strong> — no longer available</span>
+          </li>
+        </ul>
+        <p>
+          To book multiple consecutive hours, click the first slot you want, then click the last slot.
+          All open slots between them will be selected automatically. You cannot select non-consecutive
+          slots or slots that include a held or reserved hour.
+        </p>
+        <p>
+          Once you have selected your slots, click <strong>Continue to Checkout</strong> to proceed.
+          You must be signed in to book.
+        </p>
+      </div>
+    </section>
+
+    <section id="checkout">
+      <h2 class="text-xl font-semibold text-stone-900">Checkout & Hold</h2>
+      <div class="mt-4 space-y-4 text-stone-700">
+        <p>
+          When you click <strong>Continue to Checkout</strong>, the system places a
+          <strong>5-minute hold</strong> on your selected slots. This prevents anyone else from booking
+          the same time while you complete payment.
+        </p>
+        <p>
+          A countdown timer shows how much time you have left. You must complete payment before the
+          timer reaches zero. If it expires, your slots are released and you will need to go back and
+          select them again.
+        </p>
+        <p>
+          Payment is processed securely through Stripe. Your card details are entered directly on
+          Stripe's page — we never see or store them.
+        </p>
+        <p>
+          Once payment is confirmed, your booking is locked in and you will receive a push notification
+          (if you have enabled them) confirming the date and time.
+        </p>
+      </div>
+    </section>
+
+    <section id="cancellation">
+      <h2 class="text-xl font-semibold text-stone-900">Cancellation & Refunds</h2>
+      <div class="mt-4 space-y-4 text-stone-700">
+        <p>
+          You can cancel a booking from your <strong>My Bookings</strong> page. The refund policy
+          depends on how far in advance you cancel:
+        </p>
+        <ul class="space-y-3 rounded-lg border border-stone-200 bg-white p-4 text-sm">
+          <li>
+            <strong>More than 24 hours before your session:</strong><br>
+            Full refund issued automatically. The money is returned to your original payment method.
+            Refunds typically appear within 5–10 business days depending on your bank.
+          </li>
+          <li class="border-t border-stone-100 pt-3">
+            <strong>24 hours or less before your session:</strong><br>
+            Cancellation is final with no refund. The app will clearly show this before you confirm.
+          </li>
+        </ul>
+        <p>
+          The studio can cancel any booking at any time with a full refund, regardless of the
+          cancellation window.
+        </p>
+      </div>
+    </section>
+
+    <section id="terms">
+      <h2 class="text-xl font-semibold text-stone-900">Terms of Booking</h2>
+      <div class="mt-4 space-y-4 text-stone-700">
+        <p>
+          Before completing any booking, you are shown the current Terms of Booking and must check
+          a box confirming you agree. This is a legal record of your agreement to the studio's policies.
+        </p>
+        <p>
+          The terms cover studio rules, conduct expectations, liability, and payment policies. They
+          are written in plain language — not legal jargon.
+        </p>
+        <p>
+          Each booking records the exact version of the terms you agreed to. If the terms are updated
+          in the future, your past bookings are not affected.
+        </p>
+      </div>
+    </section>
+
+    <% if authenticated? && Current.user&.admin? %>
+      <section id="admin">
+        <h2 class="text-xl font-semibold text-stone-900">Admin Workflow</h2>
+        <div class="mt-4 space-y-6 text-stone-700">
+          <div>
+            <h3 class="font-semibold">Creating Slots</h3>
+            <p class="mt-1 text-sm">
+              Go to <strong>Admin → Slots</strong>. Use <strong>New Slot</strong> to add a single
+              hour, or <strong>Bulk Create</strong> to generate slots across a date range, days of
+              the week, and time window all at once. Overnight ranges (e.g., 10 PM – 2 AM) are
+              handled automatically.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-semibold">Managing Bookings</h3>
+            <p class="mt-1 text-sm">
+              Go to <strong>Admin → Bookings</strong> to see all bookings, filter by status, and
+              view details. You can cancel any confirmed or pending booking and issue a full refund
+              at any time. Use <strong>New Booking</strong> to create a booking manually for a
+              customer — with or without a Stripe Payment Link.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-semibold">Updating the Agreement</h3>
+            <p class="mt-1 text-sm">
+              Go to <strong>Admin → Agreement</strong>. Saving a change publishes a new version
+              immediately. Future bookings will use the new version; past bookings are unaffected.
+              All past versions are archived and viewable.
+            </p>
+          </div>
+          <div>
+            <h3 class="font-semibold">Studio Settings</h3>
+            <p class="mt-1 text-sm">
+              Go to <strong>Admin → Settings</strong> to update the studio name, description,
+              hourly rate, and cancellation window. Changes take effect immediately for new bookings.
+            </p>
+          </div>
+        </div>
+      </section>
+    <% end %>
+  </div>
+</div>

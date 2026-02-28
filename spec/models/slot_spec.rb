@@ -32,6 +32,35 @@ RSpec.describe Slot, type: :model do
     end
   end
 
+  describe "Turbo Stream broadcasts" do
+    it "removes the slot from the customer calendar when status becomes reserved" do
+      slot = create(:slot, :held)
+      expect { slot.update!(status: "reserved", held_by_user: nil, held_until: nil) }
+        .to have_broadcasted_to("slots")
+        .with(a_string_including("remove", "slot_#{slot.id}"))
+    end
+
+    it "removes the slot from the customer calendar when status becomes cancelled" do
+      slot = create(:slot)
+      expect { slot.update!(status: "cancelled") }
+        .to have_broadcasted_to("slots")
+        .with(a_string_including("remove", "slot_#{slot.id}"))
+    end
+
+    it "enqueues a replace broadcast when status becomes held" do
+      slot = create(:slot)
+      user = create(:user)
+      expect { slot.update!(status: "held", held_by_user: user, held_until: 2.minutes.from_now) }
+        .to have_enqueued_job(Turbo::Streams::ActionBroadcastJob)
+    end
+
+    it "enqueues a replace broadcast when status returns to open" do
+      slot = create(:slot, :held)
+      expect { slot.update!(status: "open", held_by_user: nil, held_until: nil) }
+        .to have_enqueued_job(Turbo::Streams::ActionBroadcastJob)
+    end
+  end
+
   describe ".available scope" do
     it "includes open slots" do
       slot = create(:slot, status: "open")

@@ -1,0 +1,46 @@
+<% content_for :title, "New Customer — Admin" %>
+
+<div class="mb-6">
+  <%= render BreadcrumbComponent.new(items: [
+    { label: "Admin",     path: admin_root_path },
+    { label: "Customers", path: admin_customers_path },
+    { label: "New Customer", path: nil }
+  ]) %>
+  <h1 class="mt-1 text-2xl font-semibold text-stone-900">New Customer</h1>
+</div>
+
+<div class="<%= card %> max-w-md">
+  <p class="mb-5 text-sm text-stone-500">
+    A temporary password will be generated. The customer can set their own via <strong>Forgot password</strong>.
+  </p>
+
+  <%= form_with model: @customer, url: admin_customers_path do |f| %>
+    <% if @customer.errors.any? %>
+      <div class="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+        <% @customer.errors.full_messages.each do |msg| %>
+          <p><%= msg %></p>
+        <% end %>
+      </div>
+    <% end %>
+
+    <div class="mb-4">
+      <%= f.label :email_address, "Email", class: form_label %>
+      <%= f.email_field :email_address, class: input_field, placeholder: "customer@example.com", required: true %>
+    </div>
+
+    <div class="mb-4">
+      <%= f.label :name, "Name", class: form_label %>
+      <%= f.text_field :name, class: input_field, placeholder: "Full name (optional)" %>
+    </div>
+
+    <div class="mb-6">
+      <%= f.label :phone, "Phone", class: form_label %>
+      <%= f.text_field :phone, class: input_field, placeholder: "Optional" %>
+    </div>
+
+    <div class="flex items-center gap-3">
+      <%= f.submit "Create Customer", class: btn_primary %>
+      <%= link_to "Cancel", admin_customers_path, class: btn_secondary %>
+    </div>
+  <% end %>
+</div>
