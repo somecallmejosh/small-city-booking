@@ -22,14 +22,22 @@ class Slot < ApplicationRecord
     starts_at + 1.hour
   end
 
+  def past?
+    starts_at <= Time.current
+  end
+
   def cancellable?
     status == "open"
   end
 
   after_update_commit -> {
-    broadcast_replace_later_to "slots",
-      target: "slot_#{id}",
-      partial: "slots/slot",
-      locals: { slot: self }
+    if status.in?(%w[reserved cancelled])
+      broadcast_remove_to "slots", target: "slot_#{id}"
+    else
+      broadcast_replace_later_to "slots",
+        target: "slot_#{id}",
+        partial: "slots/slot",
+        locals: { slot: self }
+    end
   }
 end

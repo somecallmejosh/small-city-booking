@@ -18,7 +18,7 @@ Rails.application.routes.draw do
     end
     resource :agreement, only: [ :show, :edit, :update ]
     resource :settings, only: [ :show, :edit, :update ]
-    resources :customers, only: [ :index, :show, :edit, :update ]
+    resources :customers, only: [ :index, :show, :new, :create, :edit, :update ]
   end
 
   get "/help", to: "help#show"
@@ -32,6 +32,10 @@ Rails.application.routes.draw do
 
   get "manifest" => "rails/pwa#manifest", as: :pwa_manifest
   get "service-worker" => "rails/pwa#service_worker", as: :pwa_service_worker
+
+  match "/404", to: "errors#not_found",            via: :all
+  match "/422", to: "errors#unprocessable",          via: :all
+  match "/500", to: "errors#internal_server_error",  via: :all
 
   root to: "home#index"
 end

@@ -31,6 +31,17 @@ module StyleHelper
     "mx-auto w-full max-w-2xl px-4 lg:px-8"
   end
 
+  BOOKING_STATUS_BADGE_CLASSES = {
+    "pending"   => "bg-yellow-100 text-yellow-800",
+    "confirmed" => "bg-green-100 text-green-800",
+    "cancelled" => "bg-stone-100 text-stone-500",
+    "completed" => "bg-blue-100 text-blue-800"
+  }.freeze
+
+  def booking_status_badge_classes(status)
+    BOOKING_STATUS_BADGE_CLASSES.fetch(status, "bg-stone-100 text-stone-500")
+  end
+
   SLOT_STATUS_BADGE_CLASSES = {
     "open"      => "bg-green-100 text-green-800",
     "held"      => "bg-yellow-100 text-yellow-800",
@@ -50,6 +61,8 @@ module StyleHelper
   }.freeze
 
   def slot_button_classes(slot)
+    return SLOT_BUTTON_CLASSES["cancelled"] if slot.past?
+
     SLOT_BUTTON_CLASSES.fetch(slot.status, "rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-sm")
   end
 end

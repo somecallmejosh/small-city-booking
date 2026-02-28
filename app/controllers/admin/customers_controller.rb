@@ -24,6 +24,20 @@ class Admin::CustomersController < Admin::BaseController
                             .sum(:total_cents)
   end
 
+  def new
+    @customer = User.new
+  end
+
+  def create
+    @customer = User.new(new_customer_params.merge(password: SecureRandom.base58(24), admin: false))
+
+    if @customer.save
+      redirect_to admin_customer_path(@customer), notice: "Customer created. They can set their password via 'Forgot password'."
+    else
+      render :new, status: :unprocessable_entity
+    end
+  end
+
   def edit
     @customer = User.where(admin: false).find(params[:id])
   end
@@ -39,6 +53,10 @@ class Admin::CustomersController < Admin::BaseController
   end
 
   private
+
+    def new_customer_params
+      params.expect(user: [ :email_address, :name, :phone ])
+    end
 
     def customer_params
       params.expect(user: [ :name, :phone ])

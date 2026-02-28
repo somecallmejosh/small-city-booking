@@ -9,12 +9,20 @@
 </div>
 
 <div class="mb-4 flex flex-wrap gap-2">
+  <% tab_colors = {
+    nil         => { active: "bg-stone-900 text-white border-stone-900",         inactive: "bg-white text-stone-600 border-stone-300 hover:bg-stone-50" },
+    "pending"   => { active: "bg-yellow-600 text-white border-yellow-600",        inactive: "bg-yellow-50 text-yellow-700 border-yellow-300 hover:bg-yellow-100" },
+    "confirmed" => { active: "bg-green-700 text-white border-green-700",          inactive: "bg-green-50 text-green-700 border-green-300 hover:bg-green-100" },
+    "cancelled" => { active: "bg-stone-500 text-white border-stone-500",          inactive: "bg-stone-100 text-stone-500 border-stone-300 hover:bg-stone-200" },
+    "completed" => { active: "bg-blue-700 text-white border-blue-700",            inactive: "bg-blue-50 text-blue-700 border-blue-300 hover:bg-blue-100" }
+  } %>
   <% [nil, "pending", "confirmed", "cancelled", "completed"].each do |status| %>
     <% label = status ? status.capitalize : "All" %>
     <% active = @status_filter == status %>
+    <% colors = active ? tab_colors[status][:active] : tab_colors[status][:inactive] %>
     <%= link_to label,
           admin_bookings_path(status.present? ? { status: status } : {}),
-          class: "rounded-full px-3 py-1 text-xs font-medium border #{active ? 'bg-stone-900 text-white border-stone-900' : 'bg-white text-stone-600 border-stone-300 hover:bg-stone-50'}" %>
+          class: "rounded-full px-3 py-1 text-xs font-medium border #{colors}" %>
   <% end %>
 </div>
 
@@ -83,7 +91,7 @@
                 $<%= number_with_precision(booking.total_cents / 100.0, precision: 2) %>
               </td>
               <td class="px-4 py-3">
-                <span class="<%= slot_status_badge_classes(booking.status) %> rounded-full px-2.5 py-0.5 text-xs font-medium">
+                <span class="<%= booking_status_badge_classes(booking.status) %> rounded-full px-2.5 py-0.5 text-xs font-medium">
                   <%= booking.status.capitalize %>
                 </span>
                 <% if booking.admin_created? %>

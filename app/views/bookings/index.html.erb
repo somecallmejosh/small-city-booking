@@ -23,7 +23,7 @@
             </p>
           </div>
           <div class="flex items-center gap-3">
-            <span class="<%= slot_status_badge_classes(booking.status) %> rounded-full px-2.5 py-0.5 text-xs font-medium">
+            <span class="<%= booking_status_badge_classes(booking.status) %> rounded-full px-2.5 py-0.5 text-xs font-medium">
               <%= booking.status.capitalize %>
             </span>
             <%= link_to "View", booking_path(booking), class: "text-sm font-medium text-stone-700 hover:underline" %>
@@ -48,7 +48,7 @@
             </p>
           </div>
           <div class="flex items-center gap-3">
-            <span class="<%= slot_status_badge_classes(booking.status) %> rounded-full px-2.5 py-0.5 text-xs font-medium">
+            <span class="<%= booking_status_badge_classes(booking.status) %> rounded-full px-2.5 py-0.5 text-xs font-medium">
               <%= booking.status.capitalize %>
             </span>
             <%= link_to "View", booking_path(booking), class: "text-sm font-medium text-stone-700 hover:underline" %>

@@ -31,13 +31,37 @@ class WebhooksController < ApplicationController
       booking = Booking.find_by(id: intent.metadata["booking_id"])
       return if booking.nil? || booking.status == "confirmed"
 
-      if booking.slots.any? { |s| s.status != "held" || s.held_by_user_id != booking.user_id }
-        Stripe::Refund.create(payment_intent: intent.id)
-        booking.update!(status: "cancelled")
-        return
+      refund_needed = false
+
+      ActiveRecord::Base.transaction do
+        locked_slots = booking.slots.lock("FOR UPDATE").to_a
+
+        if locked_slots.any? { |s| s.status != "held" || s.held_by_user_id != booking.user_id }
+          booking.update!(status: "cancelled")
+          refund_needed = true
+          raise ActiveRecord::Rollback
+        end
+
+        booking.update!(status: "confirmed", stripe_payment_intent_id: intent.id)
+
+        locked_slots.each do |slot|
+          slot.update!(status: "reserved", held_by_user: nil, held_until: nil)
+        end
+
+        AgreementAcceptance.create!(
+          user:        booking.user,
+          agreement:   booking.agreement,
+          booking:     booking,
+          ip_address:  intent.metadata["agreed_ip"],
+          user_agent:  intent.metadata["agreed_user_agent"],
+          accepted_at: Time.current
+        )
       end
 
-      booking.update!(status: "confirmed", stripe_payment_intent_id: intent.id)
+      if refund_needed
+        Stripe::Refund.create(payment_intent: intent.id)
+        return
+      end
 
       slot_label = slot_date_label(booking.slots.minimum(:starts_at))
       SendNotificationJob.perform_later(
@@ -60,19 +84,6 @@ class WebhooksController < ApplicationController
         charge = Stripe::Charge.retrieve(intent["latest_charge"])
         booking.update!(stripe_receipt_url: charge.receipt_url)
       end
-
-      booking.slots.each do |slot|
-        slot.update!(status: "reserved", held_by_user: nil, held_until: nil)
-      end
-
-      AgreementAcceptance.create!(
-        user:       booking.user,
-        agreement:  booking.agreement,
-        booking:    booking,
-        ip_address: intent.metadata["agreed_ip"],
-        user_agent: intent.metadata["agreed_user_agent"],
-        accepted_at: Time.current
-      )
     end
 
     def handle_payment_intent_failed(intent)

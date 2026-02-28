@@ -1,4 +1,9 @@
 <% content_for :title, "Booking ##{@booking.id}" %>
+<% if @booking.status == "pending" %>
+  <% content_for :head do %>
+    <meta http-equiv="refresh" content="5">
+  <% end %>
+<% end %>
 
 <div class="mx-auto max-w-2xl">
   <%= render BreadcrumbComponent.new(items: [
@@ -9,7 +14,7 @@
   <div class="mt-4 <%= card %>">
     <div class="mb-4 flex items-center justify-between">
       <h1 class="text-xl font-semibold text-stone-900">Booking #<%= @booking.id %></h1>
-      <span class="<%= slot_status_badge_classes(@booking.status) %> rounded-full px-2.5 py-0.5 text-xs font-medium">
+      <span class="<%= booking_status_badge_classes(@booking.status) %> rounded-full px-2.5 py-0.5 text-xs font-medium">
         <%= @booking.status.capitalize %>
       </span>
     </div>

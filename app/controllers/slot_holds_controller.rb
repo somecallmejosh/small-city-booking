@@ -12,7 +12,7 @@ class SlotHoldsController < ApplicationController
     ActiveRecord::Base.transaction do
       locked = Slot.where(id: slot_ids).lock("FOR UPDATE SKIP LOCKED").to_a
 
-      unless locked.size == slot_ids.size && locked.all? { |s| s.status == "open" }
+      unless locked.size == slot_ids.size && locked.all? { |s| s.status == "open" && s.starts_at > Time.current }
         raise ActiveRecord::Rollback
       end
 

@@ -5,6 +5,7 @@
     <%= render BreadcrumbComponent.new(items: [{ label: "Admin", path: admin_root_path }, { label: "Customers", path: nil }]) %>
     <h1 class="mt-1 text-2xl font-semibold text-stone-900">Customers</h1>
   </div>
+  <%= link_to "New Customer", new_admin_customer_path, class: btn_primary %>
 </div>
 
 <%= form_with url: admin_customers_path, method: :get, class: "mb-6 flex gap-2" do |f| %>
