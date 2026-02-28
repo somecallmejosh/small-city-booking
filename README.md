@@ -1,24 +1,194 @@
-# README
+# Small City Studio
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A production-grade booking app for a single-room recording studio. Customers browse available time slots, hold them for two minutes, pay via Stripe Checkout, and receive confirmation. One admin manages all slots, bookings, customers, agreements, and settings.
 
-Things you may want to cover:
+---
 
-* Ruby version
+## Tech Stack
 
-* System dependencies
+| Layer | Technology |
+|---|---|
+| Framework | Rails 8.1.1 |
+| Database | PostgreSQL |
+| Frontend | Hotwire (Turbo Frames/Streams + Stimulus) |
+| Styling | TailwindCSS + Propshaft |
+| Auth | Rails `authentication` generator |
+| Payments | Stripe (Checkout, Refunds, Payment Links) |
+| Push Notifications | Web Push API (`web-push` gem, VAPID) |
+| Background Jobs | Solid Queue |
+| Components | ViewComponent |
+| Pagination | Pagy |
+| Testing | RSpec, Capybara + Cuprite, FactoryBot, SimpleCov, WebMock, VCR |
+| Code Quality | RuboCop (rails-omakase), Brakeman, Bundler Audit |
 
-* Configuration
+---
 
-* Database creation
+## Getting Started
 
-* Database initialization
+### Prerequisites
 
-* How to run the test suite
+- Ruby (see `.ruby-version`)
+- PostgreSQL
+- Node.js (for Tailwind CSS)
+- Chrome (for system tests via Cuprite)
+- [Stripe CLI](https://stripe.com/docs/stripe-cli) (for local webhook testing)
 
-* Services (job queues, cache servers, search engines, etc.)
+### Setup
 
-* Deployment instructions
+```bash
+bundle install
+bin/rails db:create db:migrate db:seed
+bin/rails server
+```
 
-* ...
+The seed creates an admin user and an initial `StudioSetting` record. Check `db/seeds.rb` for credentials.
+
+### Environment Variables
+
+Copy `.env.example` to `.env` and fill in the values:
+
+```
+DATABASE_URL
+RAILS_MASTER_KEY
+STRIPE_SECRET_KEY
+STRIPE_PUBLISHABLE_KEY
+STRIPE_WEBHOOK_SECRET
+VAPID_PUBLIC_KEY
+VAPID_PRIVATE_KEY
+SMTP_HOST
+SMTP_USER
+SMTP_PASSWORD
+```
+
+---
+
+## Development
+
+```bash
+# Start the server
+bin/rails server
+
+# Run migrations
+bin/rails db:migrate
+
+# Reseed
+bin/rails db:seed
+```
+
+### Local Stripe Webhooks
+
+Run the Stripe CLI listener in a dedicated terminal before testing payments:
+
+```bash
+stripe listen --forward-to localhost:3000/webhooks/stripe
+```
+
+Copy the printed `whsec_...` secret into `.env` as `STRIPE_WEBHOOK_SECRET`, then restart the Rails server.
+
+To resend a past event:
+
+```bash
+stripe events resend evt_XXXXXXXXXX
+```
+
+---
+
+## Testing
+
+```bash
+# Full suite (also runs SimpleCov; CI fails below 95% coverage)
+bundle exec rspec
+
+# Single file
+bundle exec rspec spec/models/slot_spec.rb
+
+# Single example
+bundle exec rspec spec/models/slot_spec.rb:42
+```
+
+**Test setup highlights:**
+
+- Default driver is `:rack_test` (fast). System specs that require JavaScript use `driven_by(:cuprite)` with `js: true`.
+- WebMock stubs all external HTTP calls — no real Stripe or SMTP calls in tests.
+- VCR cassettes live in `spec/fixtures/vcr_cassettes`.
+- Stripe webhook specs use the HMAC helper in `spec/support/stripe_helpers.rb`.
+- Coverage threshold is 95% (currently ~97%).
+
+---
+
+## Code Quality
+
+```bash
+# Lint
+bin/rubocop
+bin/rubocop -a      # auto-correct safe offenses
+
+# Security
+bin/brakeman --no-pager
+bin/bundler-audit
+bin/importmap audit
+```
+
+---
+
+## CI/CD
+
+GitHub Actions runs four jobs on every push and pull request:
+
+| Job | What it checks |
+|---|---|
+| `scan_ruby` | Brakeman + Bundler Audit |
+| `scan_js` | Importmap audit |
+| `lint` | RuboCop — zero offenses |
+| `test` | RSpec + Chrome via Cuprite |
+
+All four must pass before merge. Coverage is enforced by SimpleCov inside the `test` job.
+
+---
+
+## Architecture
+
+### Booking Flow
+
+1. Customer selects consecutive open slots on the calendar.
+2. `SlotHoldsController#create` acquires an atomic hold via `SELECT FOR UPDATE SKIP LOCKED`. All selected slots must be `open`; any conflict rolls back. On success, slots move to `held` for two minutes and a pending `Booking` + `BookingSlot` are created.
+3. `BookingsController#create` validates the hold is still active, creates a Stripe Checkout Session, and redirects to Stripe.
+4. On `payment_intent.succeeded`, `WebhooksController` verifies the hold, confirms the booking, transitions slots to `reserved`, and records an `AgreementAcceptance`.
+5. On `payment_intent.payment_failed`, slots are released back to `open` and the booking is cancelled.
+6. `HoldExpiryJob` runs every minute (Solid Queue) to release any expired holds. `Slot.available` also lazily cleans up expired holds so the calendar stays accurate between job runs.
+
+### Admin
+
+All admin controllers inherit `Admin::BaseController`, which enforces `require_admin` and uses the `admin` layout. The admin can:
+
+- Create and cancel slots (individually or in bulk across a date/time range).
+- View, cancel, and manually create bookings (with optional Stripe Payment Link).
+- Manage customer profiles (search, view history, edit name/phone).
+- Publish new agreement versions (append-only; past versions archived).
+- Update studio settings (hourly rate, cancellation window, studio name/description).
+
+### Auth
+
+Generated by `rails generate authentication`. Uses `Current.user` via `CurrentAttributes`. The `email_address` field follows Rails 8 convention. Password minimum is 12 characters. Password reset uses `generates_token_for :password_reset`.
+
+### Key Conventions
+
+**Styling** — Tailwind classes are never repeated inline. Shared styles live in `app/helpers/style_helper.rb` (`btn_primary`, `btn_secondary`, `btn_danger`, `input_field`, `card`, `page_container`, and slot/booking badge helpers). Component-private styles are private methods on the ViewComponent class.
+
+**Pagination** — Pagy 43.x. Controllers use `include Pagy::Method`; views call `@pagy.series_nav`.
+
+**Time zone** — All times stored in UTC, displayed in `America/New_York`. `config.time_zone = "Eastern Time (US & Canada)"`.
+
+**Error pages** — Routed through Rails (`config.exceptions_app = self.routes`) using a minimal `error` layout. Static `public/404.html` and `public/422.html` are removed so the custom routes take effect.
+
+---
+
+## Deployment
+
+Deployed on [Railway](https://railway.app) with a managed PostgreSQL add-on. Migrations run automatically on deploy via Railway's deploy hook:
+
+```bash
+bundle exec rails db:migrate
+```
+
+Automatic deploys trigger from `main` after all CI checks pass.
