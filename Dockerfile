@@ -72,6 +72,7 @@ COPY --chown=rails:rails --from=build /rails /rails
 # Entrypoint prepares the database.
 ENTRYPOINT ["/rails/bin/docker-entrypoint"]
 
-# Start the Rails server, binding to Railway-injected $PORT (shell form expands env vars)
+# Use Thruster as the entry point (handles HTTP/2, static files, compression).
+# Thruster listens on $PORT and proxies to an internal Puma socket.
 EXPOSE 3000
-CMD ./bin/rails server -b 0.0.0.0 -p ${PORT:-3000}
+CMD ["./bin/thrust", "./bin/rails", "server"]
