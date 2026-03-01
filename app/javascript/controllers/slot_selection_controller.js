@@ -5,39 +5,63 @@ export default class extends Controller {
   static targets = [ "slot", "summary", "checkoutButton", "slotIdsInput" ]
 
   connect() {
-    this.selectedIds = []
+    this.selectedIds  = []
+    this.anchorSlotId = null
     this.updateUI()
   }
 
   selectSlot(event) {
-    const button     = event.currentTarget
-    const slotId     = parseInt(button.dataset.slotId)
-    const startsAtMs = parseInt(button.dataset.startsAtMs)
-    const endsAtMs   = parseInt(button.dataset.endsAtMs)
+    const button = event.currentTarget
+    const slotId = parseInt(button.dataset.slotId)
 
     const existingIndex = this.selectedIds.indexOf(slotId)
 
     if (existingIndex !== -1) {
-      // Deselect: keep only slots before this one (consecutive run breaks here)
+      // Clicking an already-selected slot: deselect it and everything after
       this.selectedIds = this.selectedIds.slice(0, existingIndex)
+      if (this.selectedIds.length === 0) this.anchorSlotId = null
     } else if (this.selectedIds.length === 0) {
-      this.selectedIds = [ slotId ]
+      // First click: set anchor
+      this.anchorSlotId = slotId
+      this.selectedIds  = [ slotId ]
     } else {
-      // Check if this slot is consecutive with the last selected slot
-      const lastSlotButton = this.slotTargets.find(
-        el => parseInt(el.dataset.slotId) === this.selectedIds[this.selectedIds.length - 1]
-      )
-      const lastEndsAtMs = lastSlotButton ? parseInt(lastSlotButton.dataset.endsAtMs) : null
-
-      if (lastEndsAtMs === startsAtMs) {
-        this.selectedIds = [ ...this.selectedIds, slotId ]
+      // Second (or later) click: try to fill range from anchor to this slot
+      const range = this.consecutiveRange(this.anchorSlotId, slotId)
+      if (range) {
+        this.selectedIds = range
       } else {
-        // Non-consecutive: restart selection from this slot
-        this.selectedIds = [ slotId ]
+        // Gap or backwards click: restart selection from this slot
+        this.anchorSlotId = slotId
+        this.selectedIds  = [ slotId ]
       }
     }
 
     this.updateUI()
+  }
+
+  // Returns an ordered array of slot IDs from fromId up to toId if all slots
+  // in that span are consecutive (each endsAtMs === next startsAtMs).
+  // Returns null if the range is invalid or non-consecutive.
+  consecutiveRange(fromId, toId) {
+    const sorted = this.slotTargets.slice().sort(
+      (a, b) => parseInt(a.dataset.startsAtMs) - parseInt(b.dataset.startsAtMs)
+    )
+
+    const fromIndex = sorted.findIndex(el => parseInt(el.dataset.slotId) === fromId)
+    const toIndex   = sorted.findIndex(el => parseInt(el.dataset.slotId) === toId)
+
+    if (fromIndex === -1 || toIndex === -1 || toIndex <= fromIndex) return null
+
+    const span = sorted.slice(fromIndex, toIndex + 1)
+
+    // Every slot must end exactly when the next one starts
+    for (let i = 0; i < span.length - 1; i++) {
+      if (parseInt(span[i].dataset.endsAtMs) !== parseInt(span[i + 1].dataset.startsAtMs)) {
+        return null
+      }
+    }
+
+    return span.map(el => parseInt(el.dataset.slotId))
   }
 
   submit(event) {
