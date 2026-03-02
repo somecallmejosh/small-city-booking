@@ -12,21 +12,23 @@
   <body class="min-h-screen bg-stone-50 font-sans antialiased">
     <%= render(HeaderComponent.new) do |c| %>
       <% c.with_desktop_nav do %>
-        <%= link_to "Dashboard", admin_root_path, class: "hover:text-stone-500 #{'text-red-700 hover:text-red-600' if current_page?(admin_root_path)}" %>
-        <%= link_to "Bookings", admin_bookings_path, class: "hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/bookings')}" %>
-        <%= link_to "Customers", admin_customers_path, class: "hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/customers')}" %>
-        <%= link_to "Slots", admin_slots_path, class: "hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/slots')}" %>
-        <%= link_to "Agreement", admin_agreement_path, class: "hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/agreement')}" %>
-        <%= link_to "Settings", admin_settings_path, class: "hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/settings')}" %>
+        <%= link_to "Dashboard", admin_root_path, class: "hover:text-red-500 #{'text-red-700 hover:text-red-600' if current_page?(admin_root_path)}" %>
+        <%= link_to "Bookings", admin_bookings_path, class: "hover:text-red-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/bookings')}" %>
+        <%= link_to "Customers", admin_customers_path, class: "hover:text-red-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/customers')}" %>
+        <%= link_to "Slots", admin_slots_path, class: "hover:text-red-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/slots')}" %>
+        <%= link_to "Agreement", admin_agreement_path, class: "hover:text-red-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/agreement')}" %>
+        <%= link_to "Settings", admin_settings_path, class: "hover:text-red-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/settings')}" %>
+        <%= button_to "Sign Out", session_path, method: :delete, class: "text-stone-600 hover:text-red-500 text-sm" %>
       <% end %>
       <% c.with_mobile_nav do %>
         <div class="px-4 py-2 space-y-1">
-          <%= link_to "Dashboard", admin_root_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-stone-500 #{'text-red-700 hover:text-red-600' if current_page?(admin_root_path)}" %>
-          <%= link_to "Bookings", admin_bookings_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/bookings')}" %>
-          <%= link_to "Customers", admin_customers_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/customers')}" %>
-          <%= link_to "Slots", admin_slots_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/slots')}" %>
-          <%= link_to "Agreement", admin_agreement_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/agreement')}" %>
-          <%= link_to "Settings", admin_settings_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/settings')}" %>
+          <%= link_to "Dashboard", admin_root_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-red-500 #{'text-red-700 hover:text-red-600' if current_page?(admin_root_path)}" %>
+          <%= link_to "Bookings", admin_bookings_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-red-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/bookings')}" %>
+          <%= link_to "Customers", admin_customers_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-red-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/customers')}" %>
+          <%= link_to "Slots", admin_slots_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-red-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/slots')}" %>
+          <%= link_to "Agreement", admin_agreement_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-red-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/agreement')}" %>
+          <%= link_to "Settings", admin_settings_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-red-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/settings')}" %>
+          <%= button_to "Sign Out", session_path, method: :delete, class: "block w-full text-left px-3 py-2 rounded-md text-base font-medium text-stone-600 hover:text-red-500" %>
         </div>
       <% end %>
     <% end %>

@@ -1,6 +1,10 @@
 @import 'tailwindcss';
 
 @layer base {
+  body {
+    font-size: 16px;
+  }
+
   a,
   button {
     @apply transition-colors cursor-pointer;
