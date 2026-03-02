@@ -28,7 +28,7 @@
       </div>
       <div>
         <dt class="text-xs text-stone-500">Phone</dt>
-        <dd class="text-stone-900"><%= @customer.phone.presence || "—" %></dd>
+        <dd class="text-stone-900 underline hover:no-underline"><a href="tel:<%= @customer.phone %>"><%= @customer.phone.presence || "—" %></a></dd>
       </div>
       <div>
         <dt class="text-xs text-stone-500">Joined</dt>
@@ -51,6 +51,7 @@
 
   <% if @bookings.any? %>
     <div class="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
+      <div class="overflow-x-auto">
       <table class="w-full text-sm">
         <thead class="border-b border-stone-200 bg-stone-50">
           <tr>
@@ -90,6 +91,7 @@
           <% end %>
         </tbody>
       </table>
+      </div>
     </div>
   <% else %>
     <div class="<%= card %> text-center text-stone-500">No bookings yet.</div>

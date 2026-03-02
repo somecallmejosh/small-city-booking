@@ -10,20 +10,26 @@
   </head>
 
   <body class="min-h-screen bg-stone-50 font-sans antialiased">
-    <nav class="bg-stone-900 text-white">
-      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 lg:px-8">
-        <span class="text-sm font-semibold tracking-wide">Small City Studio &mdash; Admin</span>
-        <div class="flex items-center gap-6 text-sm">
-          <%= link_to "Dashboard", admin_root_path, class: "hover:text-stone-300 #{'text-stone-300' if current_page?(admin_root_path)}" %>
-          <%= link_to "Bookings", admin_bookings_path, class: "hover:text-stone-300 #{'text-stone-300' if request.path.start_with?('/admin/bookings')}" %>
-          <%= link_to "Customers", admin_customers_path, class: "hover:text-stone-300 #{'text-stone-300' if request.path.start_with?('/admin/customers')}" %>
-          <%= link_to "Slots", admin_slots_path, class: "hover:text-stone-300 #{'text-stone-300' if request.path.start_with?('/admin/slots')}" %>
-          <%= link_to "Agreement", admin_agreement_path, class: "hover:text-stone-300 #{'text-stone-300' if request.path.start_with?('/admin/agreement')}" %>
-          <%= link_to "Settings", admin_settings_path, class: "hover:text-stone-300 #{'text-stone-300' if request.path.start_with?('/admin/settings')}" %>
-          <%= link_to "← Site", root_path, class: "ml-4 text-stone-400 hover:text-white" %>
+    <%= render(HeaderComponent.new) do |c| %>
+      <% c.with_desktop_nav do %>
+        <%= link_to "Dashboard", admin_root_path, class: "hover:text-stone-500 #{'text-red-700 hover:text-red-600' if current_page?(admin_root_path)}" %>
+        <%= link_to "Bookings", admin_bookings_path, class: "hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/bookings')}" %>
+        <%= link_to "Customers", admin_customers_path, class: "hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/customers')}" %>
+        <%= link_to "Slots", admin_slots_path, class: "hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/slots')}" %>
+        <%= link_to "Agreement", admin_agreement_path, class: "hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/agreement')}" %>
+        <%= link_to "Settings", admin_settings_path, class: "hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/settings')}" %>
+      <% end %>
+      <% c.with_mobile_nav do %>
+        <div class="px-4 py-2 space-y-1">
+          <%= link_to "Dashboard", admin_root_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-stone-500 #{'text-red-700 hover:text-red-600' if current_page?(admin_root_path)}" %>
+          <%= link_to "Bookings", admin_bookings_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/bookings')}" %>
+          <%= link_to "Customers", admin_customers_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/customers')}" %>
+          <%= link_to "Slots", admin_slots_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/slots')}" %>
+          <%= link_to "Agreement", admin_agreement_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/agreement')}" %>
+          <%= link_to "Settings", admin_settings_path, class: "block px-3 py-2 rounded-md text-base font-medium hover:text-stone-500 #{'text-red-700 hover:text-red-600' if request.path.start_with?('/admin/settings')}" %>
         </div>
-      </div>
-    </nav>
+      <% end %>
+    <% end %>
 
     <% flash.each do |type, message| %>
       <div class="mx-auto max-w-6xl px-4 pt-4 lg:px-8">

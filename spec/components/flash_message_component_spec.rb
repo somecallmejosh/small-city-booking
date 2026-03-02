@@ -31,7 +31,7 @@ RSpec.describe FlashMessageComponent, type: :component do
   it "applies green container classes for notice type" do
     render_inline(described_class.new(type: :notice, message: "Good"))
 
-    expect(page).to have_css(".bg-green-50")
+    expect(page).to have_css(".bg-red-50")
   end
 
   it "applies red container classes for error type" do

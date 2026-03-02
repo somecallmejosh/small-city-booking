@@ -17,11 +17,11 @@
         "lines": [
           1,
           1,
-          55,
+          56,
           null,
           null,
           1,
-          29,
+          41,
           null,
           null,
           1,
@@ -41,7 +41,7 @@
           null,
           null,
           1,
-          69,
+          74,
           null,
           null,
           1,
@@ -78,9 +78,9 @@
           null,
           null,
           1,
-          4,
+          2,
           null,
-          4,
+          2,
           null,
           null
         ]
@@ -150,15 +150,27 @@
           null
         ]
       },
-      "/Users/joshuabriley/Documents/web/rails-apps/small-city/app/jobs/hold_expiry_job.rb": {
+      "/Users/joshuabriley/Documents/web/rails-apps/small-city/app/components/header_component.rb": {
+        "lines": [
+          1,
+          1,
+          1,
+          null
+        ]
+      },
+      "/Users/joshuabriley/Documents/web/rails-apps/small-city/app/jobs/booking_completion_job.rb": {
         "lines": [
           1,
           1,
           null,
           1,
-          4,
-          1,
+          6,
           null,
+          null,
+          null,
+          null,
+          null,
+          6,
           null,
           null
         ]
@@ -169,6 +181,19 @@
           null,
           null,
           null,
+          null,
+          null,
+          null
+        ]
+      },
+      "/Users/joshuabriley/Documents/web/rails-apps/small-city/app/jobs/hold_expiry_job.rb": {
+        "lines": [
+          1,
+          1,
+          null,
+          1,
+          4,
+          1,
           null,
           null,
           null
@@ -261,7 +286,7 @@
           1,
           null,
           1,
-          67,
+          73,
           null,
           null
         ]
@@ -291,7 +316,7 @@
           1,
           null,
           9,
-          3,
+          9,
           3,
           1,
           1,
@@ -340,17 +365,17 @@
           4,
           null,
           null,
+          5,
+          1,
+          5,
+          1,
+          null,
+          1,
           2,
-          1,
-          2,
-          1,
-          null,
-          1,
-          4,
           null,
           null,
           1,
-          7,
+          3,
           null,
           null,
           1,
@@ -377,7 +402,7 @@
           1,
           null,
           1,
-          54,
+          51,
           null,
           null,
           null,
@@ -395,14 +420,14 @@
           1,
           1,
           null,
-          443,
+          455,
           null,
           1,
           12,
           null,
           null,
           1,
-          176,
+          182,
           null
         ]
       },
@@ -497,7 +522,7 @@
           null,
           1,
           1,
-          47,
+          68,
           null,
           null,
           1,
@@ -505,11 +530,11 @@
           null,
           null,
           1,
-          165,
+          186,
           null,
           null,
           1,
-          145,
+          159,
           null,
           null,
           1,
@@ -617,7 +642,7 @@
           1,
           null,
           1,
-          70,
+          73,
           null,
           null
         ]
@@ -626,8 +651,8 @@
         "lines": [
           1,
           1,
-          1,
-          1,
+          4,
+          4,
           null,
           null
         ]
@@ -1119,23 +1144,23 @@
           null,
           null,
           1,
-          8,
+          5,
           null,
           null,
           null,
-          8,
+          5,
           0,
           null,
-          8,
+          5,
           null,
           null,
           null,
-          8,
+          5,
           null,
           null,
           null,
           null,
-          4,
+          2,
           null,
           null
         ]
@@ -1349,6 +1374,6 @@
         ]
       }
     },
-    "timestamp": 1772383220
+    "timestamp": 1772413934
   }
 }

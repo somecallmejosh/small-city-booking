@@ -1,8 +1,8 @@
 class FlashMessageComponent < ViewComponent::Base
   VARIANTS = {
     notice: {
-      container: "bg-green-50 border border-green-200 text-green-800",
-      icon: "text-green-500",
+      container: "bg-red-50 border border-red-200 text-red-800",
+      icon: "text-red-500",
       role: "status"
     },
     alert: {

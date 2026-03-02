@@ -33,7 +33,7 @@ module StyleHelper
 
   BOOKING_STATUS_BADGE_CLASSES = {
     "pending"   => "bg-yellow-100 text-yellow-800",
-    "confirmed" => "bg-green-100 text-green-800",
+    "confirmed" => "bg-red-100 text-red-800",
     "cancelled" => "bg-stone-100 text-stone-500",
     "completed" => "bg-blue-100 text-blue-800"
   }.freeze
@@ -43,7 +43,7 @@ module StyleHelper
   end
 
   SLOT_STATUS_BADGE_CLASSES = {
-    "open"      => "bg-green-100 text-green-800",
+    "open"      => "bg-red-100 text-red-800",
     "held"      => "bg-yellow-100 text-yellow-800",
     "reserved"  => "bg-blue-100 text-blue-800",
     "cancelled" => "bg-stone-100 text-stone-500"
@@ -54,7 +54,7 @@ module StyleHelper
   end
 
   SLOT_BUTTON_CLASSES = {
-    "open"      => "rounded-lg border border-green-300 bg-green-50 px-3 py-2 text-sm font-medium text-green-800 hover:bg-green-100 hover:text-green-950 cursor-pointer font-semibold",
+    "open"      => "rounded-lg border border-red-100 bg-red-50/50 px-3 py-2 text-sm font-medium text-red-800 hover:bg-red-100 hover:text-red-950 cursor-pointer font-semibold",
     "held"      => "rounded-lg border border-yellow-300 bg-yellow-50 px-3 py-2 text-sm font-medium text-yellow-800 cursor-not-allowed opacity-60",
     "reserved"  => "rounded-lg border border-blue-300 bg-blue-50 px-3 py-2 text-sm font-medium text-blue-800 cursor-not-allowed opacity-60",
     "cancelled" => "rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-sm font-medium text-stone-400 cursor-not-allowed opacity-40"

@@ -37,5 +37,9 @@ Rails.application.routes.draw do
   match "/422", to: "errors#unprocessable",          via: :all
   match "/500", to: "errors#internal_server_error",  via: :all
 
+  root to: "admin/dashboard#index", as: nil, constraints: lambda { |req|
+    session_id = req.cookie_jar.signed[:session_id]
+    session_id && Session.find_by(id: session_id)&.user&.admin?
+  }
   root to: "home#index"
 end

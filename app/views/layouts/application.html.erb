@@ -24,29 +24,46 @@
   </head>
 
   <body class="min-h-screen bg-stone-50 font-sans antialiased">
-    <nav class="bg-stone-900 text-white">
-      <div class="mx-auto flex max-w-6xl items-center justify-between px-4 py-3 lg:px-8">
-        <%= link_to "Small City Studio", root_path, class: "text-sm font-semibold tracking-wide hover:text-stone-300" %>
-        <div class="flex items-center gap-6 text-sm">
-          <%= link_to "Help", help_path, class: "hover:text-stone-300 #{'text-stone-300' if current_page?(help_path)}" %>
+    <%= render(HeaderComponent.new) do |c| %>
+      <% c.with_desktop_nav do %>
+        <%= link_to "Help", help_path, class: "hover:text-stone-600 #{'text-red-700 hover:text-red-600' if current_page?(help_path)}" %>
+        <% if authenticated? %>
+          <%= link_to "My Bookings", bookings_path, class: "hover:text-stone-600" %>
+          <div data-controller="push-subscription"
+               data-push-subscription-vapid-public-key-value="<%= Rails.application.config.vapid_public_key %>">
+            <button data-push-subscription-target="button"
+                    data-action="push-subscription#toggle"
+                    class="text-stone-600 hover:text-stone-600 text-sm hidden">
+              Notifications
+            </button>
+          </div>
+          <%= button_to "Sign Out", session_path, method: :delete,
+                class: "text-stone-600 hover:text-stone-600 text-sm" %>
+        <% else %>
+          <%= link_to "Sign In", new_session_path, class: "hover:text-stone-600" %>
+        <% end %>
+      <% end %>
+      <% c.with_mobile_nav do %>
+        <div class="flex flex-col gap-6 p-4">
+          <%= link_to "Help", help_path, class: "hover:text-stone-600 #{'text-red-700 hover:text-red-600' if current_page?(help_path)}" %>
           <% if authenticated? %>
-            <%= link_to "My Bookings", bookings_path, class: "hover:text-stone-300" %>
+            <%= link_to "My Bookings", bookings_path, class: "hover:text-stone-600" %>
             <div data-controller="push-subscription"
                  data-push-subscription-vapid-public-key-value="<%= Rails.application.config.vapid_public_key %>">
               <button data-push-subscription-target="button"
                       data-action="push-subscription#toggle"
-                      class="text-stone-400 hover:text-white text-sm hidden">
+                      class="text-stone-600 hover:text-stone-600 text-sm hidden">
                 Notifications
               </button>
             </div>
             <%= button_to "Sign Out", session_path, method: :delete,
-                  class: "text-stone-400 hover:text-white text-sm" %>
+                  class: "text-stone-600 hover:text-stone-600 text-sm" %>
           <% else %>
-            <%= link_to "Sign In", new_session_path, class: "hover:text-stone-300" %>
+            <%= link_to "Sign In", new_session_path, class: "hover:text-stone-600" %>
           <% end %>
         </div>
-      </div>
-    </nav>
+      <% end %>
+    <% end %>
 
     <% flash.each do |type, message| %>
       <div class="mx-auto max-w-6xl px-4 pt-4 lg:px-8">

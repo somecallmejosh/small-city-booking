@@ -1,11 +1,11 @@
-import { Controller } from "@hotwired/stimulus"
+import { Controller } from '@hotwired/stimulus'
 
 export default class extends Controller {
-  static values  = { rateCents: Number }
-  static targets = [ "slot", "summary", "checkoutButton", "slotIdsInput" ]
+  static values = { rateCents: Number }
+  static targets = ['slot', 'summary', 'checkoutButton', 'slotIdsInput']
 
   connect() {
-    this.selectedIds  = []
+    this.selectedIds = []
     this.anchorSlotId = null
     this.updateUI()
   }
@@ -23,7 +23,7 @@ export default class extends Controller {
     } else if (this.selectedIds.length === 0) {
       // First click: set anchor
       this.anchorSlotId = slotId
-      this.selectedIds  = [ slotId ]
+      this.selectedIds = [slotId]
     } else {
       // Second (or later) click: try to fill range from anchor to this slot
       const range = this.consecutiveRange(this.anchorSlotId, slotId)
@@ -32,7 +32,7 @@ export default class extends Controller {
       } else {
         // Gap or backwards click: restart selection from this slot
         this.anchorSlotId = slotId
-        this.selectedIds  = [ slotId ]
+        this.selectedIds = [slotId]
       }
     }
 
@@ -43,12 +43,19 @@ export default class extends Controller {
   // in that span are consecutive (each endsAtMs === next startsAtMs).
   // Returns null if the range is invalid or non-consecutive.
   consecutiveRange(fromId, toId) {
-    const sorted = this.slotTargets.slice().sort(
-      (a, b) => parseInt(a.dataset.startsAtMs) - parseInt(b.dataset.startsAtMs)
-    )
+    const sorted = this.slotTargets
+      .slice()
+      .sort(
+        (a, b) =>
+          parseInt(a.dataset.startsAtMs) - parseInt(b.dataset.startsAtMs),
+      )
 
-    const fromIndex = sorted.findIndex(el => parseInt(el.dataset.slotId) === fromId)
-    const toIndex   = sorted.findIndex(el => parseInt(el.dataset.slotId) === toId)
+    const fromIndex = sorted.findIndex(
+      (el) => parseInt(el.dataset.slotId) === fromId,
+    )
+    const toIndex = sorted.findIndex(
+      (el) => parseInt(el.dataset.slotId) === toId,
+    )
 
     if (fromIndex === -1 || toIndex === -1 || toIndex <= fromIndex) return null
 
@@ -56,27 +63,33 @@ export default class extends Controller {
 
     // Every slot must end exactly when the next one starts
     for (let i = 0; i < span.length - 1; i++) {
-      if (parseInt(span[i].dataset.endsAtMs) !== parseInt(span[i + 1].dataset.startsAtMs)) {
+      if (
+        parseInt(span[i].dataset.endsAtMs) !==
+        parseInt(span[i + 1].dataset.startsAtMs)
+      ) {
         return null
       }
     }
 
-    return span.map(el => parseInt(el.dataset.slotId))
+    return span.map((el) => parseInt(el.dataset.slotId))
   }
 
   submit(event) {
     event.preventDefault()
 
-    const form = event.currentTarget.closest("form") || this.element.querySelector("form")
+    const form =
+      event.currentTarget.closest('form') || this.element.querySelector('form')
 
     // Remove old hidden inputs
-    form.querySelectorAll("input[name='slot_ids[]']").forEach(el => el.remove())
+    form
+      .querySelectorAll("input[name='slot_ids[]']")
+      .forEach((el) => el.remove())
 
     // Build new hidden inputs
-    this.selectedIds.forEach(id => {
-      const input = document.createElement("input")
-      input.type  = "hidden"
-      input.name  = "slot_ids[]"
+    this.selectedIds.forEach((id) => {
+      const input = document.createElement('input')
+      input.type = 'hidden'
+      input.name = 'slot_ids[]'
       input.value = id
       form.appendChild(input)
     })
@@ -85,28 +98,38 @@ export default class extends Controller {
   }
 
   updateUI() {
-    const count      = this.selectedIds.length
+    const count = this.selectedIds.length
     const totalCents = count * this.rateCentsValue
-    const dollars    = (totalCents / 100).toFixed(2)
+    const dollars = (totalCents / 100).toFixed(2)
 
     // Update slot button states
-    this.slotTargets.forEach(button => {
+    this.slotTargets.forEach((button) => {
       const slotId = parseInt(button.dataset.slotId)
       if (this.selectedIds.includes(slotId)) {
-        button.classList.add("ring-2", "ring-stone-900", "bg-stone-900", "text-white")
-        button.classList.remove("bg-green-50", "text-green-800")
+        button.classList.add(
+          'ring-2',
+          'ring-stone-900',
+          'bg-stone-900',
+          'text-white',
+        )
+        button.classList.remove('bg-red-50', 'text-red-800')
       } else {
-        button.classList.remove("ring-2", "ring-stone-900", "bg-stone-900", "text-white")
-        button.classList.add("bg-green-50", "text-green-800")
+        button.classList.remove(
+          'ring-2',
+          'ring-stone-900',
+          'bg-stone-900',
+          'text-white',
+        )
+        button.classList.add('bg-red-50', 'text-red-800')
       }
     })
 
     // Update summary
     if (this.hasSummaryTarget) {
       if (count === 0) {
-        this.summaryTarget.textContent = "Select slots to book"
+        this.summaryTarget.textContent = 'Select slots to book'
       } else {
-        this.summaryTarget.textContent = `${count} hour${count === 1 ? "" : "s"} — $${dollars}`
+        this.summaryTarget.textContent = `${count} hour${count === 1 ? '' : 's'} — $${dollars}`
       }
     }
 
