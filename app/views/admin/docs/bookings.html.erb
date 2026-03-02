@@ -1,0 +1,107 @@
+<% content_for :title, "Managing Bookings — Admin Manual" %>
+
+<div class="flex gap-8 lg:gap-12">
+  <aside class="hidden lg:block w-52 flex-shrink-0">
+    <%= render "sidebar" %>
+  </aside>
+
+  <article class="min-w-0 flex-1">
+    <%= render BreadcrumbComponent.new(items: [
+      { label: "Admin Manual", path: admin_docs_path },
+      { label: "Bookings", path: nil }
+    ]) %>
+
+    <h1 class="mt-3 text-2xl font-semibold text-stone-900">Managing Bookings</h1>
+    <p class="mt-2 text-stone-500">View, filter, create, and cancel bookings from the Bookings section.</p>
+
+    <div class="mt-8 space-y-8 text-stone-700">
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Booking Statuses</h2>
+        <div class="mt-3 text-sm">
+          <table class="w-full rounded-xl border border-stone-200 overflow-hidden text-left">
+            <thead class="bg-stone-50 text-xs uppercase tracking-wide text-stone-500">
+              <tr>
+                <th class="px-4 py-2 font-semibold">Status</th>
+                <th class="px-4 py-2 font-semibold">What it means</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-100 bg-white">
+              <tr>
+                <td class="px-4 py-3 font-medium">Pending</td>
+                <td class="px-4 py-3 text-stone-600">Customer is in checkout; payment not yet confirmed</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-medium">Confirmed</td>
+                <td class="px-4 py-3 text-stone-600">Payment successful; session is locked in</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-medium">Cancelled</td>
+                <td class="px-4 py-3 text-stone-600">Cancelled by the customer or by you</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-medium">Completed</td>
+                <td class="px-4 py-3 text-stone-600">Session has taken place — set automatically once all slots have ended</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Filtering and Viewing Bookings</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            Go to <strong>Bookings</strong> to see all bookings. Use the filter tabs at the top to
+            narrow by status. Click any booking to see full details: customer info, all session times,
+            total paid, Stripe payment and receipt links, and refund status if applicable.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Creating a Manual Booking</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            Go to <strong>Bookings → New Booking</strong>. Useful when a customer calls or emails
+            instead of booking online.
+          </p>
+          <ol class="mt-3 space-y-2 list-decimal pl-5">
+            <li>Select the customer from the dropdown (create them first under <strong>Customers</strong> if needed)</li>
+            <li>Select the open slots for their session</li>
+            <li>Optionally add internal notes</li>
+            <li>Optionally generate a <strong>Stripe Payment Link</strong> — a URL you can email so the customer pays online</li>
+          </ol>
+          <p>
+            The booking is created as <strong>Confirmed</strong> immediately. No payment is required
+            upfront if you're handling it another way or if it's a comp session.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Cancelling a Booking</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            From any booking detail page, click <strong>Cancel Booking</strong>. If the booking was
+            paid via Stripe, the app automatically issues a full refund to the customer's card. The
+            slots are released back to open and the customer receives a push notification.
+          </p>
+          <p>
+            Admin cancellations always refund the customer in full, regardless of the cancellation
+            window set in Settings.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Bulk Cancellation</h2>
+        <div class="mt-3 text-sm">
+          <p>
+            From the Bookings list, select multiple bookings using their checkboxes and use the
+            <strong>Cancel Selected</strong> action to cancel them all at once.
+          </p>
+        </div>
+      </section>
+    </div>
+  </article>
+</div>

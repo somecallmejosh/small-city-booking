@@ -1,0 +1,66 @@
+<% content_for :title, "Studio Settings — Admin Manual" %>
+
+<div class="flex gap-8 lg:gap-12">
+  <aside class="hidden lg:block w-52 flex-shrink-0">
+    <%= render "sidebar" %>
+  </aside>
+
+  <article class="min-w-0 flex-1">
+    <%= render BreadcrumbComponent.new(items: [
+      { label: "Admin Manual", path: admin_docs_path },
+      { label: "Settings", path: nil }
+    ]) %>
+
+    <h1 class="mt-3 text-2xl font-semibold text-stone-900">Studio Settings</h1>
+    <p class="mt-2 text-stone-500">Configure how your studio is presented and priced.</p>
+
+    <div class="mt-8 space-y-8 text-stone-700">
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Settings Reference</h2>
+        <div class="mt-3 text-sm">
+          <table class="w-full rounded-xl border border-stone-200 overflow-hidden text-left">
+            <thead class="bg-stone-50 text-xs uppercase tracking-wide text-stone-500">
+              <tr>
+                <th class="px-4 py-2 font-semibold">Setting</th>
+                <th class="px-4 py-2 font-semibold">What it does</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-100 bg-white">
+              <tr>
+                <td class="px-4 py-3 font-medium">Studio Name</td>
+                <td class="px-4 py-3 text-stone-600">Appears on the booking page and in push notifications</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-medium">Studio Description</td>
+                <td class="px-4 py-3 text-stone-600">A short tagline customers see when browsing (e.g., "Professional 2-mic isolated booth")</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-medium">Hourly Rate</td>
+                <td class="px-4 py-3 text-stone-600">Price per hour. Booking totals are calculated automatically: hours × rate</td>
+              </tr>
+              <tr>
+                <td class="px-4 py-3 font-medium">Cancellation Window</td>
+                <td class="px-4 py-3 text-stone-600">Hours before a session when customers can still cancel for a full refund (e.g., 24)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">When Changes Take Effect</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            All settings changes take effect immediately for new bookings. Existing confirmed bookings
+            are not affected — a customer who already paid at the old rate will not see that change.
+          </p>
+          <p>
+            <strong>Verify your hourly rate before your first booking.</strong> Once a booking is
+            confirmed, the rate is locked in for that booking. Changing the rate later only affects
+            future bookings.
+          </p>
+        </div>
+      </section>
+    </div>
+  </article>
+</div>

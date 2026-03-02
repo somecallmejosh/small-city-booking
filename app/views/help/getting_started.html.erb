@@ -1,0 +1,80 @@
+<% content_for :title, "Getting Started — Help" %>
+
+<div class="flex gap-8 lg:gap-12">
+  <aside class="hidden lg:block w-52 flex-shrink-0">
+    <%= render "sidebar" %>
+  </aside>
+
+  <article class="min-w-0 flex-1">
+    <%= render BreadcrumbComponent.new(items: [
+      { label: "Help", path: help_path },
+      { label: "Getting Started", path: nil }
+    ]) %>
+
+    <h1 class="mt-3 text-2xl font-semibold text-stone-900">Getting Started</h1>
+    <p class="mt-2 text-stone-500">New to Small City? Here's how to create an account and book your first session.</p>
+
+    <div class="mt-8 space-y-8 text-stone-700">
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">1. Create an Account</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            To book studio time you need an account. Click <strong>Sign In</strong> in the top navigation,
+            then select <strong>Create an account</strong> on the sign-in page.
+          </p>
+          <p>
+            Enter your email address and choose a password (minimum 12 characters). You can optionally
+            add your name and phone number so the studio can identify you if needed.
+          </p>
+          <p>
+            Once your account is created you'll be signed in automatically and can start browsing available slots.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">2. Browse the Calendar</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            The home page shows available studio time for the next 30 days, grouped by date.
+            Red slots are available to book. Click any red slot to start selecting your session time.
+          </p>
+          <p>
+            See <strong><%= link_to "Booking Calendar", help_calendar_path, class: "underline hover:text-stone-900" %></strong>
+            for a full explanation of slot colors and how to select multiple consecutive hours.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">3. Check Out and Pay</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            After selecting your slots, click <strong>Continue to Checkout</strong>. The app places a
+            short hold on your time while you review and pay. Payment is handled securely through Stripe —
+            your card details are never stored by the studio.
+          </p>
+          <p>
+            See <strong><%= link_to "Checkout & Payment", help_checkout_path, class: "underline hover:text-stone-900" %></strong>
+            for details on the hold timer and the payment flow.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">4. Your Booking is Confirmed</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            After successful payment you'll be redirected to a confirmation page. Your booking
+            appears under <strong>My Bookings</strong> in the top navigation.
+          </p>
+          <p>
+            If you have push notifications enabled, you'll also receive a notification confirming
+            the date and time. See <strong><%= link_to "Notifications", help_notifications_path, class: "underline hover:text-stone-900" %></strong>
+            to learn how to enable them.
+          </p>
+        </div>
+      </section>
+    </div>
+  </article>
+</div>

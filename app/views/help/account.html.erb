@@ -1,0 +1,80 @@
+<% content_for :title, "Account & Sign In — Help" %>
+
+<div class="flex gap-8 lg:gap-12">
+  <aside class="hidden lg:block w-52 flex-shrink-0">
+    <%= render "sidebar" %>
+  </aside>
+
+  <article class="min-w-0 flex-1">
+    <%= render BreadcrumbComponent.new(items: [
+      { label: "Help", path: help_path },
+      { label: "Account & Sign In", path: nil }
+    ]) %>
+
+    <h1 class="mt-3 text-2xl font-semibold text-stone-900">Account & Sign In</h1>
+    <p class="mt-2 text-stone-500">Managing your account, signing in, and resetting your password.</p>
+
+    <div class="mt-8 space-y-8 text-stone-700">
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Creating an Account</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            Click <strong>Sign In</strong> in the top navigation, then select <strong>Create an account</strong>.
+            Enter your email address and choose a password of at least 12 characters. An account is
+            required to book studio time.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Signing In</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            Click <strong>Sign In</strong> in the top navigation and enter your email address and
+            password. If you check <strong>Remember me</strong>, your session will persist across
+            browser restarts.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Forgot Your Password?</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            On the sign-in page, click <strong>Forgot your password?</strong>. Enter your email address
+            and we'll send you a password reset link. The link expires after a short time, so use it
+            promptly.
+          </p>
+          <p>
+            If you don't receive the email within a few minutes, check your spam folder.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Your Bookings</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            Once signed in, <strong>My Bookings</strong> appears in the top navigation. This page shows
+            all your upcoming and past sessions. From here you can:
+          </p>
+          <ul class="mt-2 space-y-1 list-disc pl-5">
+            <li>View the details and status of any booking</li>
+            <li>Access your Stripe receipt for any paid session</li>
+            <li>Cancel a confirmed booking (if within the cancellation window)</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Signing Out</h2>
+        <div class="mt-3 text-sm">
+          <p>
+            Click <strong>Sign Out</strong> in the top navigation. Your session ends immediately and
+            you'll be returned to the home page.
+          </p>
+        </div>
+      </section>
+    </div>
+  </article>
+</div>

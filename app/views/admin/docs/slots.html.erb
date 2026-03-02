@@ -1,0 +1,75 @@
+<% content_for :title, "Managing Slots — Admin Manual" %>
+
+<div class="flex gap-8 lg:gap-12">
+  <aside class="hidden lg:block w-52 flex-shrink-0">
+    <%= render "sidebar" %>
+  </aside>
+
+  <article class="min-w-0 flex-1">
+    <%= render BreadcrumbComponent.new(items: [
+      { label: "Admin Manual", path: admin_docs_path },
+      { label: "Slots", path: nil }
+    ]) %>
+
+    <h1 class="mt-3 text-2xl font-semibold text-stone-900">Managing Slots</h1>
+    <p class="mt-2 text-stone-500">Slots are the 1-hour blocks customers book. You control the schedule entirely.</p>
+
+    <div class="mt-8 space-y-8 text-stone-700">
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Creating a Single Slot</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            Go to <strong>Slots → New Slot</strong>. Pick a date and start time, then click
+            <strong>Create Slot</strong>. The slot is immediately available for customers to book.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Creating Slots in Bulk</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            Go to <strong>Slots → Bulk Create</strong>. This is the fastest way to set up your schedule:
+          </p>
+          <ol class="mt-3 space-y-2 list-decimal pl-5">
+            <li>Choose which <strong>days of the week</strong> to include (e.g., Tuesday, Wednesday, Friday)</li>
+            <li>Set a <strong>date range</strong> (e.g., March 1 through March 31)</li>
+            <li>Set a <strong>time window</strong> (e.g., 10:00 AM to 6:00 PM)</li>
+            <li>Click <strong>Create Slots</strong></li>
+          </ol>
+          <p>
+            The app generates one slot per hour within the time window, on each selected day, across
+            the entire date range. It skips any slots that already exist. You'll see a summary of
+            how many were created.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Overnight Sessions</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            If your studio runs late-night hours that span midnight (e.g., 10 PM to 2 AM), just set the
+            end time earlier than the start time in Bulk Create — the app handles the midnight crossover
+            automatically.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Cancelling a Slot</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            From the <strong>Slots</strong> list, click <strong>Cancel</strong> next to any open slot.
+            Cancelled slots disappear from the customer calendar immediately.
+          </p>
+          <p>
+            You can only cancel slots that haven't been reserved. If a slot is part of a booking,
+            cancel the booking first (which releases the slots) and then cancel the individual slots
+            if needed.
+          </p>
+        </div>
+      </section>
+    </div>
+  </article>
+</div>

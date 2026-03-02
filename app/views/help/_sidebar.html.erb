@@ -1,0 +1,22 @@
+<nav aria-label="Help topics">
+  <p class="mb-3 text-xs font-semibold uppercase tracking-wide text-stone-400">Help</p>
+  <ul class="space-y-1 text-sm">
+    <% [
+      ["Overview",           help_path],
+      ["Getting Started",    help_getting_started_path],
+      ["Booking Calendar",   help_calendar_path],
+      ["Checkout & Payment", help_checkout_path],
+      ["Cancellations",      help_cancellations_path],
+      ["Notifications",      help_notifications_path],
+      ["Account & Sign In",  help_account_path],
+      ["Terms of Booking",   help_terms_path]
+    ].each do |label, path| %>
+      <li>
+        <%= link_to label, path,
+              class: "block rounded-md px-3 py-1.5 #{current_page?(path) ?
+                'bg-stone-100 font-medium text-stone-900' :
+                'text-stone-600 hover:bg-stone-50 hover:text-stone-900'}" %>
+      </li>
+    <% end %>
+  </ul>
+</nav>

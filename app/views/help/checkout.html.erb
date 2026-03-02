@@ -1,0 +1,75 @@
+<% content_for :title, "Checkout & Payment — Help" %>
+
+<div class="flex gap-8 lg:gap-12">
+  <aside class="hidden lg:block w-52 flex-shrink-0">
+    <%= render "sidebar" %>
+  </aside>
+
+  <article class="min-w-0 flex-1">
+    <%= render BreadcrumbComponent.new(items: [
+      { label: "Help", path: help_path },
+      { label: "Checkout & Payment", path: nil }
+    ]) %>
+
+    <h1 class="mt-3 text-2xl font-semibold text-stone-900">Checkout & Payment</h1>
+    <p class="mt-2 text-stone-500">How the hold timer works and what to expect during payment.</p>
+
+    <div class="mt-8 space-y-8 text-stone-700">
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">The Hold Timer</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            When you click <strong>Continue to Checkout</strong>, the app places a short hold on your
+            selected slots. This temporarily reserves them so nobody else can book the same time while
+            you complete payment.
+          </p>
+          <p>
+            A countdown timer on the checkout page shows how much time you have left. You must complete
+            payment before the timer reaches zero. If it expires, your slots are released back to open
+            and you'll need to go back to the calendar and select them again.
+          </p>
+          <p>
+            If you want to change your selection before paying, click <strong>Release Hold & Go Back</strong>
+            to return to the calendar immediately.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Reviewing Your Booking</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            The checkout page shows:
+          </p>
+          <ul class="mt-2 space-y-1 list-disc pl-5">
+            <li>Your selected sessions with dates and start times</li>
+            <li>Total cost (number of hours × hourly rate)</li>
+            <li>The current Studio Agreement, which you must accept before paying</li>
+          </ul>
+          <p>
+            Check the agreement box to confirm you've read and accepted the studio's terms. Each booking
+            records the exact version of the terms you agreed to.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Secure Payment via Stripe</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            Clicking <strong>Confirm & Pay</strong> takes you to Stripe's secure payment page. All card
+            processing happens on Stripe — the studio never sees or stores your card details.
+          </p>
+          <p>
+            After successful payment, Stripe redirects you back to a confirmation page. Your booking is
+            now locked in and appears under <strong>My Bookings</strong>.
+          </p>
+          <p>
+            If your payment fails (e.g., card declined), the hold on your slots is released automatically
+            and you can try again from the calendar. You'll receive a notification if you have them enabled.
+          </p>
+        </div>
+      </section>
+    </div>
+  </article>
+</div>

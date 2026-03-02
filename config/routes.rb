@@ -19,9 +19,23 @@ Rails.application.routes.draw do
     resource :agreement, only: [ :show, :edit, :update ]
     resource :settings, only: [ :show, :edit, :update ]
     resources :customers, only: [ :index, :show, :new, :create, :edit, :update ]
+    get "docs",            to: "docs#index",     as: :docs
+    get "docs/slots",      to: "docs#slots",     as: :docs_slots
+    get "docs/bookings",   to: "docs#bookings",  as: :docs_bookings
+    get "docs/customers",  to: "docs#customers", as: :docs_customers
+    get "docs/agreement",  to: "docs#agreement", as: :docs_agreement
+    get "docs/settings",   to: "docs#settings",  as: :docs_settings
+    get "docs/tips",       to: "docs#tips",      as: :docs_tips
   end
 
-  get "/help", to: "help#show"
+  get "/help",                 to: "help#index",          as: :help
+  get "/help/getting-started", to: "help#getting_started", as: :help_getting_started
+  get "/help/calendar",        to: "help#calendar",        as: :help_calendar
+  get "/help/checkout",        to: "help#checkout",        as: :help_checkout
+  get "/help/cancellations",   to: "help#cancellations",   as: :help_cancellations
+  get "/help/notifications",   to: "help#notifications",   as: :help_notifications
+  get "/help/account",         to: "help#account",         as: :help_account
+  get "/help/terms",           to: "help#terms",           as: :help_terms
 
   resources :bookings, only: [ :index, :new, :create, :show ] do
     member { post :cancel }
