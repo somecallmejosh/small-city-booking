@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Countdown timer", type: :system do
-  let(:user)      { create(:user) }
+  let(:user)      { create(:user, :verified) }
   let!(:agreement) { create(:agreement) }
 
   before { driven_by(:cuprite) }

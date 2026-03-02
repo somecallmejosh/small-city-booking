@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "Bookings", type: :request do
-  let(:user)      { create(:user) }
+  let(:user)      { create(:user, :verified) }
   let(:agreement) { create(:agreement) }
   let(:slot)      { create(:slot, status: "open") }
 

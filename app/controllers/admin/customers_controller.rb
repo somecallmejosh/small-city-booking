@@ -29,7 +29,11 @@ class Admin::CustomersController < Admin::BaseController
   end
 
   def create
-    @customer = User.new(new_customer_params.merge(password: SecureRandom.base58(24), admin: false))
+    @customer = User.new(new_customer_params.merge(
+      password:          SecureRandom.base58(24),
+      admin:             false,
+      email_verified_at: Time.current
+    ))
 
     if @customer.save
       redirect_to admin_customer_path(@customer), notice: "Customer created. They can set their password via 'Forgot password'."

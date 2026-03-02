@@ -34,8 +34,13 @@
         <% @customers.each do |customer| %>
           <tr>
             <td class="px-4 py-3">
-              <p class="font-medium text-stone-900 whitespace-nowrap"><%= customer.name.presence || "—" %></p>
-              <p class="text-xs text-stone-500 whitespace-nowrap"><%= customer.email_address %></p>
+              <div class="flex items-center gap-2.5">
+                <%= avatar_tag(customer, size: 32, css_class: "rounded-full flex-shrink-0") %>
+                <div>
+                  <p class="font-medium text-stone-900 whitespace-nowrap"><%= customer.name.presence || "—" %></p>
+                  <p class="text-xs text-stone-500 whitespace-nowrap"><%= customer.email_address %></p>
+                </div>
+              </div>
             </td>
             <td class="px-4 py-3 text-stone-700 whitespace-nowrap">
               <%= customer.phone.presence || "—" %>

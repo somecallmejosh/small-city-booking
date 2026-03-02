@@ -1,4 +1,6 @@
 class SlotHoldsController < ApplicationController
+  before_action :require_verified_email, only: :create
+
   def create
     slot_ids = Array(params[:slot_ids]).map(&:to_i).uniq
 
@@ -53,4 +55,11 @@ class SlotHoldsController < ApplicationController
 
     redirect_to root_path
   end
+
+  private
+
+    def require_verified_email
+      return if Current.user.email_verified?
+      redirect_to root_path, alert: "Please verify your email address before booking."
+    end
 end

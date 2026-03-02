@@ -1,0 +1,10 @@
+Hi <%= @user.name.presence || "there" %>,
+
+Thanks for creating an account with Small City Studio. Please verify your email
+address by visiting the link below. This link expires in 24 hours.
+
+<%= email_verification_url(@token) %>
+
+Once verified, sign in to browse available sessions and book your time in the studio.
+
+If you did not create an account, you can safely ignore this email.

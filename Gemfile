@@ -37,6 +37,9 @@ gem "stripe"
 # Web Push notifications (VAPID)
 gem "web-push"
 
+# Cloudinary for image storage (avatar uploads)
+gem "cloudinary", "~> 2.4"
+
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
 gem "tzinfo-data", platforms: %i[ windows jruby ]
 

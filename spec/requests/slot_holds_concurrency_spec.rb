@@ -16,8 +16,8 @@ RSpec.describe "SlotHolds concurrency", type: :request do
   it "only one thread wins the hold when two race for the same slot" do
     agreement = FactoryBot.create(:agreement)
     slot      = FactoryBot.create(:slot, status: "open")
-    user1     = FactoryBot.create(:user, email_address: "concurrent1@example.com")
-    user2     = FactoryBot.create(:user, email_address: "concurrent2@example.com")
+    user1     = FactoryBot.create(:user, :verified, email_address: "concurrent1@example.com")
+    user2     = FactoryBot.create(:user, :verified, email_address: "concurrent2@example.com")
 
     results   = Queue.new
     barrier   = Concurrent::CyclicBarrier.new(2) rescue nil

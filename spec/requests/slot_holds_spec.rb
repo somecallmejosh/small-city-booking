@@ -1,7 +1,7 @@
 require "rails_helper"
 
 RSpec.describe "SlotHolds", type: :request do
-  let(:user)      { create(:user) }
+  let(:user)      { create(:user, :verified) }
   let!(:agreement) { create(:agreement) }
   let(:slot)      { create(:slot, status: "open") }
 
@@ -39,7 +39,7 @@ RSpec.describe "SlotHolds", type: :request do
     context "when a slot is already held by another user" do
       before do
         sign_in
-        other_user = create(:user)
+        other_user = create(:user, :verified)
         slot.update!(status: "held", held_by_user: other_user, held_until: 5.minutes.from_now)
       end
 

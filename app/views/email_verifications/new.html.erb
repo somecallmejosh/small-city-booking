@@ -1,0 +1,24 @@
+<% content_for :title, "Resend Verification Email — Small City Studio" %>
+
+<div class="<%= session_form_wrapper %>">
+  <h1 class="text-xl font-semibold text-stone-900">Resend Verification Email</h1>
+  <p class="text-sm text-stone-500">
+    Enter your email address and we'll send a new verification link.
+  </p>
+
+  <%= form_with url: email_verifications_path do |f| %>
+    <div>
+      <%= f.label :email_address, "Email", class: form_label %>
+      <%= f.email_field :email_address, class: input_field,
+            required: true, autofocus: true,
+            autocomplete: "email",
+            placeholder: "you@example.com" %>
+    </div>
+
+    <%= f.submit "Resend Verification Email", class: "#{btn_primary} w-full" %>
+  <% end %>
+
+  <p class="text-sm text-stone-500 text-center">
+    <%= link_to "Back to sign in", new_session_path, class: "text-stone-900 underline hover:no-underline" %>
+  </p>
+</div>

@@ -1,0 +1,53 @@
+<% content_for :title, "Create Account — Small City Studio" %>
+
+<div class="<%= session_form_wrapper %>">
+  <h1 class="text-xl font-semibold text-stone-900">Create Account</h1>
+
+  <% if @user.errors.any? %>
+    <div class="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700 space-y-1">
+      <% @user.errors.full_messages.each do |msg| %>
+        <p><%= msg %></p>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= form_with model: @user, url: registration_path do |f| %>
+    <div>
+      <%= f.label :email_address, "Email", class: form_label %>
+      <%= f.email_field :email_address, class: input_field,
+            required: true, autofocus: true,
+            autocomplete: "email",
+            placeholder: "you@example.com" %>
+    </div>
+      <br />
+    <div>
+      <%= f.label :name, "Name (optional)", class: form_label %>
+      <%= f.text_field :name, class: input_field,
+            autocomplete: "name",
+            placeholder: "Your artist name" %>
+    </div>
+<br />
+    <div>
+      <%= f.label :password, "Password", class: form_label %>
+      <p class="mb-1.5 text-xs text-stone-500">Minimum 12 characters</p>
+      <%= f.password_field :password, class: input_field,
+            required: true,
+            autocomplete: "new-password",
+            placeholder: "At least 12 characters" %>
+    </div>
+<br />
+    <div>
+      <%= f.label :password_confirmation, "Confirm Password", class: form_label %>
+      <%= f.password_field :password_confirmation, class: input_field,
+            required: true,
+            autocomplete: "new-password",
+            placeholder: "Repeat your password" %>
+    </div>
+<br />
+    <%= f.submit "Create Account", class: "#{btn_primary}" %>
+  <% end %>
+
+  <p class="text-sm text-stone-500">
+    Already have an account? <%= link_to "Sign in", new_session_path, class: "text-stone-900 underline hover:no-underline" %>
+  </p>
+</div>

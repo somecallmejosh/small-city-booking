@@ -79,4 +79,53 @@ RSpec.describe User, type: :model do
       expect(user.admin).to be true
     end
   end
+
+  describe "email verification" do
+    let(:user) { create(:user) }
+
+    it "defaults to unverified" do
+      expect(user.email_verified?).to be false
+    end
+
+    it "#verify! sets email_verified_at" do
+      user.verify!
+      expect(user.email_verified?).to be true
+      expect(user.email_verified_at).to be_within(2.seconds).of(Time.current)
+    end
+
+    it "generates a valid email_verification token" do
+      token = user.generate_token_for(:email_verification)
+      expect(User.find_by_token_for!(:email_verification, token)).to eq(user)
+    end
+
+    it "invalidates the token after verify!" do
+      token = user.generate_token_for(:email_verification)
+      user.verify!
+      expect {
+        User.find_by_token_for!(:email_verification, token)
+      }.to raise_error(ActiveSupport::MessageVerifier::InvalidSignature)
+    end
+  end
+
+  describe "avatar validations" do
+    it "accepts jpeg content type" do
+      user = build(:user)
+      user.avatar.attach(io: StringIO.new("fake"), filename: "photo.jpg", content_type: "image/jpeg")
+      expect(user).to be_valid
+    end
+
+    it "rejects gif content type" do
+      user = build(:user)
+      user.avatar.attach(io: StringIO.new("fake"), filename: "anim.gif", content_type: "image/gif")
+      expect(user).not_to be_valid
+      expect(user.errors[:avatar]).to be_present
+    end
+
+    it "rejects files over 5MB" do
+      user = build(:user)
+      user.avatar.attach(io: StringIO.new("x" * 6.megabytes), filename: "big.jpg", content_type: "image/jpeg")
+      expect(user).not_to be_valid
+      expect(user.errors[:avatar]).to be_present
+    end
+  end
 end
