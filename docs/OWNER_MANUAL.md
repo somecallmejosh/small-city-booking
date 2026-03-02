@@ -91,7 +91,7 @@ Use the filter tabs at the top to view bookings by status:
 | **Pending** | Customer is in the middle of checkout; payment not yet confirmed |
 | **Confirmed** | Payment successful; session is locked in |
 | **Cancelled** | Booking was cancelled by the customer or by you |
-| **Completed** | Session has already taken place |
+| **Completed** | Session has already taken place — set automatically once all session slots have ended |
 
 #### Viewing a Booking
 
@@ -152,7 +152,7 @@ The Studio Agreement is the terms and conditions your customers must accept befo
 
 #### Publishing a New Agreement
 
-Go to **Agreement → Edit**. Write or paste your terms using the rich text editor (supports bold, italic, headings, bullet lists, and links). Click **Save** to publish immediately.
+Go to **Agreement → Edit**. Write or paste your terms using the rich text editor (supports bold, italic, headings, bullet lists, and links). Click **Publish New Version** to publish immediately.
 
 Each saved version is automatically numbered. Future bookings use the new version; past bookings remain linked to the version the customer originally agreed to — this protects you legally if terms change.
 
@@ -189,7 +189,7 @@ When a customer visits the site, they see a calendar of your available slots for
 
 | Color | Status | What it means to the customer |
 |-------|--------|-------------------------------|
-| Green | Open | Available to book |
+| Red | Open | Available to book |
 | Yellow | Held | Someone is checking out — may open up soon |
 | Blue | Reserved | Already booked |
 | Gray | Cancelled | Not available |
@@ -214,7 +214,7 @@ When a customer clicks **Continue to Checkout**, the app places a **2-minute hol
 
 - The slots turn yellow and are unavailable to other customers
 - A countdown timer on the checkout page shows how much time remains
-- If the customer doesn't complete payment in time, the hold expires automatically and slots return to green
+- If the customer doesn't complete payment in time, the hold expires automatically and slots return to red (available)
 
 This prevents double-booking without requiring payment upfront.
 
@@ -285,7 +285,7 @@ The app sends push notifications automatically in these situations:
 |-------|----------------|
 | Customer pays successfully | Customer + You (admin) |
 | Payment fails | Customer |
-| Customer cancels their own booking | Customer |
+| Customer cancels their own booking | Customer + You (admin) |
 | You cancel a customer's booking | Customer |
 | You create a manual booking for a customer | Customer |
 

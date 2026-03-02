@@ -62,7 +62,7 @@ All admin controllers inherit from `Admin::BaseController`, which sets `layout "
 1. `SlotHoldsController#create`: wraps hold acquisition in a DB transaction with `SELECT FOR UPDATE SKIP LOCKED`. If any slot is not `open`, rolls back. On success, sets `status: "held"`, `held_by_user_id`, `held_until: 2.minutes.from_now`, creates a pending `Booking` + `BookingSlot` records, stores `session[:pending_booking_id]`.
 2. `BookingsController#new/create`: reads pending booking from session, validates hold hasn't expired, creates Stripe Checkout Session, redirects to Stripe.
 3. `WebhooksController#stripe`: on `payment_intent.succeeded`, verifies slots are still held by the booking's user, confirms booking + transitions slots to `reserved`, creates `AgreementAcceptance`. On `payment_intent.payment_failed`, releases slots back to `open` and cancels booking. CSRF skipped, Stripe signature verified.
-4. `HoldExpiryJob`: releases expired holds every minute (configured in `config/recurring.yml` for production via Solid Queue).
+4. `HoldExpiryJob`: releases expired holds (job still exists; no longer scheduled in `config/recurring.yml` — lazy cleanup via `Slot.available` scope covers the gap between runs).
 
 `Slot.available` scope includes lazy cleanup: `status = 'open' OR (status = 'held' AND held_until < NOW())` so expired holds don't block the calendar between job runs.
 
@@ -91,11 +91,12 @@ Component-private styles go as private methods on the ViewComponent class, not i
 
 ### ViewComponent
 
-Used for any reusable UI element. Components live in `app/components/`, specs in `spec/components/`. Current components: `FlashMessageComponent`, `ConfirmationDialogComponent`, `BreadcrumbComponent`.
+Used for any reusable UI element. Components live in `app/components/`, specs in `spec/components/`. Current components: `FlashMessageComponent`, `ConfirmationDialogComponent`, `BreadcrumbComponent`, `HeaderComponent`.
 
 - `FlashMessageComponent`: `type:` (`:notice`/`:alert`/`:error`), `message:` — dismiss button uses `aria-label="Dismiss"`
 - `ConfirmationDialogComponent`: `<dialog>` element, `aria-modal="true"`, bottom-sheet on mobile / modal on desktop
 - `BreadcrumbComponent`: `items:` array of `{label:, path:}` — last item gets `aria-current="page"`
+- `HeaderComponent`: sticky site header with logo + nav slots. Uses `renders_one :desktop_nav` and `renders_one :mobile_nav`. Mounts the `navigation` Stimulus controller (`data-controller="navigation"`). Desktop nav is hidden on mobile; hamburger button toggles a slide-in drawer (`role="dialog"`, `aria-modal="true"`).
 
 Component specs use `render_inline` via `ViewComponent::TestHelpers` (included for `type: :component`).
 
@@ -103,6 +104,7 @@ Component specs use `render_inline` via `ViewComponent::TestHelpers` (included f
 
 - `slot_selection_controller.js`: manages multi-slot selection (consecutive-only), submits hidden `slot_ids[]` inputs
 - `countdown_timer_controller.js`: reads `expiresAt` value, counts down, disables pay button and shows expired message at zero
+- `navigation_controller.js`: mobile nav drawer open/close with slide-in animation, backdrop overlay, Escape key and Tab focus-trap. Targets: `menu`, `menuButton`, `backdrop`. Sets `document.body.style.overflow = "hidden"` while open.
 
 ### Models — Key Behaviors
 
@@ -113,6 +115,7 @@ Component specs use `render_inline` via `ViewComponent::TestHelpers` (included f
 - `Booking#within_cancellation_window?` returns `true` if earliest slot starts after `cancellation_hours.hours.from_now`.
 - `BookingSlot` has unique index on `[:booking_id, :slot_id]`.
 - `BulkSlotCreator` service (`app/services/`) handles overnight time ranges (e.g., 22:00 → 02:00 spanning midnight).
+- `BookingCompletionJob`: transitions confirmed bookings to `completed` when all slots ended more than 1 hour ago. Runs hourly at minute 5 via Solid Queue (`config/recurring.yml`).
 
 ---
 
