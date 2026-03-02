@@ -8,8 +8,9 @@ Rails.application.routes.draw do
     root to: "dashboard#index"
     resources :slots, only: [ :index, :new, :create, :destroy ] do
       collection do
-        get  :bulk_new
-        post :bulk_create
+        get    :bulk_new
+        post   :bulk_create
+        delete :bulk_destroy
       end
     end
     resources :bookings, only: [ :index, :show, :new, :create ] do

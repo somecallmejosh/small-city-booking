@@ -49,6 +49,14 @@ class Admin::SlotsController < Admin::BaseController
     end
   end
 
+  def bulk_destroy
+    ids = Array(params[:slot_ids]).compact_blank
+    slots = Slot.open.where(id: ids)
+    count = slots.count
+    slots.each { |s| s.update!(status: "cancelled") }
+    redirect_to admin_slots_path, notice: "Cancelled #{count} slot(s)."
+  end
+
   private
 
     def slot_params

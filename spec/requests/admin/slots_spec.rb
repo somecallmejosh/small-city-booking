@@ -95,4 +95,32 @@ RSpec.describe "Admin::Slots", type: :request do
       end
     end
   end
+
+  describe "DELETE /admin/slots/bulk_destroy" do
+    let!(:slot_a) { create(:slot, status: "open") }
+    let!(:slot_b) { create(:slot, status: "open") }
+    let!(:reserved_slot) { create(:slot, :reserved) }
+
+    it "cancels the selected open slots and redirects with a notice" do
+      expect {
+        delete bulk_destroy_admin_slots_path, params: { slot_ids: [ slot_a.id, slot_b.id ] }
+      }.not_to change(Slot, :count)
+
+      expect(slot_a.reload.status).to eq("cancelled")
+      expect(slot_b.reload.status).to eq("cancelled")
+      expect(response).to redirect_to(admin_slots_path)
+      follow_redirect!
+      expect(response.body).to include("Cancelled 2 slot(s)")
+    end
+
+    it "ignores non-open slots even if their IDs are submitted" do
+      delete bulk_destroy_admin_slots_path, params: { slot_ids: [ reserved_slot.id ] }
+      expect(reserved_slot.reload.status).to eq("reserved")
+    end
+
+    it "handles an empty selection gracefully" do
+      delete bulk_destroy_admin_slots_path, params: { slot_ids: [] }
+      expect(response).to redirect_to(admin_slots_path)
+    end
+  end
 end

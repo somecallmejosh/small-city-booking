@@ -81,8 +81,8 @@
               <td class="px-4 py-3 text-stone-700">
                 <% first_slot = booking.slots.min_by(&:starts_at) %>
                 <% if first_slot %>
-                  <span class="block text-xs"><%= first_slot.starts_at.strftime("%b %-d, %Y") %></span>
-                  <span class="block"><%= first_slot.starts_at.strftime("%A · %-I:%M %p") %></span>
+                  <span class="block text-xs whitespace-nowrap"><%= first_slot.starts_at.strftime("%b %-d, %Y") %></span>
+                  <span class="block whitespace-nowrap"><%= first_slot.starts_at.strftime("%A · %-I:%M %p") %></span>
                   <span class="block text-xs font-medium">
                     <%= booking.slots.count %> hour<%= "s" if booking.slots.count != 1 %>
                   </span>
@@ -98,10 +98,10 @@
                   <%= booking.status.capitalize %>
                 </span>
                 <% if booking.admin_created? %>
-                  <span class="ml-1 rounded-full bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-700">Admin</span>
+                  <span class="ml-1 rounded-full bg-violet-100 px-2 py-0.5 text-xs font-medium text-violet-700 whitespace-nowrap">Admin</span>
                 <% end %>
               </td>
-              <td class="px-4 py-3 text-stone-500">
+              <td class="px-4 py-3 text-stone-500 whitespace-nowrap">
                 <%= booking.created_at.strftime("%b %-d, %Y") %>
               </td>
               <td class="px-4 py-3 text-right">

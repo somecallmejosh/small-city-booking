@@ -23,6 +23,10 @@ module StyleHelper
     "block text-sm font-medium text-stone-700 mb-1.5"
   end
 
+  def checkbox
+    "h-4 w-4 rounded border-red-300 text-white focus:ring-red-600"
+  end
+
   def card
     "rounded-xl border border-stone-200 bg-white p-5 shadow-sm"
   end
