@@ -42,6 +42,11 @@ RSpec.describe "Admin::Slots", type: :request do
         post admin_slots_path, params: { slot: { starts_at: 1.day.from_now.beginning_of_hour } }
         expect(Slot.last.status).to eq("open")
       end
+
+      it "enqueues NotifyWaitlistJob" do
+        post admin_slots_path, params: { slot: { starts_at: 1.day.from_now.beginning_of_hour } }
+        expect(NotifyWaitlistJob).to have_been_enqueued
+      end
     end
 
     context "with missing starts_at" do
@@ -69,6 +74,17 @@ RSpec.describe "Admin::Slots", type: :request do
       expect(response).to redirect_to(admin_slots_path)
       follow_redirect!
       expect(response.body).to include("Created 2 slot(s)")
+    end
+
+    it "enqueues NotifyWaitlistJob when slots are created" do
+      post bulk_create_admin_slots_path, params: {
+        days_of_week: [ "1" ],
+        start_date:   monday.to_s,
+        end_date:     monday.to_s,
+        start_hour:   "14",
+        end_hour:     "16"
+      }
+      expect(NotifyWaitlistJob).to have_been_enqueued
     end
   end
 

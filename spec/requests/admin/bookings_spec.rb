@@ -98,6 +98,14 @@ RSpec.describe "Admin::Bookings", type: :request do
         expect(future_slot.reload.status).to eq("open")
         expect(response).to redirect_to(admin_bookings_path)
       end
+
+      it "enqueues NotifyWaitlistJob after releasing slots" do
+        stub_stripe_refund(payment_intent_id: "pi_test_fake")
+
+        post cancel_admin_booking_path(booking)
+
+        expect(NotifyWaitlistJob).to have_been_enqueued
+      end
     end
 
     context "outside the cancellation window (<24h away)" do

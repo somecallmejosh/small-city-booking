@@ -4,6 +4,7 @@ class User < ApplicationRecord
   has_many :bookings, dependent: :destroy
   has_many :push_subscriptions, dependent: :destroy
   has_many :held_slots, class_name: "Slot", foreign_key: :held_by_user_id, dependent: :nullify
+  has_many :waitlist_entries, dependent: :destroy
   has_one_attached :avatar
 
   normalizes :email_address, with: ->(e) { e.strip.downcase }

@@ -19,5 +19,15 @@ class HomeController < ApplicationController
       .where("starts_at >= ? AND starts_at < ?", Time.current, 30.days.from_now)
       .order(:starts_at)
       .group_by { |s| s.starts_at.to_date }
+
+    @has_available_slots = @slots_by_date.any?
+
+    unless Current.user.admin?
+      @waitlist_entry = WaitlistEntry.find_by(user: Current.user)
+      @on_waitlist    = @waitlist_entry&.status == "pending"
+    else
+      @waitlist_entry = nil
+      @on_waitlist    = false
+    end
   end
 end

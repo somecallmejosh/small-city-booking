@@ -90,6 +90,11 @@
             Admin cancellations always refund the customer in full, regardless of the cancellation
             window set in Settings.
           </p>
+          <p>
+            Cancelling a booking also triggers a notification email to any customers currently on the
+            <%= link_to "waitlist", admin_waitlist_entries_path, class: "underline hover:text-stone-900" %>,
+            since the released slots are now available to book.
+          </p>
         </div>
       </section>
 
@@ -98,7 +103,8 @@
         <div class="mt-3 text-sm">
           <p>
             From the Bookings list, select multiple bookings using their checkboxes and use the
-            <strong>Cancel Selected</strong> action to cancel them all at once.
+            <strong>Cancel Selected</strong> action to cancel them all at once. Waitlist customers
+            are notified once per bulk action, not once per booking.
           </p>
         </div>
       </section>

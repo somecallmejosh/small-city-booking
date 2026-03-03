@@ -6,4 +6,5 @@ class Admin::DocsController < Admin::BaseController
   def agreement; end
   def settings; end
   def tips; end
+  def waitlist; end
 end

@@ -58,8 +58,24 @@
 
 
   <% else %>
-    <div class="<%= card %> text-center text-stone-500">
-      No upcoming slots available. Check back soon.
+    <div class="<%= card %>">
+      <p class="text-center text-stone-500">No upcoming slots available. Check back soon.</p>
+
+      <% unless Current.user.admin? %>
+        <div class="mt-4 border-t border-stone-100 pt-4 text-center">
+          <% if @on_waitlist %>
+            <p class="text-sm text-stone-600 mb-3">
+              You're on the waitlist. We'll email <strong><%= Current.user.email_address %></strong> when slots open up.
+            </p>
+            <%= button_to "Leave waitlist", waitlist_entry_path(@waitlist_entry), method: :delete,
+                  class: btn_secondary %>
+          <% else %>
+            <p class="text-sm text-stone-600 mb-3">Join the waitlist and we'll email you when slots become available.</p>
+            <%= button_to "Join waitlist", waitlist_entries_path, method: :post,
+                  class: btn_primary %>
+          <% end %>
+        </div>
+      <% end %>
     </div>
   <% end %>
 </div>

@@ -14,11 +14,12 @@
             autocomplete: "email",
             placeholder: "you@example.com" %>
     </div>
+    <br />
 
-    <%= f.submit "Resend Verification Email", class: "#{btn_primary} w-full" %>
+    <%= f.submit "Resend Verification Email", class: "#{btn_primary}" %>
   <% end %>
 
-  <p class="text-sm text-stone-500 text-center">
+  <p class="text-sm text-stone-500">
     <%= link_to "Back to sign in", new_session_path, class: "text-stone-900 underline hover:no-underline" %>
   </p>
 </div>

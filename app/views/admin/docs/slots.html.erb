@@ -22,6 +22,11 @@
             Go to <strong>Slots → New Slot</strong>. Pick a date and start time, then click
             <strong>Create Slot</strong>. The slot is immediately available for customers to book.
           </p>
+          <p>
+            Creating a slot automatically emails any customers on the
+            <%= link_to "waitlist", admin_waitlist_entries_path, class: "underline hover:text-stone-900" %>
+            if there are pending entries and the new slot falls within the next 30 days.
+          </p>
         </div>
       </section>
 
@@ -41,6 +46,10 @@
             The app generates one slot per hour within the time window, on each selected day, across
             the entire date range. It skips any slots that already exist. You'll see a summary of
             how many were created.
+          </p>
+          <p>
+            If any slots were created successfully, the system automatically notifies customers on the
+            <%= link_to "waitlist", admin_waitlist_entries_path, class: "underline hover:text-stone-900" %>.
           </p>
         </div>
       </section>

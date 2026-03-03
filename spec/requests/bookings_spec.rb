@@ -162,6 +162,14 @@ RSpec.describe "Bookings", type: :request do
           user.id, "Booking Cancelled", anything
         )
       end
+
+      it "enqueues NotifyWaitlistJob after releasing slots" do
+        stub_stripe_refund(payment_intent_id: "pi_test_fake")
+
+        post cancel_booking_path(booking)
+
+        expect(NotifyWaitlistJob).to have_been_enqueued
+      end
     end
 
     context "when outside cancellation window" do

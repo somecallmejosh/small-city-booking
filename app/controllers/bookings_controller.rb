@@ -77,6 +77,7 @@ class BookingsController < ApplicationController
 
     @booking.slots.each { |slot| slot.update!(status: "open") }
     @booking.update!(status: "cancelled", cancelled_at: Time.current)
+    NotifyWaitlistJob.perform_later
 
     SendNotificationJob.perform_later(
       Current.user.id,

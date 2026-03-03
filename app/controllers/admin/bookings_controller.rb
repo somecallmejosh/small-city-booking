@@ -75,6 +75,7 @@ class Admin::BookingsController < Admin::BaseController
         "Booking Cancelled",
         "Your studio booking has been cancelled."
       )
+      NotifyWaitlistJob.perform_later
     end
 
     def booking_params

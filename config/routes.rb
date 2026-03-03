@@ -23,6 +23,7 @@ Rails.application.routes.draw do
     resource :agreement, only: [ :show, :edit, :update ]
     resource :settings, only: [ :show, :edit, :update ]
     resources :customers, only: [ :index, :show, :new, :create, :edit, :update ]
+    resources :waitlist_entries, only: [ :index, :destroy ]
     get "docs",            to: "docs#index",     as: :docs
     get "docs/slots",      to: "docs#slots",     as: :docs_slots
     get "docs/bookings",   to: "docs#bookings",  as: :docs_bookings
@@ -30,6 +31,7 @@ Rails.application.routes.draw do
     get "docs/agreement",  to: "docs#agreement", as: :docs_agreement
     get "docs/settings",   to: "docs#settings",  as: :docs_settings
     get "docs/tips",       to: "docs#tips",      as: :docs_tips
+    get "docs/waitlist",   to: "docs#waitlist",  as: :docs_waitlist
   end
 
   get "/help",                 to: "help#index",          as: :help
@@ -40,11 +42,13 @@ Rails.application.routes.draw do
   get "/help/notifications",   to: "help#notifications",   as: :help_notifications
   get "/help/account",         to: "help#account",         as: :help_account
   get "/help/terms",           to: "help#terms",           as: :help_terms
+  get "/help/waitlist",        to: "help#waitlist",        as: :help_waitlist
 
   resources :bookings, only: [ :index, :new, :create, :show ] do
     member { post :cancel }
   end
   resources :slot_holds, only: [ :create, :destroy ]
+  resources :waitlist_entries, only: [ :create, :destroy ]
   resources :push_subscriptions, only: [ :create, :destroy ]
   post "/webhooks/stripe", to: "webhooks#stripe"
 

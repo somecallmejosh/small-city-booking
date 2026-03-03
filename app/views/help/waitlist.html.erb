@@ -1,0 +1,84 @@
+<% content_for :title, "Waitlist — Help" %>
+
+<div class="flex gap-8 lg:gap-12">
+  <aside class="hidden lg:block w-52 flex-shrink-0">
+    <%= render "sidebar" %>
+  </aside>
+
+  <article class="min-w-0 flex-1">
+    <%= render BreadcrumbComponent.new(items: [
+      { label: "Help", path: help_path },
+      { label: "Waitlist", path: nil }
+    ]) %>
+
+    <h1 class="mt-3 text-2xl font-semibold text-stone-900">Waitlist</h1>
+    <p class="mt-2 text-stone-500">Get notified by email when studio time becomes available.</p>
+
+    <div class="mt-8 space-y-8 text-stone-700">
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">What Is the Waitlist?</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            The waitlist lets you receive an email notification when new studio slots open up —
+            so you don't have to keep checking back manually. When slots become available, everyone
+            on the waitlist gets a single email with a link to the booking calendar.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">How to Join</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            When the studio calendar has no available slots, a <strong>Join waitlist</strong> button
+            appears on the home page below the "No upcoming slots" message. Click it and you're on
+            the list — you'll receive a notification email the next time slots are added or a booking
+            is cancelled.
+          </p>
+          <p>
+            You must be signed in to join. If you don't have an account yet,
+            <%= link_to "create one here", new_registration_path, class: "underline hover:text-stone-900" %>.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">When Will I Get an Email?</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>A notification is sent when any of the following happens:</p>
+          <ul class="mt-2 space-y-1 list-disc pl-5">
+            <li>The studio adds new slots to the calendar</li>
+            <li>Another customer cancels a booking, releasing those hours</li>
+          </ul>
+          <p>
+            The email goes to the address on your account and includes a direct link to the home page
+            so you can book right away.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">How to Leave</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            If you no longer want notifications, visit the home page while no slots are available.
+            You'll see a <strong>Leave waitlist</strong> button. Click it and you'll be removed
+            immediately.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Rejoining After Being Notified</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            After you receive a notification email, your spot in the waitlist is marked as notified.
+            If you check the calendar and the slots are already gone, or if no slots fit your schedule,
+            simply click <strong>Join waitlist</strong> again from the home page to re-activate your
+            entry. You'll be notified again the next time slots become available.
+          </p>
+        </div>
+      </section>
+    </div>
+  </article>
+</div>

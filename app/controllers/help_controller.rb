@@ -9,4 +9,5 @@ class HelpController < ApplicationController
   def notifications; end
   def account; end
   def terms; end
+  def waitlist; end
 end

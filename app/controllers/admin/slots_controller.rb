@@ -15,6 +15,7 @@ class Admin::SlotsController < Admin::BaseController
   def create
     @slot = Slot.new(slot_params.merge(status: "open"))
     if @slot.save
+      NotifyWaitlistJob.perform_later
       redirect_to admin_slots_path, notice: "Slot created."
     else
       render :new, status: :unprocessable_entity
@@ -31,6 +32,8 @@ class Admin::SlotsController < Admin::BaseController
       start_hour:   params[:start_hour],
       end_hour:     params[:end_hour]
     ).call
+
+    NotifyWaitlistJob.perform_later if result.created_count > 0
 
     msg = "Created #{result.created_count} slot(s)"
     msg += ", skipped #{result.skipped_count} duplicate(s)" if result.skipped_count > 0

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_02_194432) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_03_170043) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -289,6 +289,16 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_02_194432) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  create_table "waitlist_entries", force: :cascade do |t|
+    t.datetime "created_at", null: false
+    t.datetime "notified_at"
+    t.string "status", default: "pending", null: false
+    t.datetime "updated_at", null: false
+    t.bigint "user_id", null: false
+    t.index ["status"], name: "index_waitlist_entries_on_status"
+    t.index ["user_id"], name: "index_waitlist_entries_on_user_id", unique: true
+  end
+
   add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
   add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
   add_foreign_key "agreement_acceptances", "agreements"
@@ -307,4 +317,5 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_02_194432) do
   add_foreign_key "solid_queue_ready_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_recurring_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
   add_foreign_key "solid_queue_scheduled_executions", "solid_queue_jobs", column: "job_id", on_delete: :cascade
+  add_foreign_key "waitlist_entries", "users"
 end

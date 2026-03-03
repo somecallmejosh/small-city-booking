@@ -1,0 +1,91 @@
+<% content_for :title, "Waitlist — Admin Manual" %>
+
+<div class="flex gap-8 lg:gap-12">
+  <aside class="hidden lg:block w-52 flex-shrink-0">
+    <%= render "sidebar" %>
+  </aside>
+
+  <article class="min-w-0 flex-1">
+    <%= render BreadcrumbComponent.new(items: [
+      { label: "Admin Manual", path: admin_docs_path },
+      { label: "Waitlist", path: nil }
+    ]) %>
+
+    <h1 class="mt-3 text-2xl font-semibold text-stone-900">Waitlist</h1>
+    <p class="mt-2 text-stone-500">Automatically notify customers when studio slots become available.</p>
+
+    <div class="mt-8 space-y-8 text-stone-700">
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">How It Works</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            When the studio calendar has no open slots in the next 30 days, signed-in customers see
+            a <strong>Join Waitlist</strong> button on the home page. Clicking it adds them to the
+            waitlist and they'll receive an email the next time slots become available.
+          </p>
+          <p>
+            The waitlist is automatic — you don't need to do anything. When new slots are created
+            or a booking is cancelled, the system emails every customer who has a pending waitlist
+            entry and marks them as notified.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">What Triggers a Notification</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>Waitlist emails are sent automatically when either of these happens:</p>
+          <ul class="mt-2 space-y-1 list-disc pl-5">
+            <li><strong>New slots are created</strong> — single or bulk creation from the Slots page</li>
+            <li><strong>A booking is cancelled</strong> — by the customer or by you (including bulk cancels)</li>
+          </ul>
+          <p>
+            If no customers are on the waitlist, or if the newly available slots fall outside the
+            30-day window, no emails are sent.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Viewing the Waitlist</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            Go to <strong><%= link_to "Waitlist", admin_waitlist_entries_path, class: "underline hover:text-stone-900" %></strong>
+            in the main navigation. You'll see a table with each customer's name, email, status
+            (<strong>Pending</strong> or <strong>Notified</strong>), when they joined, and when they were last notified.
+          </p>
+          <p>
+            <strong>Pending</strong> entries have not yet been notified (or have re-joined after being notified).
+            <strong>Notified</strong> entries received an email and have not re-joined since.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Removing an Entry</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            Click <strong>Remove</strong> next to any entry to delete it from the list. The customer
+            will no longer receive notifications unless they re-join from the home page.
+          </p>
+          <p>
+            Customers can also remove themselves at any time using the <strong>Leave waitlist</strong>
+            button on the home page while no slots are available.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Re-Joining After Notification</h2>
+        <div class="mt-3 space-y-3 text-sm">
+          <p>
+            After a customer is notified, their entry is marked as <strong>Notified</strong> but kept
+            in the database. If they return to the home page and find no slots available again, they
+            can click <strong>Join waitlist</strong> to re-activate their entry. Their status resets
+            to <strong>Pending</strong> and they'll be notified the next time slots open.
+          </p>
+        </div>
+      </section>
+    </div>
+  </article>
+</div>

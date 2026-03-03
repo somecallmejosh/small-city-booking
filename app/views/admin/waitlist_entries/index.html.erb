@@ -1,0 +1,59 @@
+<% content_for :title, "Waitlist — Admin" %>
+
+<div class="mb-6 flex items-center justify-between">
+  <div>
+    <%= render BreadcrumbComponent.new(items: [{ label: "Admin", path: admin_root_path }, { label: "Waitlist", path: nil }]) %>
+    <h1 class="mt-1 text-2xl font-semibold text-stone-900">Waitlist</h1>
+    <p class="mt-1 text-sm text-stone-500">Customers waiting to be notified of available slots.</p>
+  </div>
+</div>
+
+<% if @waitlist_entries.any? %>
+  <div class="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead class="border-b border-stone-200 bg-stone-50">
+          <tr>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Customer</th>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Status</th>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Joined</th>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Notified</th>
+            <th class="px-4 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-stone-100">
+          <% @waitlist_entries.each do |entry| %>
+            <tr>
+              <td class="px-4 py-3">
+                <p class="font-medium text-stone-900 whitespace-nowrap"><%= entry.user.name.presence || "—" %></p>
+                <p class="text-xs text-stone-500 whitespace-nowrap"><%= entry.user.email_address %></p>
+              </td>
+              <td class="px-4 py-3">
+                <span class="rounded-full px-2.5 py-0.5 text-xs font-medium <%= entry.status == 'pending' ? 'bg-yellow-100 text-yellow-800' : 'bg-stone-100 text-stone-600' %>">
+                  <%= entry.status.capitalize %>
+                </span>
+              </td>
+              <td class="px-4 py-3 text-stone-500 whitespace-nowrap">
+                <%= entry.created_at.strftime("%b %-d, %Y") %>
+              </td>
+              <td class="px-4 py-3 text-stone-500 whitespace-nowrap">
+                <%= entry.notified_at ? entry.notified_at.strftime("%b %-d, %Y") : "—" %>
+              </td>
+              <td class="px-4 py-3 text-right">
+                <%= button_to "Remove", admin_waitlist_entry_path(entry), method: :delete,
+                      class: "text-sm font-medium text-red-600 hover:underline bg-transparent border-0 cursor-pointer p-0",
+                      form: { data: { turbo_confirm: "Remove this waitlist entry?" } } %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <%== @pagy.series_nav if @pagy.pages > 1 %>
+<% else %>
+  <div class="<%= card %> text-center text-stone-500">
+    No waitlist entries.
+  </div>
+<% end %>
