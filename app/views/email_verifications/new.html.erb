@@ -2,7 +2,7 @@
 
 <div class="<%= session_form_wrapper %>">
   <h1 class="text-xl font-semibold text-stone-900">Resend Verification Email</h1>
-  <p class="text-sm text-stone-500">
+  <p class="text-stone-500">
     Enter your email address and we'll send a new verification link.
   </p>
 
@@ -19,7 +19,7 @@
     <%= f.submit "Resend Verification Email", class: "#{btn_primary}" %>
   <% end %>
 
-  <p class="text-sm text-stone-500">
+  <p class="text-stone-500">
     <%= link_to "Back to sign in", new_session_path, class: "text-stone-900 underline hover:no-underline" %>
   </p>
 </div>

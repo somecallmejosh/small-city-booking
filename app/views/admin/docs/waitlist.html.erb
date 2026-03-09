@@ -17,7 +17,7 @@
     <div class="mt-8 space-y-8 text-stone-700">
       <section>
         <h2 class="text-lg font-semibold text-stone-900">How It Works</h2>
-        <div class="mt-3 space-y-3 text-sm">
+        <div class="mt-3 space-y-3">
           <p>
             When the studio calendar has no open slots in the next 30 days, signed-in customers see
             a <strong>Join Waitlist</strong> button on the home page. Clicking it adds them to the
@@ -33,7 +33,7 @@
 
       <section>
         <h2 class="text-lg font-semibold text-stone-900">What Triggers a Notification</h2>
-        <div class="mt-3 space-y-3 text-sm">
+        <div class="mt-3 space-y-3">
           <p>Waitlist emails are sent automatically when either of these happens:</p>
           <ul class="mt-2 space-y-1 list-disc pl-5">
             <li><strong>New slots are created</strong> — single or bulk creation from the Slots page</li>
@@ -48,7 +48,7 @@
 
       <section>
         <h2 class="text-lg font-semibold text-stone-900">Viewing the Waitlist</h2>
-        <div class="mt-3 space-y-3 text-sm">
+        <div class="mt-3 space-y-3">
           <p>
             Go to <strong><%= link_to "Waitlist", admin_waitlist_entries_path, class: "underline hover:text-stone-900" %></strong>
             in the main navigation. You'll see a table with each customer's name, email, status
@@ -63,7 +63,7 @@
 
       <section>
         <h2 class="text-lg font-semibold text-stone-900">Removing an Entry</h2>
-        <div class="mt-3 space-y-3 text-sm">
+        <div class="mt-3 space-y-3">
           <p>
             Click <strong>Remove</strong> next to any entry to delete it from the list. The customer
             will no longer receive notifications unless they re-join from the home page.
@@ -77,7 +77,7 @@
 
       <section>
         <h2 class="text-lg font-semibold text-stone-900">Re-Joining After Notification</h2>
-        <div class="mt-3 space-y-3 text-sm">
+        <div class="mt-3 space-y-3">
           <p>
             After a customer is notified, their entry is marked as <strong>Notified</strong> but kept
             in the database. If they return to the home page and find no slots available again, they

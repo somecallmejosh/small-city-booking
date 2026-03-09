@@ -14,7 +14,7 @@
     <div class="space-y-6">
 
       <div class="<%= card %>">
-        <h2 class="mb-4 text-sm font-semibold text-stone-700">Customer</h2>
+        <h2 class="mb-4 font-semibold text-stone-700">Customer</h2>
         <label class="<%= form_label %>" for="booking_user_id">Select customer</label>
         <select name="booking[user_id]" id="booking_user_id" class="<%= input_field %>">
           <option value="">— choose a customer —</option>
@@ -27,11 +27,11 @@
       </div>
 
       <div class="<%= card %>">
-        <h2 class="mb-4 text-sm font-semibold text-stone-700">Available Slots</h2>
+        <h2 class="mb-4 font-semibold text-stone-700">Available Slots</h2>
         <% if @available_slots.any? %>
           <div class="max-h-64 space-y-1.5 overflow-y-auto">
             <% @available_slots.each do |slot| %>
-              <label class="flex items-center gap-3 rounded-lg border border-stone-200 px-3 py-2 text-sm text-stone-700 hover:bg-stone-50 cursor-pointer">
+              <label class="flex items-center gap-3 rounded-lg border border-stone-200 px-3 py-2 text-stone-700 hover:bg-stone-50 cursor-pointer">
                 <input type="checkbox"
                        name="booking[slot_ids][]"
                        value="<%= slot.id %>"
@@ -41,12 +41,12 @@
             <% end %>
           </div>
         <% else %>
-          <p class="text-sm text-stone-400">No open slots available. <%= link_to "Create some →", new_admin_slot_path, class: "text-stone-700 underline" %></p>
+          <p class="text-stone-400">No open slots available. <%= link_to "Create some →", new_admin_slot_path, class: "text-stone-700 underline" %></p>
         <% end %>
       </div>
 
       <div class="<%= card %>">
-        <h2 class="mb-4 text-sm font-semibold text-stone-700">Notes <span class="font-normal text-stone-400">(optional)</span></h2>
+        <h2 class="mb-4 font-semibold text-stone-700">Notes <span class="font-normal text-stone-400">(optional)</span></h2>
         <textarea name="booking[notes]"
                   id="booking_notes"
                   rows="3"
@@ -55,8 +55,8 @@
       </div>
 
       <div class="<%= card %>">
-        <h2 class="mb-4 text-sm font-semibold text-stone-700">Payment</h2>
-        <label class="flex items-start gap-3 text-sm text-stone-700 cursor-pointer">
+        <h2 class="mb-4 font-semibold text-stone-700">Payment</h2>
+        <label class="flex items-start gap-3 text-stone-700 cursor-pointer">
           <input type="checkbox"
                  name="booking[generate_payment_link]"
                  value="1"
@@ -71,7 +71,7 @@
 
       <div class="flex items-center gap-4">
         <%= f.submit "Create Booking", class: btn_primary %>
-        <%= link_to "Cancel", admin_bookings_path, class: "text-sm text-stone-500 hover:text-stone-700" %>
+        <%= link_to "Cancel", admin_bookings_path, class: "text-stone-500 hover:text-stone-700" %>
       </div>
 
     </div>

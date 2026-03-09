@@ -1,19 +1,19 @@
 <% content_for :title, "Agreement — Admin" %>
 
-<div class="mb-6 flex items-start justify-between">
-  <div>
+<div class="mb-6">
     <%= render BreadcrumbComponent.new(items: [
       { label: "Admin", path: admin_root_path },
       { label: "Agreement", path: nil }
     ]) %>
-    <h1 class="mt-1 text-2xl font-semibold text-stone-900">Terms of Booking</h1>
-  </div>
-  <%= link_to "Edit / Publish New Version", edit_admin_agreement_path, class: btn_primary %>
+    <h1 class="mt-1 text-2xl font-semibold text-stone-900 mb-4">Terms of Booking</h1>
+    <%= link_to "Edit / Publish New Version", edit_admin_agreement_path, class: btn_primary %>
+
 </div>
+
 
 <% if @agreement %>
   <div class="<%= card %> mb-6 prose prose-stone max-w-none">
-    <div class="mb-3 flex items-center gap-3 text-sm text-stone-500">
+    <div class="mb-3 flex items-center gap-3 text-stone-500">
       <span>Version <%= @agreement.version %></span>
       <span>&middot;</span>
       <time datetime="<%= @agreement.published_at.iso8601 %>">
@@ -32,7 +32,7 @@
   <h2 class="mt-8 mb-3 text-lg font-semibold text-stone-900">Archived Versions</h2>
   <div class="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
     <div class="overflow-x-auto">
-    <table class="w-full text-sm">
+    <table class="w-full">
       <thead class="border-b border-stone-200 bg-stone-50">
         <tr>
           <th class="px-4 py-3 text-left font-medium text-stone-600">Version</th>

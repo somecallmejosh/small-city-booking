@@ -10,13 +10,13 @@
 </div>
 
 <div class="<%= card %> max-w-md">
-  <p class="mb-5 text-sm text-stone-500">
+  <p class="mb-5 text-stone-500">
     A temporary password will be generated. The customer can set their own via <strong>Forgot password</strong>.
   </p>
 
   <%= form_with model: @customer, url: admin_customers_path do |f| %>
     <% if @customer.errors.any? %>
-      <div class="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
+      <div class="mb-4 rounded-lg border border-red-200 bg-red-50 p-3 text-red-700">
         <% @customer.errors.full_messages.each do |msg| %>
           <p><%= msg %></p>
         <% end %>

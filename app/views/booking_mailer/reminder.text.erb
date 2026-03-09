@@ -1,0 +1,16 @@
+Hi <%= @user.name.presence || "there" %>,
+
+Just a reminder — your studio session is tomorrow.
+
+<% @slots.each do |slot| %>
+<% et = slot.starts_at.in_time_zone(BookingMailer::TIMEZONE) %>
+- <%= et.strftime("%A, %B %-d") %> from <%= et.strftime("%-I:%M %p") %> to <%= slot.ends_at.in_time_zone(BookingMailer::TIMEZONE).strftime("%-I:%M %p %Z") %>
+<% end %>
+
+Studio address:
+Small City Studio
+<%= BookingMailer::STUDIO_ADDRESS %>
+
+See you tomorrow!
+
+— Small City Studio

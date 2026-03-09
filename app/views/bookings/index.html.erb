@@ -9,12 +9,12 @@
   %>
 
   <% if upcoming.any? %>
-    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide text-stone-500">Upcoming</h2>
+    <h2 class="mb-3 font-semibold uppercase tracking-wide text-stone-500">Upcoming</h2>
     <div class="mb-8 space-y-3">
       <% upcoming.each do |booking| %>
         <div class="<%= card %> flex items-center justify-between">
           <div>
-            <p class="text-sm font-medium text-stone-900">
+            <p class="font-medium text-stone-900">
               <%= booking.slots.order(:starts_at).first&.starts_at&.strftime("%A, %B %-d %Y") %>
             </p>
             <p class="text-xs text-stone-500">
@@ -26,7 +26,7 @@
             <span class="<%= booking_status_badge_classes(booking.status) %> rounded-full px-2.5 py-0.5 text-xs font-medium">
               <%= booking.status.capitalize %>
             </span>
-            <%= link_to "View", booking_path(booking), class: "text-sm font-medium text-stone-700 hover:underline" %>
+            <%= link_to "View", booking_path(booking), class: "font-medium text-stone-700 hover:underline" %>
           </div>
         </div>
       <% end %>
@@ -34,12 +34,12 @@
   <% end %>
 
   <% if past.any? %>
-    <h2 class="mb-3 text-sm font-semibold uppercase tracking-wide text-stone-500">Past</h2>
+    <h2 class="mb-3 font-semibold uppercase tracking-wide text-stone-500">Past</h2>
     <div class="space-y-3">
       <% past.each do |booking| %>
         <div class="<%= card %> flex items-center justify-between opacity-75">
           <div>
-            <p class="text-sm font-medium text-stone-900">
+            <p class="font-medium text-stone-900">
               <%= booking.slots.order(:starts_at).first&.starts_at&.strftime("%A, %B %-d %Y") %>
             </p>
             <p class="text-xs text-stone-500">
@@ -51,7 +51,7 @@
             <span class="<%= booking_status_badge_classes(booking.status) %> rounded-full px-2.5 py-0.5 text-xs font-medium">
               <%= booking.status.capitalize %>
             </span>
-            <%= link_to "View", booking_path(booking), class: "text-sm font-medium text-stone-700 hover:underline" %>
+            <%= link_to "View", booking_path(booking), class: "font-medium text-stone-700 hover:underline" %>
           </div>
         </div>
       <% end %>

@@ -95,6 +95,12 @@ RSpec.describe "Webhooks", type: :request do
         )
       end
 
+      it "enqueues a confirmation email to the customer" do
+        expect {
+          post_webhook(type: "payment_intent.succeeded", data: intent_data)
+        }.to have_enqueued_mail(BookingMailer, :confirmation)
+      end
+
       it "stores the Stripe receipt URL on the booking" do
         post_webhook(type: "payment_intent.succeeded", data: intent_data)
 

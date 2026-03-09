@@ -20,7 +20,7 @@
 <% if @customers.any? %>
   <div class="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
     <div class="overflow-x-auto">
-    <table class="w-full text-sm">
+    <table class="w-full">
       <thead class="border-b border-stone-200 bg-stone-50">
         <tr>
           <th class="px-4 py-3 text-left font-medium text-stone-600">Customer</th>
@@ -52,7 +52,7 @@
               <%= customer.created_at.strftime("%b %-d, %Y") %>
             </td>
             <td class="px-4 py-3 text-right">
-              <%= link_to "View", admin_customer_path(customer), class: "text-sm font-medium text-stone-700 hover:underline" %>
+              <%= link_to "View", admin_customer_path(customer), class: "font-medium text-stone-700 hover:underline" %>
             </td>
           </tr>
         <% end %>

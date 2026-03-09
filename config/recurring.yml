@@ -14,7 +14,22 @@ production:
     command: "SolidQueue::Job.clear_finished_in_batches(sleep_between_batches: 0.3)"
     schedule: every hour at minute 12
 
+  expire_holds:
+    class: HoldExpiryJob
+    queue: default
+    schedule: every 5 minutes
+
   complete_past_bookings:
     class: BookingCompletionJob
     queue: default
     schedule: every hour at minute 5
+
+  send_reminder_emails:
+    class: SendReminderEmailsJob
+    queue: default
+    schedule: every hour at minute 15
+
+  send_follow_up_emails:
+    class: SendFollowUpEmailsJob
+    queue: default
+    schedule: every hour at minute 20

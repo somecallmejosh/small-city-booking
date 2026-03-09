@@ -33,7 +33,7 @@
 
     <div class="mb-3 hidden items-center gap-3 rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-2.5"
          data-bulk-select-target="actionBar">
-      <span class="text-sm text-yellow-800">
+      <span class="text-yellow-800">
         <span data-bulk-select-target="counter">0</span> selected
       </span>
       <button type="submit" class="<%= btn_danger %> py-1 text-xs">
@@ -43,7 +43,7 @@
 
     <div class="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
       <div class="overflow-x-auto">
-      <table class="w-full text-sm">
+      <table class="w-full">
         <thead class="border-b border-stone-200 bg-stone-50">
           <tr>
             <th class="w-10 px-4 py-3">
@@ -105,7 +105,7 @@
                 <%= booking.created_at.strftime("%b %-d, %Y") %>
               </td>
               <td class="px-4 py-3 text-right">
-                <%= link_to "View", admin_booking_path(booking), class: "text-sm font-medium text-stone-700 hover:underline" %>
+                <%= link_to "View", admin_booking_path(booking), class: "font-medium text-stone-700 hover:underline" %>
               </td>
             </tr>
           <% end %>

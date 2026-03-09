@@ -4,7 +4,7 @@
   <h1 class="text-xl font-semibold text-stone-900">Create Account</h1>
 
   <% if @user.errors.any? %>
-    <div class="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700 space-y-1">
+    <div class="rounded-lg border border-red-200 bg-red-50 p-3 text-red-700 space-y-1">
       <% @user.errors.full_messages.each do |msg| %>
         <p><%= msg %></p>
       <% end %>
@@ -47,7 +47,7 @@
     <%= f.submit "Create Account", class: "#{btn_primary}" %>
   <% end %>
 
-  <p class="text-sm text-stone-500">
+  <p class="text-stone-500">
     Already have an account? <%= link_to "Sign in", new_session_path, class: "text-stone-900 underline hover:no-underline" %>
   </p>
 </div>

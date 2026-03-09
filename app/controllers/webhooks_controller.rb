@@ -84,6 +84,8 @@ class WebhooksController < ApplicationController
         charge = Stripe::Charge.retrieve(intent["latest_charge"])
         booking.update!(stripe_receipt_url: charge.receipt_url)
       end
+
+      BookingMailer.confirmation(booking.reload).deliver_later
     end
 
     def handle_payment_intent_failed(intent)

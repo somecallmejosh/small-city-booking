@@ -4,14 +4,14 @@
   <div>
     <%= render BreadcrumbComponent.new(items: [{ label: "Admin", path: admin_root_path }, { label: "Waitlist", path: nil }]) %>
     <h1 class="mt-1 text-2xl font-semibold text-stone-900">Waitlist</h1>
-    <p class="mt-1 text-sm text-stone-500">Customers waiting to be notified of available slots.</p>
+    <p class="mt-1 text-stone-500">Customers waiting to be notified of available slots.</p>
   </div>
 </div>
 
 <% if @waitlist_entries.any? %>
   <div class="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
     <div class="overflow-x-auto">
-      <table class="w-full text-sm">
+      <table class="w-full">
         <thead class="border-b border-stone-200 bg-stone-50">
           <tr>
             <th class="px-4 py-3 text-left font-medium text-stone-600">Customer</th>
@@ -41,7 +41,7 @@
               </td>
               <td class="px-4 py-3 text-right">
                 <%= button_to "Remove", admin_waitlist_entry_path(entry), method: :delete,
-                      class: "text-sm font-medium text-red-600 hover:underline bg-transparent border-0 cursor-pointer p-0",
+                      class: "font-medium text-red-600 hover:underline bg-transparent border-0 cursor-pointer p-0",
                       form: { data: { turbo_confirm: "Remove this waitlist entry?" } } %>
               </td>
             </tr>

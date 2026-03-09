@@ -1,0 +1,30 @@
+<p>Hi <%= @user.name.presence || "there" %>,</p>
+
+<p>Your studio session is confirmed. Here are your booking details:</p>
+
+<ul>
+<% @slots.each do |slot| %>
+  <% et = slot.starts_at.in_time_zone(BookingMailer::TIMEZONE) %>
+  <li><%= et.strftime("%A, %B %-d") %> from <%= et.strftime("%-I:%M %p") %> to <%= slot.ends_at.in_time_zone(BookingMailer::TIMEZONE).strftime("%-I:%M %p %Z") %></li>
+<% end %>
+</ul>
+
+<p><strong>Total paid:</strong> $<%= "%.2f" % @total %></p>
+
+<% if @receipt %>
+  <p><%= link_to "View your Stripe receipt", @receipt %></p>
+<% end %>
+
+<p><strong>Studio address:</strong><br>Small City Studio<br><%= BookingMailer::STUDIO_ADDRESS %></p>
+
+<p><strong>A few things to know before your session:</strong></p>
+<ul>
+  <li>Arrive a few minutes early — your session time starts when your slot begins, not when you walk in.</li>
+  <li>Bring any instruments, cables, or gear you need.</li>
+  <li>Basic gear and headphones are available in the studio.</li>
+  <li>Need to cancel? Sign in and visit <strong>My Bookings</strong> to check your cancellation options.</li>
+</ul>
+
+<p>We look forward to having you. If you have any questions, just reply to this email.</p>
+
+<p>— Small City Studio</p>

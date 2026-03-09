@@ -13,6 +13,27 @@ RSpec.describe HoldExpiryJob, type: :job do
       expect(slot.held_until).to be_nil
     end
 
+    it "cancels pending bookings associated with expired slots" do
+      slot = create(:slot, :held, held_until: 2.minutes.ago)
+      booking = create(:booking, status: "pending")
+      create(:booking_slot, booking: booking, slot: slot)
+
+      described_class.new.perform
+
+      expect(booking.reload.status).to eq("cancelled")
+      expect(booking.reload.cancelled_at).to be_present
+    end
+
+    it "does not cancel confirmed bookings when releasing expired slots" do
+      slot = create(:slot, :held, held_until: 2.minutes.ago)
+      booking = create(:booking, status: "confirmed")
+      create(:booking_slot, booking: booking, slot: slot)
+
+      described_class.new.perform
+
+      expect(booking.reload.status).to eq("confirmed")
+    end
+
     it "does not release non-expired held slots" do
       slot = create(:slot, :held, held_until: 10.minutes.from_now)
 

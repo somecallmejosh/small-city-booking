@@ -70,9 +70,14 @@ class BookingsController < ApplicationController
       return
     end
 
-    if @booking.within_cancellation_window?
-      Stripe::Refund.create(payment_intent: @booking.stripe_payment_intent_id)
-      @booking.update!(refunded: true)
+    if @booking.stripe_payment_intent_id.present?
+      if @booking.within_cancellation_window?
+        refund = Stripe::Refund.create(payment_intent: @booking.stripe_payment_intent_id)
+      else
+        refund_amount = @booking.total_cents - 5000
+        refund = Stripe::Refund.create(payment_intent: @booking.stripe_payment_intent_id, amount: refund_amount)
+      end
+      @booking.update!(refunded: true, stripe_refund_id: refund.id)
     end
 
     @booking.slots.each { |slot| slot.update!(status: "open") }

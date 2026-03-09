@@ -17,7 +17,7 @@
 
     <div class="mb-3 hidden items-center gap-3 rounded-lg border border-red-200 bg-red-50 px-4 py-2.5"
          data-bulk-select-target="actionBar">
-      <span class="text-sm text-red-800">
+      <span class="text-red-800">
         <span data-bulk-select-target="counter">0</span> selected
       </span>
       <button type="submit" class="<%= btn_danger %> py-1 text-xs">
@@ -27,7 +27,7 @@
 
     <div class="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
       <div class="overflow-x-auto">
-      <table class="w-full text-sm">
+      <table class="w-full">
         <thead class="border-b border-stone-200 bg-stone-50">
           <tr>
             <th class="w-10 px-4 py-3">
@@ -68,7 +68,7 @@
               <td class="px-4 py-3 text-right">
                 <% if slot.cancellable? %>
                   <%= button_to "Cancel", admin_slot_path(slot), method: :delete,
-                        class: "text-sm font-medium text-red-600 hover:text-red-800",
+                        class: "font-medium text-red-600 hover:text-red-800",
                         data: { turbo_confirm: "Cancel this slot on #{slot.starts_at.strftime('%b %-d at %-I:%M %p')}?" } %>
                 <% end %>
               </td>

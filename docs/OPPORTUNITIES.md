@@ -9,12 +9,15 @@ Chase Briley of Small City Studios works with rap, hip-hop, and R&B artists — 
 ## The Big Three Gaps
 
 ### 1. No Self-Registration
+
 Artists currently can't sign up themselves. An admin has to create every customer account. This kills organic lead flow. A potential customer who finds the site at midnight ready to book hits a wall.
 
 ### 2. No Email Communication (Beyond Password Reset)
+
 The studio has contact info for every customer who's ever booked. That's a goldmine that's sitting completely unused. No booking confirmations via email, no reminders, no re-engagement.
 
 ### 3. No Lead Capture for Unbooked Visitors
+
 A visitor browses the calendar, finds nothing available, and leaves. No way to stay in touch. That potential customer is gone.
 
 ---
@@ -31,6 +34,7 @@ When the calendar has no available slots in the next N days (or for a specific d
 
 **C. Transactional Emails**
 Currently almost no emails go out. Add:
+
 - Booking confirmation email (with session details, prep tips, studio address)
 - 24-hour reminder email ("Your session is tomorrow!")
 - Post-session follow-up email (sent ~3 hours after session ends): "How'd it go? Book your next session → [link]"
@@ -46,6 +50,7 @@ Chase has worked with 250+ artists. A few powerful quotes with artist names on t
 
 **E. Promo Codes**
 A `PromoCode` model with a percentage or flat discount, applied at checkout. Use cases:
+
 - First-session discount ("FIRSTTRACK" — 10% off)
 - Slow-period fill ("MARCH20" during low weeks)
 - Reward returning customers personally

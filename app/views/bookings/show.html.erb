@@ -20,28 +20,28 @@
     </div>
 
     <% if @booking.status == "pending" %>
-      <div class="mb-4 rounded-lg bg-yellow-50 p-4 text-sm text-yellow-800">
+      <div class="mb-4 rounded-lg bg-yellow-50 p-4 text-yellow-800">
         Payment processing… This page will update once your payment is confirmed.
       </div>
     <% end %>
 
-    <h2 class="mb-2 text-sm font-semibold text-stone-700">Sessions</h2>
+    <h2 class="mb-2 font-semibold text-stone-700">Sessions</h2>
     <ul class="space-y-1">
       <% @booking.slots.order(:starts_at).each do |slot| %>
-        <li class="text-sm text-stone-700">
+        <li class="text-stone-700">
           <%= slot.starts_at.strftime("%A, %B %-d %Y · %-I:%M %p") %>
         </li>
       <% end %>
     </ul>
 
     <div class="mt-4 border-t border-stone-100 pt-4">
-      <p class="text-sm text-stone-600">
+      <p class="text-stone-600">
         Total paid: <span class="font-semibold text-stone-900">
           $<%= number_with_precision(@booking.total_cents / 100.0, precision: 2) %>
         </span>
       </p>
       <% if (receipt_url = @booking.safe_receipt_url) %>
-        <p class="mt-2 text-sm">
+        <p class="mt-2">
           <%= link_to "View Stripe receipt →", receipt_url,
                 target: "_blank", rel: "noopener noreferrer",
                 class: "text-stone-700 underline hover:text-stone-900" %>
@@ -65,15 +65,16 @@
             ) %>
           </div>
         <% else %>
+          <% partial_refund = number_with_precision((@booking.total_cents - 5000) / 100.0, precision: 2) %>
           <div data-controller="confirmation-dialog">
             <button type="button" data-action="confirmation-dialog#open" class="<%= btn_danger %>">
               Cancel Booking
             </button>
             <%= render ConfirmationDialogComponent.new(
               title:         "Cancel Booking",
-              message:       "Are you sure you want to cancel? No refund will be issued — you are outside the cancellation window.",
+              message:       "You are within 24 hours of your session. A $50 cancellation fee applies — you will receive a $#{partial_refund} refund to your original payment method.",
               confirm_url:   cancel_booking_path(@booking),
-              confirm_label: "Yes, Cancel (No Refund)",
+              confirm_label: "Yes, Cancel ($50 Fee)",
               cancel_label:  "Keep Booking"
             ) %>
           </div>

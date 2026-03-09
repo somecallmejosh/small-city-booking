@@ -17,7 +17,7 @@
     <div class="mt-8 space-y-8 text-stone-700">
       <section>
         <h2 class="text-lg font-semibold text-stone-900">Booking Statuses</h2>
-        <div class="mt-3 text-sm">
+        <div class="mt-3">
           <table class="w-full rounded-xl border border-stone-200 overflow-hidden text-left">
             <thead class="bg-stone-50 text-xs uppercase tracking-wide text-stone-500">
               <tr>
@@ -49,7 +49,7 @@
 
       <section>
         <h2 class="text-lg font-semibold text-stone-900">Filtering and Viewing Bookings</h2>
-        <div class="mt-3 space-y-3 text-sm">
+        <div class="mt-3 space-y-3">
           <p>
             Go to <strong>Bookings</strong> to see all bookings. Use the filter tabs at the top to
             narrow by status. Click any booking to see full details: customer info, all session times,
@@ -60,7 +60,7 @@
 
       <section>
         <h2 class="text-lg font-semibold text-stone-900">Creating a Manual Booking</h2>
-        <div class="mt-3 space-y-3 text-sm">
+        <div class="mt-3 space-y-3">
           <p>
             Go to <strong>Bookings → New Booking</strong>. Useful when a customer calls or emails
             instead of booking online.
@@ -80,15 +80,20 @@
 
       <section>
         <h2 class="text-lg font-semibold text-stone-900">Cancelling a Booking</h2>
-        <div class="mt-3 space-y-3 text-sm">
+        <div class="mt-3 space-y-3">
           <p>
-            From any booking detail page, click <strong>Cancel Booking</strong>. If the booking was
+            From any booking detail page, click <strong>Cancel & Refund</strong>. If the booking was
             paid via Stripe, the app automatically issues a full refund to the customer's card. The
             slots are released back to open and the customer receives a push notification.
           </p>
           <p>
             Admin cancellations always refund the customer in full, regardless of the cancellation
             window set in Settings.
+          </p>
+          <p>
+            <strong>Customer-initiated cancellations</strong> follow a different policy: cancellations
+            made more than 24 hours before the session receive a full refund; cancellations within
+            24 hours incur a <strong>$50 cancellation fee</strong> — the remainder is refunded automatically.
           </p>
           <p>
             Cancelling a booking also triggers a notification email to any customers currently on the
@@ -100,11 +105,61 @@
 
       <section>
         <h2 class="text-lg font-semibold text-stone-900">Bulk Cancellation</h2>
-        <div class="mt-3 text-sm">
+        <div class="mt-3">
           <p>
             From the Bookings list, select multiple bookings using their checkboxes and use the
             <strong>Cancel Selected</strong> action to cancel them all at once. Waitlist customers
             are notified once per bulk action, not once per booking.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Admin Push Notifications</h2>
+        <div class="mt-3 space-y-3">
+          <p>
+            The app sends push notifications to your browser when key booking events occur:
+          </p>
+          <ul class="mt-2 space-y-2 list-disc pl-5">
+            <li><strong>New booking confirmed</strong> — when a customer's payment succeeds</li>
+            <li><strong>Booking cancelled</strong> — when a customer cancels a confirmed booking</li>
+          </ul>
+          <p>
+            To receive these notifications, click the <strong>Notifications</strong> button at the
+            bottom of the sidebar and grant permission when your browser prompts you. The button only
+            appears if your browser supports push notifications. You must enable notifications from
+            each browser or device you want to receive them on.
+          </p>
+          <p>
+            Once enabled, the button label changes to <strong>Notifications On</strong>. Click it
+            again at any time to unsubscribe.
+          </p>
+        </div>
+      </section>
+
+      <section>
+        <h2 class="text-lg font-semibold text-stone-900">Automated Email Notifications</h2>
+        <div class="mt-3 space-y-3">
+          <p>The app sends three transactional emails to customers automatically:</p>
+          <ul class="mt-2 space-y-2 list-disc pl-5">
+            <li>
+              <strong>Booking confirmation</strong> — sent immediately when a customer's payment
+              succeeds. Includes session date(s) and time(s), total paid, and a link to their Stripe receipt.
+            </li>
+            <li>
+              <strong>24-hour reminder</strong> — sent the day before the session. The job runs
+              hourly; customers with a session starting 23–25 hours from the run time receive this email.
+              Sent only once per booking.
+            </li>
+            <li>
+              <strong>Post-session follow-up</strong> — sent approximately 3–4 hours after the
+              session ends. Includes a thank-you note and a link to book again. Sent only once per booking.
+            </li>
+          </ul>
+          <p>
+            Manual bookings created from the admin panel also receive the 24-hour reminder and
+            post-session follow-up. The confirmation email is only sent when payment is processed
+            through Stripe Checkout.
           </p>
         </div>
       </section>

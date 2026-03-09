@@ -4,7 +4,7 @@
   <h1 class="text-xl font-semibold text-stone-900">My Profile</h1>
 
   <% if @user.errors.any? %>
-    <div class="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700 space-y-1">
+    <div class="rounded-lg border border-red-200 bg-red-50 p-3 text-red-700 space-y-1">
       <% @user.errors.full_messages.each do |msg| %>
         <p><%= msg %></p>
       <% end %>
@@ -24,9 +24,9 @@
       </p>
       <%= f.file_field :avatar,
             accept: "image/jpeg,image/png,image/webp",
-            class: "block w-full text-sm text-stone-600
+            class: "block w-full text-stone-600
                     file:mr-4 file:py-2 file:px-4 file:rounded-lg
-                    file:border-0 file:text-sm file:font-medium
+                    file:border-0 file:file:font-medium
                     file:bg-stone-100 file:text-stone-700
                     hover:file:bg-stone-200 cursor-pointer" %>
     </div>

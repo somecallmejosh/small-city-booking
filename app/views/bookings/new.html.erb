@@ -10,7 +10,7 @@
        data-controller="countdown-timer checkout"
        data-countdown-timer-expires-at-value="<%= @held_until.iso8601 %>">
 
-    <div class="mb-6 rounded-xl border border-yellow-200 bg-yellow-50 p-4 text-sm text-yellow-800">
+    <div class="mb-6 rounded-xl border border-yellow-200 bg-yellow-50 p-4 text-yellow-800">
       <div class="flex items-center justify-between">
         <span>Slots reserved for</span>
         <span class="font-semibold tabular-nums" data-countdown-timer-target="display">5:00</span>
@@ -21,16 +21,16 @@
     </div>
 
     <div class="<%= card %> mb-6">
-      <h2 class="mb-3 text-sm font-semibold text-stone-700">Your selected slots</h2>
+      <h2 class="mb-3 font-semibold text-stone-700">Your selected slots</h2>
       <ul class="space-y-1">
         <% @booking.slots.order(:starts_at).each do |slot| %>
-          <li class="text-sm text-stone-700">
+          <li class="text-stone-700">
             <%= slot.starts_at.strftime("%A, %B %-d · %-I:%M %p") %>
           </li>
         <% end %>
       </ul>
       <div class="mt-4 border-t border-stone-100 pt-4">
-        <p class="text-sm font-semibold text-stone-900">
+        <p class="font-semibold text-stone-900">
           Total: $<%= number_with_precision(@booking.total_cents / 100.0, precision: 2) %>
         </p>
       </div>
@@ -38,13 +38,13 @@
 
     <% if @agreement %>
       <div class="<%= card %> mb-6">
-        <h2 class="mb-3 text-sm font-semibold text-stone-700">
+        <h2 class="mb-3 font-semibold text-stone-700">
           Studio Agreement — Version <%= @agreement.version %>
         </h2>
         <div class="prose prose-sm max-h-48 overflow-y-auto text-stone-600">
           <%= @agreement.body %>
         </div>
-        <label class="mt-4 flex items-start gap-3 text-sm text-stone-700">
+        <label class="mt-4 flex items-start gap-3 text-stone-700">
           <input type="checkbox" id="agree_checkbox" class="mt-0.5 h-4 w-4 rounded border-stone-300"
                  required
                  data-action="change->checkout#togglePay">
@@ -68,7 +68,7 @@
             slot_hold_path(@booking),
             method: :delete,
             data: { turbo_confirm: "Release your hold and return to the calendar?" },
-            class: "text-sm text-stone-500 hover:text-stone-700 bg-transparent border-0 p-0 cursor-pointer" %>
+            class: "text-stone-500 hover:text-stone-700 bg-transparent border-0 p-0 cursor-pointer" %>
     </div>
   </div>
 </div>

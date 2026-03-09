@@ -24,46 +24,54 @@
   </head>
 
   <body class="min-h-screen bg-stone-50 font-sans antialiased">
+    <% nav_item = ->(active) { active ? "block px-3 py-2 rounded-lg font-medium bg-red-50 text-red-700" : "block px-3 py-2 rounded-lg text-stone-600 hover:bg-stone-50 hover:text-stone-900" } %>
     <%= render(HeaderComponent.new) do |c| %>
       <% c.with_desktop_nav do %>
-        <%= link_to "Help", help_path, class: "hover:text-red-600 #{'text-red-700 hover:text-red-600' if current_page?(help_path)}" %>
         <% if authenticated? %>
-          <%= link_to "My Bookings", bookings_path, class: "hover:text-red-600" %>
-          <%= link_to "My Profile", edit_profile_path, class: "hover:text-red-600" %>
+          <%= link_to "My Bookings", bookings_path, class: nav_item.(current_page?(bookings_path)) %>
+          <%= link_to "Available Sessions", root_path, class: nav_item.(current_page?(root_path)) %>
+          <%= link_to "My Profile", edit_profile_path, class: nav_item.(current_page?(edit_profile_path)) %>
+          <%= link_to "Help", help_path, class: nav_item.(current_page?(help_path)) %>
+
           <div data-controller="push-subscription"
-               data-push-subscription-vapid-public-key-value="<%= Rails.application.config.vapid_public_key %>">
+               data-push-subscription-vapid-public-key-value="<%= Rails.application.config.vapid_public_key %>" class="ml-6">
             <button data-push-subscription-target="button"
                     data-action="push-subscription#toggle"
-                    class="text-stone-600 hover:text-red-600 text-sm hidden">
+                    class="<%= btn_secondary %>">
               Notifications
             </button>
           </div>
-          <%= button_to "Sign Out", session_path, method: :delete,
-                class: "text-stone-600 hover:text-red-600 text-sm" %>
+          <div class="flex items-center ml-4">
+            <%= button_to "Sign Out", session_path, method: :delete,
+                  class: btn_primary %>
+          </div>
         <% else %>
-          <%= link_to "Sign Up", new_registration_path, class: "hover:text-red-600" %>
-          <%= link_to "Sign In", new_session_path, class: "hover:text-red-600" %>
+          <div class="flex items-center gap-1.5 ml-4">
+            <%= link_to "Sign Up", new_registration_path, class: btn_secondary %>
+            <%= link_to "Sign In", new_session_path, class: btn_primary %>
+          </div>
         <% end %>
       <% end %>
       <% c.with_mobile_nav do %>
-        <div class="flex flex-col gap-6 p-4">
-          <%= link_to "Help", help_path, class: "hover:text-red-600 #{'text-red-700 hover:text-red-600' if current_page?(help_path)}" %>
+        <div class="flex flex-col gap-2 p-4">
           <% if authenticated? %>
-            <%= link_to "My Bookings", bookings_path, class: "hover:text-red-600" %>
-            <%= link_to "My Profile", edit_profile_path, class: "hover:text-red-600" %>
+            <%= link_to "My Bookings", bookings_path, class: nav_item.(current_page?(bookings_path)) %>
+            <%= link_to "Available Sessions", root_path, class: nav_item.(current_page?(root_path)) %>
+            <%= link_to "My Profile", edit_profile_path, class: nav_item.(current_page?(edit_profile_path)) %>
+            <%= link_to "Help", help_path, class: nav_item.(current_page?(help_path)) %>
             <div data-controller="push-subscription"
                  data-push-subscription-vapid-public-key-value="<%= Rails.application.config.vapid_public_key %>">
               <button data-push-subscription-target="button"
                       data-action="push-subscription#toggle"
-                      class="text-stone-600 hover:text-red-600 text-sm hidden">
+                      class="<%= btn_secondary %>">
                 Notifications
               </button>
             </div>
             <%= button_to "Sign Out", session_path, method: :delete,
-                  class: "text-stone-600 hover:text-red-600 text-sm" %>
+                  class: btn_primary %>
           <% else %>
-            <%= link_to "Sign Up", new_registration_path, class: "hover:text-red-600" %>
-            <%= link_to "Sign In", new_session_path, class: "hover:text-red-600" %>
+            <%= link_to "Sign Up", new_registration_path, class: btn_primary %>
+            <%= link_to "Sign In", new_session_path, class: btn_primary %>
           <% end %>
         </div>
       <% end %>
@@ -77,7 +85,7 @@
 
     <% if authenticated? && !Current.user.email_verified? %>
       <div class="mx-auto max-w-6xl px-4 pt-2 lg:px-8">
-        <div class="flex items-center justify-between gap-3 rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-3 text-sm text-yellow-800">
+        <div class="flex flex-col items-center justify-between gap-1 lg:flex-col lg:gap-3 rounded-lg border border-yellow-200 bg-yellow-50 px-4 py-3 text-yellow-800">
           <span>Please verify your email address to enable booking.</span>
           <%= link_to "Resend verification email", new_email_verification_path,
                 class: "whitespace-nowrap font-medium underline hover:no-underline" %>

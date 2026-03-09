@@ -6,11 +6,11 @@
             data-starts-at-ms="<%= slot.starts_at.to_i * 1000 %>"
             data-ends-at-ms="<%= slot.ends_at.to_i * 1000 %>"
             data-action="click->slot-selection#selectSlot"
-            class="<%= slot_button_classes(slot) %>">
+            class="<%= slot_button_classes(slot) %> w-full">
       <%= slot.starts_at.strftime("%-I:%M %p") %>
     </button>
   <% else %>
-    <span class="<%= slot_button_classes(slot) %>">
+    <span class="<%= slot_button_classes(slot) %> w-full cursor-not-allowed">
       <%= slot.starts_at.strftime("%-I:%M %p") %>
     </span>
   <% end %>

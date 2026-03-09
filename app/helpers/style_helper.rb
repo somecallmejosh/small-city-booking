@@ -1,14 +1,18 @@
 module StyleHelper
+  def btn_base
+    "inline-flex items-center justify-center rounded-lg px-5 py-2.5 font-medium focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-50"
+  end
+
   def btn_primary
-    "inline-flex items-center justify-center rounded-lg bg-stone-900 px-5 py-2.5 text-sm font-medium text-white hover:bg-stone-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-stone-900 disabled:opacity-50"
+    "#{btn_base} bg-stone-900 text-white hover:bg-stone-700 focus-visible:outline-stone-900"
   end
 
   def btn_secondary
-    "inline-flex items-center justify-center rounded-lg border border-stone-300 bg-white px-5 py-2.5 text-sm font-medium text-stone-700 hover:bg-stone-50"
+    "#{btn_base} border border-stone-300 bg-white text-stone-700 hover:bg-stone-50"
   end
 
   def btn_danger
-    "inline-flex items-center justify-center rounded-lg bg-red-600 px-5 py-2.5 text-sm font-medium text-white hover:bg-red-700"
+    "#{btn_base} bg-red-600 text-white hover:bg-red-700"
   end
 
   def session_form_wrapper
@@ -20,7 +24,7 @@ module StyleHelper
   end
 
   def form_label
-    "block text-sm font-medium text-stone-700 mb-1.5"
+    "block font-medium text-stone-700 mb-1.5"
   end
 
   def checkbox
@@ -58,15 +62,15 @@ module StyleHelper
   end
 
   SLOT_BUTTON_CLASSES = {
-    "open"      => "rounded-lg border border-red-100 bg-red-50/50 px-3 py-2 text-sm font-medium text-red-800 hover:bg-red-100 hover:text-red-950 cursor-pointer font-semibold",
-    "held"      => "rounded-lg border border-yellow-300 bg-yellow-50 px-3 py-2 text-sm font-medium text-yellow-800 cursor-not-allowed opacity-60",
-    "reserved"  => "rounded-lg border border-blue-300 bg-blue-50 px-3 py-2 text-sm font-medium text-blue-800 cursor-not-allowed opacity-60",
-    "cancelled" => "rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-sm font-medium text-stone-400 cursor-not-allowed opacity-40"
+    "open"      => "rounded-lg border border-red-100 bg-red-50/50 px-3 py-2 font-medium text-red-800 hover:bg-red-100 hover:text-red-950 cursor-pointer font-semibold",
+    "held"      => "rounded-lg border border-yellow-300 bg-yellow-50 px-3 py-2 font-medium text-yellow-800 cursor-not-allowed opacity-60",
+    "reserved"  => "rounded-lg border border-blue-300 bg-blue-50 px-3 py-2 font-medium text-blue-800 cursor-not-allowed opacity-60",
+    "cancelled" => "rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 font-medium text-stone-400 cursor-not-allowed opacity-40"
   }.freeze
 
   def slot_button_classes(slot)
     return SLOT_BUTTON_CLASSES["cancelled"] if slot.past?
 
-    SLOT_BUTTON_CLASSES.fetch(slot.status, "rounded-lg border border-stone-200 bg-stone-50 px-3 py-2 text-sm")
+    SLOT_BUTTON_CLASSES.fetch(slot.status, "rounded-lg border border-stone-200 bg-stone-50 px-3 py-2")
   end
 end

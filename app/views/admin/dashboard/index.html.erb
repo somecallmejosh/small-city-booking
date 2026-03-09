@@ -6,13 +6,13 @@
 
 <div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
   <div class="<%= card %>">
-    <p class="text-sm text-stone-500">Upcoming open slots</p>
+    <p class="text-stone-500">Upcoming open slots</p>
     <p class="mt-1 text-3xl font-bold text-stone-900"><%= @open_slots_count %></p>
-    <%= link_to "Manage slots →", admin_slots_path, class: "mt-3 inline-block text-sm text-stone-600 hover:text-stone-900" %>
+    <%= link_to "Manage slots →", admin_slots_path, class: "mt-3 inline-block text-stone-600 hover:text-stone-900" %>
   </div>
 
   <div class="<%= card %>">
-    <p class="text-sm text-stone-500">Upcoming reserved slots</p>
+    <p class="text-stone-500">Upcoming reserved slots</p>
     <p class="mt-1 text-3xl font-bold text-stone-900"><%= @reserved_slots_count %></p>
   </div>
 </div>
