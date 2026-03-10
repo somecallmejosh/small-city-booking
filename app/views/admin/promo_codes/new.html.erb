@@ -1,0 +1,16 @@
+<% content_for :title, "New Promo Code — Admin" %>
+
+<div class="mb-6">
+  <%= render BreadcrumbComponent.new(items: [
+    { label: "Admin",       path: admin_root_path },
+    { label: "Promo Codes", path: admin_promo_codes_path },
+    { label: "New",         path: nil }
+  ]) %>
+  <h1 class="mt-1 text-2xl font-semibold text-stone-900">New Promo Code</h1>
+</div>
+
+<div class="<%= card %> max-w-lg">
+  <%= form_with model: [ :admin, @promo_code ], url: admin_promo_codes_path do |f| %>
+    <%= render "form", f: f, promo_code: @promo_code %>
+  <% end %>
+</div>

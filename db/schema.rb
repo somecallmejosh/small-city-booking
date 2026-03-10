@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.1].define(version: 2026_03_03_185015) do
+ActiveRecord::Schema[8.1].define(version: 2026_03_10_000003) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "pg_catalog.plpgsql"
 
@@ -87,8 +87,10 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_03_185015) do
     t.text "cancellation_reason"
     t.datetime "cancelled_at"
     t.datetime "created_at", null: false
+    t.integer "discount_cents", default: 0, null: false
     t.datetime "follow_up_sent_at"
     t.text "notes"
+    t.bigint "promo_code_id"
     t.boolean "refunded", default: false, null: false
     t.datetime "reminder_sent_at"
     t.string "status", default: "confirmed", null: false
@@ -101,9 +103,33 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_03_185015) do
     t.datetime "updated_at", null: false
     t.bigint "user_id", null: false
     t.index ["agreement_id"], name: "index_bookings_on_agreement_id"
+    t.index ["promo_code_id"], name: "index_bookings_on_promo_code_id"
     t.index ["status"], name: "index_bookings_on_status"
     t.index ["stripe_payment_intent_id"], name: "index_bookings_on_stripe_payment_intent_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
+  end
+
+  create_table "promo_code_usages", force: :cascade do |t|
+    t.bigint "promo_code_id", null: false
+    t.bigint "user_id", null: false
+    t.bigint "booking_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["promo_code_id", "user_id"], name: "index_promo_code_usages_on_promo_code_id_and_user_id", unique: true
+    t.index ["user_id"], name: "index_promo_code_usages_on_user_id"
+    t.index ["booking_id"], name: "index_promo_code_usages_on_booking_id"
+  end
+
+  create_table "promo_codes", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "code", null: false
+    t.integer "discount_percent", null: false
+    t.date "start_date", null: false
+    t.date "end_date", null: false
+    t.boolean "active", default: true, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["code"], name: "index_promo_codes_on_code", unique: true
   end
 
   create_table "push_subscriptions", force: :cascade do |t|
@@ -309,7 +335,11 @@ ActiveRecord::Schema[8.1].define(version: 2026_03_03_185015) do
   add_foreign_key "booking_slots", "bookings"
   add_foreign_key "booking_slots", "slots"
   add_foreign_key "bookings", "agreements"
+  add_foreign_key "bookings", "promo_codes"
   add_foreign_key "bookings", "users"
+  add_foreign_key "promo_code_usages", "bookings"
+  add_foreign_key "promo_code_usages", "promo_codes"
+  add_foreign_key "promo_code_usages", "users"
   add_foreign_key "push_subscriptions", "users"
   add_foreign_key "sessions", "users"
   add_foreign_key "slots", "users", column: "held_by_user_id"

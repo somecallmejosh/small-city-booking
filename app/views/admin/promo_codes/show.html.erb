@@ -1,0 +1,105 @@
+<% content_for :title, "#{@promo_code.name} — Admin" %>
+
+<div class="mb-6 flex items-start justify-between">
+  <div>
+    <%= render BreadcrumbComponent.new(items: [
+      { label: "Admin",       path: admin_root_path },
+      { label: "Promo Codes", path: admin_promo_codes_path },
+      { label: @promo_code.name, path: nil }
+    ]) %>
+    <h1 class="mt-1 text-2xl font-semibold text-stone-900"><%= @promo_code.name %></h1>
+  </div>
+  <%= link_to "Edit", edit_admin_promo_code_path(@promo_code), class: btn_secondary %>
+</div>
+
+<div class="grid gap-6 lg:grid-cols-3">
+  <%# Details card %>
+  <div class="<%= card %>">
+    <h2 class="mb-4 font-semibold text-stone-700">Details</h2>
+    <dl class="space-y-3 text-sm">
+      <div>
+        <dt class="text-stone-500">Code</dt>
+        <dd class="font-mono font-medium tracking-wider text-stone-900"><%= @promo_code.code.upcase %></dd>
+      </div>
+      <div>
+        <dt class="text-stone-500">Discount</dt>
+        <dd class="font-medium text-stone-900"><%= @promo_code.discount_percent %>% off</dd>
+      </div>
+      <div>
+        <dt class="text-stone-500">Active Window</dt>
+        <dd class="text-stone-900">
+          <%= @promo_code.start_date.strftime("%B %-d, %Y") %> –
+          <%= @promo_code.end_date.strftime("%B %-d, %Y") %>
+        </dd>
+      </div>
+      <div>
+        <dt class="text-stone-500">Status</dt>
+        <dd>
+          <% if @promo_code.active? %>
+            <span class="rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-100 text-green-800">Active</span>
+          <% else %>
+            <span class="rounded-full px-2.5 py-0.5 text-xs font-medium bg-stone-100 text-stone-600">Inactive</span>
+          <% end %>
+        </dd>
+      </div>
+      <div>
+        <dt class="text-stone-500">Total Uses</dt>
+        <dd class="font-medium text-stone-900"><%= @usages.count %></dd>
+      </div>
+    </dl>
+
+    <% if @promo_code.promo_code_usages.none? %>
+      <div class="mt-6 border-t border-stone-100 pt-4">
+        <%= button_to "Delete Promo Code", admin_promo_code_path(@promo_code), method: :delete,
+              class: btn_danger,
+              form: { data: { turbo_confirm: "Delete \"#{@promo_code.name}\"? This cannot be undone." } } %>
+      </div>
+    <% end %>
+  </div>
+
+  <%# Usage list %>
+  <div class="lg:col-span-2">
+    <% if @usages.any? %>
+      <div class="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
+        <div class="border-b border-stone-200 bg-stone-50 px-4 py-3">
+          <h2 class="font-semibold text-stone-700">Usage History</h2>
+        </div>
+        <div class="overflow-x-auto">
+          <table class="w-full">
+            <thead class="border-b border-stone-100 bg-stone-50">
+              <tr>
+                <th class="px-4 py-3 text-left font-medium text-stone-600">Customer</th>
+                <th class="px-4 py-3 text-left font-medium text-stone-600">Booking</th>
+                <th class="px-4 py-3 text-left font-medium text-stone-600">Used On</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-stone-100">
+              <% @usages.each do |usage| %>
+                <tr>
+                  <td class="px-4 py-3">
+                    <p class="font-medium text-stone-900"><%= usage.user.name.presence || "—" %></p>
+                    <p class="text-xs text-stone-500"><%= usage.user.email_address %></p>
+                  </td>
+                  <td class="px-4 py-3">
+                    <%= link_to "##{usage.booking_id}", admin_booking_path(usage.booking),
+                          class: "font-medium text-stone-700 hover:underline" %>
+                    <span class="ml-1 text-stone-500">
+                      ($<%= number_with_precision(usage.booking.charged_cents / 100.0, precision: 2) %> charged)
+                    </span>
+                  </td>
+                  <td class="px-4 py-3 text-stone-500 whitespace-nowrap">
+                    <%= usage.created_at.strftime("%b %-d, %Y") %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    <% else %>
+      <div class="<%= card %> text-center text-stone-500">
+        No uses yet.
+      </div>
+    <% end %>
+  </div>
+</div>

@@ -114,6 +114,41 @@ RSpec.describe "Webhooks", type: :request do
           post_webhook(type: "payment_intent.succeeded", data: intent_data)
         }.not_to change(AgreementAcceptance, :count)
       end
+
+      context "when the booking has a promo code" do
+        let(:promo) { create(:promo_code, discount_percent: 20) }
+
+        before do
+          booking.update!(promo_code: promo, discount_cents: 1000)
+        end
+
+        it "creates a PromoCodeUsage record on success" do
+          expect {
+            post_webhook(type: "payment_intent.succeeded", data: intent_data)
+          }.to change(PromoCodeUsage, :count).by(1)
+
+          usage = PromoCodeUsage.last
+          expect(usage.promo_code).to eq(promo)
+          expect(usage.user).to eq(user)
+          expect(usage.booking).to eq(booking)
+        end
+
+        it "is idempotent (duplicate webhook does not create second usage)" do
+          post_webhook(type: "payment_intent.succeeded", data: intent_data)
+
+          expect {
+            post_webhook(type: "payment_intent.succeeded", data: intent_data)
+          }.not_to change(PromoCodeUsage, :count)
+        end
+      end
+
+      context "when the booking has no promo code" do
+        it "does not create a PromoCodeUsage record" do
+          expect {
+            post_webhook(type: "payment_intent.succeeded", data: intent_data)
+          }.not_to change(PromoCodeUsage, :count)
+        end
+      end
     end
 
     context "payment_intent.payment_failed" do

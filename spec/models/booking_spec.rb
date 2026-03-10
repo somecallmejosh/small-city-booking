@@ -80,6 +80,30 @@ RSpec.describe Booking, type: :model do
     end
   end
 
+  describe "#charged_cents" do
+    it "equals total_cents when no discount" do
+      booking = build(:booking, total_cents: 8000, discount_cents: 0)
+      expect(booking.charged_cents).to eq(8000)
+    end
+
+    it "returns total minus discount" do
+      booking = build(:booking, total_cents: 8000, discount_cents: 1600)
+      expect(booking.charged_cents).to eq(6400)
+    end
+  end
+
+  describe "#discounted?" do
+    it "returns false when discount_cents is 0" do
+      booking = build(:booking, discount_cents: 0)
+      expect(booking.discounted?).to be false
+    end
+
+    it "returns true when discount_cents is positive" do
+      booking = build(:booking, discount_cents: 500)
+      expect(booking.discounted?).to be true
+    end
+  end
+
   describe "#within_cancellation_window?" do
     let(:settings) { StudioSetting.current }
 

@@ -50,6 +50,7 @@
             <li><%= link_to "Slots", admin_slots_path, class: nav_item.(request.path.start_with?("/admin/slots")) %></li>
             <li><%= link_to "Customers", admin_customers_path, class: nav_item.(request.path.start_with?("/admin/customers")) %></li>
             <li><%= link_to "Waitlist", admin_waitlist_entries_path, class: nav_item.(request.path.start_with?("/admin/waitlist")) %></li>
+            <li><%= link_to "Promo Codes", admin_promo_codes_path, class: nav_item.(request.path.start_with?("/admin/promo_codes")) %></li>
           </ul>
 
           <%# Configure group %>
@@ -121,6 +122,7 @@
             <li><%= link_to "Slots", admin_slots_path, class: nav_item.(request.path.start_with?("/admin/slots")) %></li>
             <li><%= link_to "Customers", admin_customers_path, class: nav_item.(request.path.start_with?("/admin/customers")) %></li>
             <li><%= link_to "Waitlist", admin_waitlist_entries_path, class: nav_item.(request.path.start_with?("/admin/waitlist")) %></li>
+            <li><%= link_to "Promo Codes", admin_promo_codes_path, class: nav_item.(request.path.start_with?("/admin/promo_codes")) %></li>
           </ul>
           <div>
             <p class="mb-1.5 px-3 text-xs font-semibold uppercase tracking-wide text-stone-400">Configure</p>

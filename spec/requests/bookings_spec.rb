@@ -104,6 +104,130 @@ RSpec.describe "Bookings", type: :request do
     end
   end
 
+  describe "POST /bookings/apply_promo" do
+    let(:promo) { create(:promo_code, discount_percent: 20) }
+
+    before do
+      sign_in
+      agreement
+      hold_slot
+    end
+
+    context "with a valid promo code" do
+      it "returns turbo stream, applies discount to booking" do
+        post apply_promo_bookings_path,
+             params: { promo_code: promo.code },
+             headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response).to have_http_status(:ok)
+        expect(response.content_type).to include("turbo-stream")
+        booking = Booking.pending.last
+        expect(booking.discount_cents).to eq(promo.discount_for(booking.total_cents))
+        expect(booking.promo_code).to eq(promo)
+      end
+
+      it "is case-insensitive" do
+        post apply_promo_bookings_path,
+             params: { promo_code: promo.code.upcase },
+             headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        booking = Booking.pending.last
+        expect(booking.promo_code).to eq(promo)
+      end
+    end
+
+    context "with an invalid code" do
+      it "returns turbo stream with error, clears any previous promo" do
+        post apply_promo_bookings_path,
+             params: { promo_code: "BADCODE" },
+             headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        expect(response).to have_http_status(:ok)
+        booking = Booking.pending.last
+        expect(booking.promo_code).to be_nil
+        expect(booking.discount_cents).to eq(0)
+      end
+    end
+
+    context "with a code already used by this user" do
+      before do
+        used_booking = create(:booking, user: user)
+        create(:promo_code_usage, promo_code: promo, user: user, booking: used_booking)
+      end
+
+      it "returns turbo stream with error" do
+        post apply_promo_bookings_path,
+             params: { promo_code: promo.code },
+             headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        booking = Booking.pending.last
+        expect(booking.promo_code).to be_nil
+      end
+    end
+
+    context "with a blank code (clears promo)" do
+      before do
+        Booking.pending.last.update!(promo_code: promo, discount_cents: 1000)
+      end
+
+      it "clears the promo code and resets discount to 0" do
+        post apply_promo_bookings_path,
+             params: { promo_code: "" },
+             headers: { "Accept" => "text/vnd.turbo-stream.html" }
+
+        booking = Booking.pending.last
+        expect(booking.promo_code).to be_nil
+        expect(booking.discount_cents).to eq(0)
+      end
+    end
+
+    context "when hold has expired" do
+      it "redirects to root with alert" do
+        booking = Booking.pending.last
+        booking.slots.update_all(held_until: 1.minute.ago)
+
+        post apply_promo_bookings_path, params: { promo_code: promo.code }
+
+        expect(response).to redirect_to(root_path)
+      end
+    end
+  end
+
+  describe "POST /bookings with promo code" do
+    let(:promo) { create(:promo_code, discount_percent: 20) }
+
+    before do
+      sign_in
+      agreement
+      hold_slot
+      Booking.pending.last.update!(promo_code: promo, discount_cents: 1000)
+    end
+
+    it "passes charged_cents (not total_cents) to Stripe" do
+      booking = Booking.pending.last
+      charged = booking.charged_cents
+
+      stub_stripe_checkout
+      post bookings_path
+
+      expect(a_request(:post, "https://api.stripe.com/v1/checkout/sessions")
+        .with(body: /unit_amount.*#{charged}/)).to have_been_made
+    end
+
+    context "when promo becomes ineligible between apply and checkout" do
+      before { promo.update!(active: false) }
+
+      it "clears discount and redirects to new_booking_path with alert" do
+        post bookings_path
+
+        booking = Booking.pending.last
+        expect(booking.promo_code).to be_nil
+        expect(booking.discount_cents).to eq(0)
+        expect(response).to redirect_to(new_booking_path)
+      end
+    end
+  end
+
   describe "GET /bookings/:id" do
     let(:booking) { create(:booking, user: user, status: "confirmed") }
 
@@ -186,6 +310,34 @@ RSpec.describe "Bookings", type: :request do
 
         expect(outside_booking.reload.status).to eq("cancelled")
         expect(outside_booking.reload.refunded).to be false
+      end
+    end
+
+    context "with a discounted booking within cancellation window" do
+      let(:promo)    { create(:promo_code, discount_percent: 20) }
+      let(:discounted_booking) do
+        b = create(:booking, user: user, status: "confirmed",
+                   stripe_payment_intent_id: "pi_test_fake",
+                   total_cents: 8000, discount_cents: 1600,
+                   promo_code: promo)
+        b.slots << reserved_slot
+        b
+      end
+
+      it "refunds charged_cents (not total_cents)" do
+        refund_stub = stub_request(:post, "https://api.stripe.com/v1/refunds")
+          .with(body: hash_including("amount" => "6400"))
+          .to_return(
+            status: 200,
+            headers: { "Content-Type" => "application/json" },
+            body: JSON.generate({ id: "re_test_fake", object: "refund",
+                                   payment_intent: "pi_test_fake", status: "succeeded" })
+          )
+
+        post cancel_booking_path(discounted_booking)
+
+        expect(refund_stub).to have_been_requested
+        expect(discounted_booking.reload.refunded).to be true
       end
     end
 

@@ -55,6 +55,20 @@
       </div>
 
       <div class="<%= card %>">
+        <h2 class="mb-4 font-semibold text-stone-700">Promo Code <span class="font-normal text-stone-400">(optional)</span></h2>
+        <label class="<%= form_label %>" for="booking_promo_code_id">Apply a promo code</label>
+        <select name="booking[promo_code_id]" id="booking_promo_code_id" class="<%= input_field %>">
+          <option value="">— no promo code —</option>
+          <% @promo_codes.each do |pc| %>
+            <option value="<%= pc.id %>">
+              <%= pc.name %> (<%= pc.code.upcase %>) — <%= pc.discount_percent %>% off
+            </option>
+          <% end %>
+        </select>
+        <p class="mt-1.5 text-xs text-stone-500">Eligibility is validated against the selected slots and customer.</p>
+      </div>
+
+      <div class="<%= card %>">
         <h2 class="mb-4 font-semibold text-stone-700">Payment</h2>
         <label class="flex items-start gap-3 text-stone-700 cursor-pointer">
           <input type="checkbox"

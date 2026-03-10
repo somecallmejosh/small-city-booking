@@ -33,7 +33,8 @@ class Admin::BookingsController < Admin::BaseController
   end
 
   def new
-    @users = User.order(:name)
+    @users        = User.order(:name)
+    @promo_codes  = PromoCode.where(active: true).order(:name)
     @available_slots = Slot.where("starts_at >= ? AND status = 'open'", Time.current)
                            .order(:starts_at)
                            .limit(100)
@@ -51,7 +52,8 @@ class Admin::BookingsController < Admin::BaseController
       )
       redirect_to admin_booking_path(result.booking), notice: "Booking created."
     else
-      @users = User.order(:name)
+      @users        = User.order(:name)
+      @promo_codes  = PromoCode.where(active: true).order(:name)
       @available_slots = Slot.where("starts_at >= ? AND status = 'open'", Time.current)
                              .order(:starts_at)
                              .limit(100)
@@ -64,7 +66,10 @@ class Admin::BookingsController < Admin::BaseController
 
     def cancel_booking!(booking)
       if booking.status == "confirmed" && booking.stripe_payment_intent_id.present?
-        refund = Stripe::Refund.create(payment_intent: booking.stripe_payment_intent_id)
+        refund = Stripe::Refund.create(
+          payment_intent: booking.stripe_payment_intent_id,
+          amount:         booking.charged_cents
+        )
         booking.update!(refunded: true, stripe_refund_id: refund.id)
       end
       booking.slots.each { |slot| slot.update!(status: "open") }
@@ -79,6 +84,6 @@ class Admin::BookingsController < Admin::BaseController
     end
 
     def booking_params
-      params.expect(booking: [ :user_id, :notes, :generate_payment_link, { slot_ids: [] } ])
+      params.expect(booking: [ :user_id, :notes, :generate_payment_link, :promo_code_id, { slot_ids: [] } ])
     end
 end

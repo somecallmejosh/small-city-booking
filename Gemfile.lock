@@ -81,6 +81,7 @@ GEM
     base64 (0.3.0)
     bcrypt (3.1.21)
     bcrypt_pbkdf (1.1.2)
+    bcrypt_pbkdf (1.1.2-x86_64-darwin)
     bigdecimal (4.0.1)
     bindex (0.8.1)
     bootsnap (1.23.0)
@@ -456,7 +457,7 @@ GEM
       railties (>= 8.0.0)
     web-push (3.1.0)
       jwt (~> 3.0)
-      openssl (>= 3.0)
+      openssl (>= 2.0)
     webmock (3.26.1)
       addressable (>= 2.8.0)
       crack (>= 0.3.2)
@@ -477,6 +478,7 @@ PLATFORMS
   aarch64-linux-musl
   arm-linux-gnu
   arm-linux-musl
+  x86_64-darwin-22
   x86_64-darwin-25
   x86_64-linux
   x86_64-linux-gnu

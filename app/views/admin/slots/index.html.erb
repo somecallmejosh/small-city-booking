@@ -32,7 +32,7 @@
           <tr>
             <th class="w-10 px-4 py-3">
               <input type="checkbox"
-                     class="<%= checkbox %>"
+                     class="<%= checkbox_field %>"
                      data-bulk-select-target="selectAll"
                      data-action="change->bulk-select#toggleAll">
             </th>
@@ -50,7 +50,7 @@
                   <input type="checkbox"
                          name="slot_ids[]"
                          value="<%= slot.id %>"
-                         class="<%= checkbox %>"
+                         class="<%= checkbox_field %>"
                          data-bulk-select-target="checkbox"
                          data-action="change->bulk-select#toggle">
                 <% end %>

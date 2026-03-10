@@ -24,6 +24,7 @@ Rails.application.routes.draw do
     resource :settings, only: [ :show, :edit, :update ]
     resources :customers, only: [ :index, :show, :new, :create, :edit, :update ]
     resources :waitlist_entries, only: [ :index, :destroy ]
+    resources :promo_codes
     get "docs",            to: "docs#index",     as: :docs
     get "docs/slots",      to: "docs#slots",     as: :docs_slots
     get "docs/bookings",   to: "docs#bookings",  as: :docs_bookings
@@ -45,7 +46,8 @@ Rails.application.routes.draw do
   get "/help/waitlist",        to: "help#waitlist",        as: :help_waitlist
 
   resources :bookings, only: [ :index, :new, :create, :show ] do
-    member { post :cancel }
+    member     { post :cancel }
+    collection { post :apply_promo }
   end
   resources :slot_holds, only: [ :create, :destroy ]
   resources :waitlist_entries, only: [ :create, :destroy ]

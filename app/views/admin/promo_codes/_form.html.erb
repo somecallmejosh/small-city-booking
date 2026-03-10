@@ -1,0 +1,51 @@
+<% if promo_code.errors.any? %>
+  <div class="mb-5 rounded-lg border border-red-200 bg-red-50 p-3 text-red-700">
+    <% promo_code.errors.full_messages.each do |msg| %>
+      <p><%= msg %></p>
+    <% end %>
+  </div>
+<% end %>
+
+<div class="mb-4">
+  <%= f.label :name, "Name", class: form_label %>
+  <%= f.text_field :name, class: input_field, placeholder: "e.g. Summer Sale", required: true %>
+  <p class="mt-1 text-xs text-stone-500">Internal label shown only in the admin panel.</p>
+</div>
+
+<div class="mb-4">
+  <%= f.label :code, "Code", class: form_label %>
+  <%= f.text_field :code, class: "#{input_field} uppercase", placeholder: "e.g. SUMMER10",
+        autocomplete: "off", required: true %>
+  <p class="mt-1 text-xs text-stone-500">Customers enter this at checkout. Case-insensitive.</p>
+</div>
+
+<div class="mb-4">
+  <%= f.label :discount_percent, "Discount (%)", class: form_label %>
+  <%= f.number_field :discount_percent, class: input_field, min: 1, max: 100,
+        placeholder: "e.g. 20", required: true %>
+</div>
+
+<div class="mb-4 grid grid-cols-2 gap-4">
+  <div>
+    <%= f.label :start_date, "Start Date", class: form_label %>
+    <%= f.date_field :start_date, class: input_field, required: true %>
+    <p class="mt-1 text-xs text-stone-500">Begins at midnight ET.</p>
+  </div>
+  <div>
+    <%= f.label :end_date, "End Date", class: form_label %>
+    <%= f.date_field :end_date, class: input_field, required: true %>
+    <p class="mt-1 text-xs text-stone-500">Ends at 11:59 PM ET.</p>
+  </div>
+</div>
+
+<div class="mb-6 flex items-center gap-2">
+  <%= f.check_box :active, class: "h-4 w-4 rounded border-stone-300 text-stone-900 focus:ring-stone-500" %>
+  <%= f.label :active, "Active", class: "text-sm font-medium text-stone-700" %>
+</div>
+
+<div class="flex items-center gap-3">
+  <%= f.submit (promo_code.new_record? ? "Create Promo Code" : "Update Promo Code"), class: btn_primary %>
+  <%= link_to "Cancel",
+        (promo_code.new_record? ? admin_promo_codes_path : admin_promo_code_path(promo_code)),
+        class: btn_secondary %>
+</div>

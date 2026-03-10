@@ -1,0 +1,71 @@
+<% content_for :title, "Promo Codes — Admin" %>
+
+<div class="mb-6 flex items-center justify-between">
+  <div>
+    <%= render BreadcrumbComponent.new(items: [{ label: "Admin", path: admin_root_path }, { label: "Promo Codes", path: nil }]) %>
+    <h1 class="mt-1 text-2xl font-semibold text-stone-900">Promo Codes</h1>
+    <p class="mt-1 text-stone-500">Discount codes customers can enter at checkout.</p>
+  </div>
+  <%= link_to "New Promo Code", new_admin_promo_code_path, class: btn_primary %>
+</div>
+
+<% if @promo_codes.any? %>
+  <div class="overflow-hidden rounded-xl border border-stone-200 bg-white shadow-sm">
+    <div class="overflow-x-auto">
+      <table class="w-full">
+        <thead class="border-b border-stone-200 bg-stone-50">
+          <tr>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Name / Code</th>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Discount</th>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Date Range</th>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Status</th>
+            <th class="px-4 py-3 text-left font-medium text-stone-600">Uses</th>
+            <th class="px-4 py-3"></th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-stone-100">
+          <% @promo_codes.each do |promo| %>
+            <tr>
+              <td class="px-4 py-3">
+                <p class="font-medium text-stone-900"><%= promo.name %></p>
+                <p class="font-mono text-xs text-stone-500 tracking-wider"><%= promo.code.upcase %></p>
+              </td>
+              <td class="px-4 py-3 font-medium text-stone-900">
+                <%= promo.discount_percent %>% off
+              </td>
+              <td class="px-4 py-3 text-stone-500 whitespace-nowrap">
+                <%= promo.start_date.strftime("%b %-d") %> – <%= promo.end_date.strftime("%b %-d, %Y") %>
+              </td>
+              <td class="px-4 py-3">
+                <% if promo.active? %>
+                  <span class="rounded-full px-2.5 py-0.5 text-xs font-medium bg-green-100 text-green-800">Active</span>
+                <% else %>
+                  <span class="rounded-full px-2.5 py-0.5 text-xs font-medium bg-stone-100 text-stone-600">Inactive</span>
+                <% end %>
+              </td>
+              <td class="px-4 py-3 text-stone-500">
+                <%= link_to promo.promo_code_usages.count, admin_promo_code_path(promo),
+                      class: "hover:underline" %>
+              </td>
+              <td class="px-4 py-3 text-right whitespace-nowrap">
+                <%= link_to "Edit", edit_admin_promo_code_path(promo),
+                      class: "mr-3 font-medium text-stone-700 hover:underline" %>
+                <% if promo.promo_code_usages.none? %>
+                  <%= button_to "Delete", admin_promo_code_path(promo), method: :delete,
+                        class: "font-medium text-red-600 hover:underline bg-transparent border-0 cursor-pointer p-0",
+                        form: { data: { turbo_confirm: "Delete \"#{promo.name}\"? This cannot be undone." } } %>
+                <% end %>
+              </td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <%== @pagy.series_nav if @pagy.pages > 1 %>
+<% else %>
+  <div class="<%= card %> text-center text-stone-500">
+    No promo codes yet. <%= link_to "Create one", new_admin_promo_code_path, class: "font-medium text-stone-700 hover:underline" %>.
+  </div>
+<% end %>

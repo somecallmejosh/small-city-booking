@@ -27,7 +27,7 @@ module StyleHelper
     "block font-medium text-stone-700 mb-1.5"
   end
 
-  def checkbox
+  def checkbox_field
     "h-4 w-4 rounded border-red-300 text-white focus:ring-red-600"
   end
 

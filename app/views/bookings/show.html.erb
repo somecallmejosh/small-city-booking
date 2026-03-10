@@ -34,12 +34,25 @@
       <% end %>
     </ul>
 
-    <div class="mt-4 border-t border-stone-100 pt-4">
-      <p class="text-stone-600">
-        Total paid: <span class="font-semibold text-stone-900">
-          $<%= number_with_precision(@booking.total_cents / 100.0, precision: 2) %>
-        </span>
-      </p>
+    <div class="mt-4 border-t border-stone-100 pt-4 space-y-1">
+      <% if @booking.discounted? %>
+        <p class="text-stone-600">
+          Subtotal: <span class="font-medium">$<%= number_with_precision(@booking.total_cents / 100.0, precision: 2) %></span>
+        </p>
+        <p class="text-green-700">
+          Promo (<%= @booking.promo_code.discount_percent %>% off):
+          <span class="font-medium">-$<%= number_with_precision(@booking.discount_cents / 100.0, precision: 2) %></span>
+        </p>
+        <p class="text-stone-600 font-semibold">
+          Total paid: <span class="text-stone-900">$<%= number_with_precision(@booking.charged_cents / 100.0, precision: 2) %></span>
+        </p>
+      <% else %>
+        <p class="text-stone-600">
+          Total paid: <span class="font-semibold text-stone-900">
+            $<%= number_with_precision(@booking.total_cents / 100.0, precision: 2) %>
+          </span>
+        </p>
+      <% end %>
       <% if (receipt_url = @booking.safe_receipt_url) %>
         <p class="mt-2">
           <%= link_to "View Stripe receipt →", receipt_url,
@@ -65,7 +78,7 @@
             ) %>
           </div>
         <% else %>
-          <% partial_refund = number_with_precision((@booking.total_cents - 5000) / 100.0, precision: 2) %>
+          <% partial_refund = number_with_precision([@booking.charged_cents - 5000, 0].max / 100.0, precision: 2) %>
           <div data-controller="confirmation-dialog">
             <button type="button" data-action="confirmation-dialog#open" class="<%= btn_danger %>">
               Cancel Booking

@@ -56,6 +56,13 @@ class WebhooksController < ApplicationController
           user_agent:  intent.metadata["agreed_user_agent"],
           accepted_at: Time.current
         )
+
+        if booking.promo_code_id.present?
+          PromoCodeUsage.find_or_create_by!(
+            promo_code: booking.promo_code,
+            user:       booking.user
+          ) { |u| u.booking = booking }
+        end
       end
 
       if refund_needed

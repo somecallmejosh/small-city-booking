@@ -29,11 +29,13 @@
           </li>
         <% end %>
       </ul>
-      <div class="mt-4 border-t border-stone-100 pt-4">
-        <p class="font-semibold text-stone-900">
-          Total: $<%= number_with_precision(@booking.total_cents / 100.0, precision: 2) %>
-        </p>
+      <div id="total_section">
+        <%= render "bookings/total_display", booking: @booking %>
       </div>
+    </div>
+
+    <div id="promo_section">
+      <%= render "bookings/promo_form", booking: @booking, promo_error: nil, promo_success: nil %>
     </div>
 
     <% if @agreement %>

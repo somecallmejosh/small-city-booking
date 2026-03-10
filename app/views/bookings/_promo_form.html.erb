@@ -1,0 +1,23 @@
+<div class="<%= card %> mb-6">
+  <h2 class="mb-3 font-semibold text-stone-700">Promo Code</h2>
+
+  <% if local_assigns[:promo_success].present? %>
+    <p class="mb-3 text-sm text-green-700"><%= promo_success %></p>
+  <% end %>
+
+  <% if local_assigns[:promo_error].present? %>
+    <p class="mb-3 text-sm text-red-600"><%= promo_error %></p>
+  <% end %>
+
+  <%= form_with url: apply_promo_bookings_path, method: :post,
+                data: { turbo_stream: true } do |f| %>
+    <div class="flex gap-2">
+      <%= f.text_field :promo_code,
+            value: booking.promo_code&.code&.upcase,
+            placeholder: "Enter promo code",
+            class: "#{input_field} uppercase",
+            autocomplete: "off" %>
+      <%= f.submit "Apply", class: btn_secondary %>
+    </div>
+  <% end %>
+</div>
